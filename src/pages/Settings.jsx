@@ -57,20 +57,17 @@ const Settings = () => {
     return (
         <div className="container my-5">
             <h6>Account Settings</h6>
-            <div>
+            {/* <div>
                 <div className="text-center mb-4">
                     <img src={'https://th.bing.com/th/id/OIP.7O4_GREtLbxqPdJCTmfatQHaHa?w=184&h=183&c=7&r=0&o=7&pid=1.7&rm=3'} className="rounded-circle mb-3" alt="Profile" width={100} height={100} />
                     <div>
-                        {/* <label htmlFor="" className="btn text-white btn-small mb-3" style={{ backgroundColor: "black" }}>
-                        </label> */}
+                        <label htmlFor="" className="btn text-white btn-small mb-3" style={{ backgroundColor: "black" }}>
+                        </label>
                         <input className='' type="file" accept="image/*" />
                     </div>
                 </div>
-
-
-
-            </div>
-            {/* Profile Info */}
+            </div> */}
+            Profile Info
             <div className="card mb-3">
                 <div className="card-body">
                     <h6>Profile Information</h6>

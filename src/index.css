@@ -31,17 +31,28 @@ h5 {
   /* keep it centered like a floating dock */
   background: rgba(255, 255, 255, 0.1);
   /* semi-transparent */
-  backdrop-filter: blur(12px);
+  /* backdrop-filter: blur(12px); */
   /* glass blur */
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease-in-out;
+  /* transition: transform 0.3s ease-in-out; */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 /* Hover effect on the nav */
 .glass-nav:hover {
-  transform: translateY(-3px);
+  /* transform: translateY(-3px); */
+}
+.offcanvas-backdrop.fade.show{
+  background-color: white !important;
+}
+.offcanvas-body{
+  backdrop-filter: blur(0px) !important;
+  /* background: white;
+  -webkit-backdrop-filter: blur(10px) !important;
+color: white !important; */
+z-index: 15000000 !important;
+
 }
 
 /* Ball cursor effect */
@@ -212,9 +223,14 @@ input{
   .appear {
     display: block !important;
   }
-
+  .navbar-nav{
+    gap: 0px !important;
+  }
   .footer {
     grid-template-columns: 1fr 1fr;
+  }
+  .foot-link{
+    font-size: 14px;
   }
 
 }

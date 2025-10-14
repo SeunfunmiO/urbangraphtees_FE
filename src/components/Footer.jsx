@@ -39,7 +39,7 @@ const Footer = () => {
 
                 <div>
                     <h5>Quick Actions</h5>
-                    <div className='d-flex flex-column'>
+                    <div className='d-flex flex-column foot-link'>
                         <Link className="text-decoration-none text-gray text-light"
                             to="/About">About</Link>
                         <Link className="text-decoration-none text-gray text-light"
@@ -61,7 +61,7 @@ const Footer = () => {
 
                 <div>
                     <h5>Categories</h5>
-                    <div className='d-flex flex-column'>
+                    <div className='d-flex flex-column foot-link'>
                         <Link className="text-decoration-none text-light text-gray"
                             to="/shop?category=T-Shirts">T-shirts</Link>
                         <Link className="text-decoration-none text-gray text-light"
@@ -79,7 +79,7 @@ const Footer = () => {
 
                 <div>
                     <h5>Contact</h5>
-                    <div className='d-flex flex-column'>
+                    <div className='d-flex flex-column foot-link'>
                         <a href="mailto:urbangraphees@gmail.com" className='text-decoration-none text-light'>urbangraphtees@gmail.com</a>
                         <a href="tel:+2349037900500" className='text-light'>(+234) 903 790 0500</a>
                         <p>Surulere, Lagos State, Nigeria</p>

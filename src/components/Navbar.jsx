@@ -1,6 +1,7 @@
 import { BiBell, BiMenuAltLeft, BiShoppingBag, BiUser } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import { NavLink, useNavigate } from "react-router-dom";
+import { logout } from '../redux/authSlice';
 // import SearchBar from './SearchBar';
 
 const Navbar = () => {
@@ -51,7 +52,7 @@ const Navbar = () => {
             <li className="nav-item" data-bs-dismiss="offcanvas"> <NavLink className={({ isActive }) =>
               isActive ? "navRoute text-black text-decoration-none active-link" : "navRoute text-decoration-none text-black"
             } aria-current="page" to="/" end >Home</NavLink></li>
-            <hr className="divider text-light" />
+            <hr className="divider" />
             <li className="nav-item dropdown"> <NavLink className={({ isActive }) =>
               isActive ? "navRoute text-decoration-none dropdown-toggle active-link" : "navRoute text-decoration-none text-black dropdown-toggle"
             } role="button" data-bs-toggle="dropdown" aria-expanded="false" to="/Shop">Shop</NavLink>
@@ -88,44 +89,47 @@ const Navbar = () => {
                 </li>
               </ul>
             </li>
-            <hr className="divider text-light" />
+            <hr className="divider" />
             <li className="nav-item " data-bs-dismiss="offcanvas"> <NavLink className={({ isActive }) =>
               isActive ? "navRoute text-decoration-none active-link" : "navRoute text-decoration-none text-black"
             } to="/About">About</NavLink></li>
-            <hr className='divider text-light' />
+            <hr className='divider' />
             <li className="nav-item" data-bs-dismiss="offcanvas"> <NavLink className={({ isActive }) =>
-              isActive ? "navRoute text-decoration-none active-link" : "navRoute text-decoration-none text-black"
+              isActive ? "navRoute text-decoration-none active-link text-black" : "navRoute text-decoration-none text-black"
             } to="/Contact">Contact</NavLink></li>
-            <hr className="divider text-light" />
+            <hr className="divider" />
             <li className="nav-item  appear" data-bs-dismiss="offcanvas" style={{ display: "none" }}> <NavLink className={({ isActive }) =>
-              isActive ? "navRoute text-decoration-none active-link" : "navRoute text-decoration-none text-light"
+              isActive ? "navRoute text-decoration-none active-link  text-black" : "navRoute text-decoration-none text-black"
             } to="/FAQs">Frequently Asked Questions</NavLink></li>
-            <hr className="divider text-light" />
+            <hr className="divider" />
             <li className="nav-item  appear" data-bs-dismiss="offcanvas" style={{ display: "none" }}> <NavLink className={({ isActive }) =>
-              isActive ? "navRoute text-decoration-none active-link" : "navRoute text-decoration-none text-light"
+              isActive ? "navRoute text-decoration-none active-link text-black" : "navRoute text-decoration-none text-black"
             } to="/Delivery-policy">Delivery & Shipping Policy</NavLink></li>
-            <hr className="divider text-light" />
+            <hr className="divider" />
             <li className="nav-item  appear" data-bs-dismiss="offcanvas" style={{ display: "none" }}> <NavLink className={({ isActive }) =>
-              isActive ? "navRoute text-decoration-none active-link" : "navRoute text-decoration-none text-light"
+              isActive ? "navRoute text-decoration-none active-link text-black" : "navRoute text-decoration-none text-black"
             } to="/Terms">Terms and Conditions</NavLink></li>
-            <hr className="divider text-light" />
+            <hr className="divider" />
             <li className="nav-item  appear" data-bs-dismiss="offcanvas" style={{ display: "none" }}> <NavLink className={({ isActive }) =>
-              isActive ? "navRoute text-decoration-none  active-link" : "navRoute text-decoration-none text-light"
+              isActive ? "navRoute text-decoration-none  active-link text-black" : "navRoute text-decoration-none text-black"
             } to="/Privacy">Privacy Policy</NavLink></li>
-            <hr className="divider text-light" />
-            <li className="nav-item dropdown appear" style={{ display: "none" }}>
+            <hr className="divider" />
+            <li className="nav-item  appear" data-bs-dismiss="offcanvas" style={{ display: "none" }}> <NavLink onClick={()=> logout()} className={({ isActive }) =>
+              isActive ? "navRoute text-decoration-none  text-danger" : "navRoute text-decoration-none text-danger"
+            } >Log Out</NavLink></li>
+            {/* <li className="nav-item dropdown appear" style={{ display: "none" }}>
               <NavLink className={({ isActive }) =>
-                isActive ? "navRoute text-decoration-none  active-link dropdown-toggle" : "navRoute text-decoration-none text-light dropdown-toggle"
+                isActive ? "navRoute text-decoration-none  active-link dropdown-toggle text-black" : "navRoute text-decoration-none dropdown-toggle text-black"
               } role="button" data-bs-toggle="dropdown" aria-expanded="false" to="/Profile">Profile</NavLink>
               <ul className="dropdown-menu">
-                <li data-bs-dismiss="offcanvas"><NavLink className="dropdown-item" to="/Profile">Go to your profile.</NavLink></li>
+                <li data-bs-dismiss="offcanvas"><NavLink className="dropdown-item" to="/dashboard">Go to your profile</NavLink></li>
                 <li>
                   <NavLink className="dropdown-item" to="/Changepassword">
                     Change Password
                   </NavLink>
                 </li>
                 <li data-bs-dismiss="offcanvas">
-                  <NavLink className="dropdown-item" to="/Resetpassword">
+                  <NavLink className="dropdown-item" to="/reset-password">
                     Reset Password
                   </NavLink>
                 </li>
@@ -140,7 +144,7 @@ const Navbar = () => {
                   </NavLink>
                 </li>
               </ul>
-            </li>
+            </li> */}
           </ul>
 
         </div>
