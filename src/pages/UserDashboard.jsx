@@ -21,8 +21,8 @@ const UserDashboard = () => {
     const dispatch = useDispatch()
     const renderContent = () => {
         switch (activePage) {
-            case "overview":
-                return <OverView/>
+            // case "overview":
+            //     return <OverView/>
             case "profile":
                 return <UserProfile />;
             case "orders":
@@ -69,12 +69,6 @@ const UserDashboard = () => {
                                     Overview
                                 </button>
                             </li>
-                            {/* <li className="mb-2">
-                                <FaUser />
-                                <button onClick={() => setActivePage("profile")} className="btn border-0  text-white">
-                                    Profile
-                                </button>
-                            </li> */}
                             <li className="mb-2">
                                 <FaBox />
                                 <button onClick={() => setActivePage("orders")} className="btn border-0 text-white">
@@ -116,7 +110,7 @@ const UserDashboard = () => {
                         <h2>Welcome back, {user?.userName || "User"}</h2>
                     </div>
 
-                    <div className="row d-md-none">
+                    <div className="row d-md-none/">
                         <div className="col-md-4">
                             <div className="card text-center shadow-sm">
                                 <div className="card-body">

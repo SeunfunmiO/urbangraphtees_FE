@@ -8,7 +8,7 @@ const Navbar = () => {
   const navigate = useNavigate()
   const cartCount = useSelector((state) => state.cart.items)
   const wishlistCount = useSelector((state) => state.wishlist.items)
-  const notificationsCount = useSelector((state) => state.notification.unreadCount || 0)
+  const notificationsCount = useSelector((state) => state.notification.unreadCount)
   const { token } = useSelector((state) => state.auth)
 
 
@@ -162,7 +162,7 @@ const Navbar = () => {
         <button type="button" className="btn badgeBtn  position-relative">
           <NavLink className='text-decoration-none text-black' title='Notification' to="/notifications"><BiBell /></NavLink>
           <span className="position-absolute text-center top-0 start-100 translate-middle badge rounded-pill bg-light text-black">
-            {notificationsCount.length || 0}
+            {notificationsCount}
             <span className="visually-hidden">Notification</span>
           </span>
         </button>

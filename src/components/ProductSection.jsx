@@ -22,18 +22,16 @@ const ProductSection = ({ tag, products }) => {
         if (isInWishlist) {
             dispatch(removeFromWishlist(item.id))
             toast.success(<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FaHeartBroken />
                 Removed from wishlist
             </div>)
         } else {
             dispatch(addToWishlist(item))
             toast.success(
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <FaHeart />
                     Added to wishlist
                 </div>
             )
-            dispatch(addNotification(`You added ${item.name} - ${item.price} to your wishlist`))
+            dispatch(addNotification({ message: `You added ${item.name} - ${item.price} to your wishlist`, status: true, type: 'info' }))
         }
     }
 

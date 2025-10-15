@@ -33,7 +33,7 @@ const Footer = () => {
         <footer style={{ backgroundColor: " #000000" }}>
             <div className="footer px-3 mb-0 pt-4">
                 <div>
-                    <img src="./public/multimedia/ugtBlackBgLogo.jpg" className='mb-3' alt=" UrbanGraphTees logo" width={"100px"} />
+                    <img src="./multimedia/ugtBlackBgLogo.jpg" className='mb-3' alt=" UrbanGraphTees logo" width={"100px"} />
                     <AboutUs />
                 </div>
 

@@ -34,17 +34,17 @@ const Settings = () => {
     };
 
     const handleDelete = () => {
-        // if (window.m confirm('Are you sure you want to delete your account? This cannot be undone.')) {
         setTimeout(() => {
             setloading(true)
             try {
                 const token = localStorage.getItem('token');
-                axios.delete('https://urbangraphtees-be.onrender.com/user/delete', {
+                axios.delete("https://urbangraphtees-be.onrender.com/user/delete", {
                     headers: { Authorization: `Bearer ${token} ` },
                 });
 
                 dispatch(logout());
                 toast.success('Account deleted successfully')
+                navigate('/')
             } catch (error) {
                 console.error(error);
                 toast.error('Failed to delete account')

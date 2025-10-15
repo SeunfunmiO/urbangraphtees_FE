@@ -121,7 +121,7 @@ const Notification = () => {
               fontSize: '13px'
             }}
           >
-            All ({notifications.length || 0})
+            All ({notifications.length})
           </button>
           <button
             onClick={() => setFilter('unread')}
@@ -151,7 +151,7 @@ const Notification = () => {
               fontSize: '13px'
             }}
           >
-            Read ({notifications.length - unreadCount || 0})
+            Read ({notifications.length - unreadCount})
           </button>
         </div>
 
@@ -211,9 +211,7 @@ const Notification = () => {
                           )}
                         </h6>
                         <p style={{
-                          marginBottom: '0.25rem', color: '#6c757d', cursor: 'pointer',
-                          // overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: expanded === notif.id ? 'unset' : 2,
-                          // WebkitBoxOrient:'vertical'
+                          marginBottom: '0.25rem', color: '#6c757d', cursor: 'pointer'
                         }}
                         >{notif.message}</p>
                         <small style={{ color: '#6c757d' }}>{notif.timestamp}</small>

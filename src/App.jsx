@@ -35,7 +35,7 @@ import { ToastContainer } from 'react-toastify'
 import ForgetPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 // import OverView from './pages/Overview'
-// import NotificationDetails from './pages/NotificationDetails'
+import NotificationDetails from './pages/NotificationDetails'
 
 const AppContent = () => {
   const location = useLocation();
@@ -83,7 +83,7 @@ const AppContent = () => {
         {/* <Route path='/overview' element={<OverView />} /> */}
         <Route path='/settings' element={<Settings />} />
         <Route path='/notifications' element={<Notification />} />
-        {/* <Route path='/notifications/:id' element={<NotificationDetails />} /> */}
+        <Route path='/notifications/:id' element={<NotificationDetails />} />
         <Route path='/signin' element={<SignIn />} />
         <Route path='/register' element={<Register />} />
         <Route path='/forgot-password' element={<ForgetPassword />} />

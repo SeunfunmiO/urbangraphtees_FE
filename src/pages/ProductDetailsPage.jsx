@@ -61,17 +61,14 @@ function ProductDetailsPage() {
     }, 1500)
   }
   const handleAddToCart = (item) => {
-//     const userName = user?.userName || user?.fullname?.split(' ')[0] || "User"
-//     const message = `🛒 ${item.name} added to cart by ${userName}.
-// Size: ${selectedSize} • Color: ${selectedColor}
-// Price: ₦${item.price.toLocaleString()}`;
+    const userName = user?.userName || user?.fullname?.split(' ')[0] || "User"
 
     if (!selectedSize || !selectedColor) {
       toast.warning('Please select a size and color before adding to cart')
       return;
     }
     dispatch(addToCart({ ...item, size: selectedSize, color: selectedColor }))
-    dispatch(addNotification({ message:'thanks' }))
+    dispatch(addNotification({ message: `Hello ${userName}, You added ${item.name} to cart `, status: true , type:'success' }))
     setrecentItem(item)
     toast.success(<div>
       {item.name} added to cart

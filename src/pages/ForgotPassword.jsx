@@ -1,56 +1,73 @@
-
 import React, { useState } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+import { FaAsterisk } from "react-icons/fa";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleForgotPassword = async (e) => {
-    e.preventDefault();
-    if (!email) return toast.error("Please enter your email");
-
-    try {
-      setLoading(true);
-      const response = await axios.post("https://urbangraphtees-be.onrender.com/user/forgot-password", { email });
-      toast.success(response.data.message);
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const formik = useFormik({
+    initialValues: { email: "" },
+    validationSchema: yup.object({
+      email: yup.string().email("Invalid email address").required("Email is required"),
+    }),
+    onSubmit: async (values) => {
+      try {
+        setLoading(true);
+        const res = await axios.post("https://urbangraphtees-be.onrender.com/user/forgot-password", {
+          email: values.email,
+        });
+        toast.success(res.data.message || "Password reset link sent to your email.");
+        navigate("/"); // or redirect back to login page
+      } catch (error) {
+        console.error(error.response?.data || error.message);
+        toast.error(error.response?.data?.message || "Failed to send reset link");
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-semibold text-center mb-4">Forgot Password</h2>
-        <p className="text-gray-500 text-sm text-center mb-6">
-          Enter your registered email to receive a password reset link.
+    <div className="d-flex justify-content-center align-items-center min-vh-100">
+      <div className="card p-4" style={{ maxWidth: "400px", width: "100%" }}>
+        <h3 className="mb-3">Forgot Password</h3>
+        <p className="text-muted" style={{ fontSize: "14px" }}>
+          Enter your email address and we’ll send you a password reset link.
         </p>
-
-        <form onSubmit={handleForgotPassword}>
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="w-full border p-3 rounded mb-4 focus:outline-none"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
+        <form onSubmit={formik.handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">
+              Email Address <FaAsterisk color="#dc4d53" size={8} />
+            </label>
+            <input
+              type="email"
+              name="email"
+              className={`form-control ${
+                formik.touched.email && formik.errors.email ? "border border-danger" : ""
+              }`}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.email}
+            />
+            {formik.touched.email && formik.errors.email && (
+              <small className="text-danger">{formik.errors.email}</small>
+            )}
+          </div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-black text-white py-3 rounded hover:bg-gray-800"
+            className="btn w-100 text-white"
+            style={{ backgroundColor: "black" }}
           >
             {loading ? "Sending..." : "Send Reset Link"}
           </button>
         </form>
       </div>
-
-      <ToastContainer position="top-right" />
     </div>
   );
 };
