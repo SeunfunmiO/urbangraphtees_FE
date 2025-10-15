@@ -7,6 +7,7 @@ const initialState = {
   user: JSON.parse(localStorage.getItem("user"))|| null,
   token,
   isAuthenticated: !!token,
+ 
 };
 
 const authSlice = createSlice({
@@ -17,6 +18,7 @@ const authSlice = createSlice({
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isAuthenticated = true;
+    
 
       // Save token in localStorage
       localStorage.setItem("token", action.payload.token);

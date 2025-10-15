@@ -7,13 +7,14 @@ import { addToWishlist, removeFromWishlist } from "../redux/wishlistSlice";
 import { BiHeart } from "react-icons/bi";
 import { FaHeart } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { addNotification } from "../redux/notificationSlice";
 
 function Products() {
   const navigate = useNavigate();
   const location = useLocation()
   const dispatch = useDispatch()
   const wishlistItems = useSelector((state) => state.wishlist.items)
- 
+   const user = useSelector((state) => state.auth.user)
 
   const queryParams = new URLSearchParams(location.search)
   const intialCategory = queryParams.get('category') || "All"
@@ -31,10 +32,12 @@ function Products() {
       : productsData.filter((p) => p.category === selectedCategory);
 
   const handleWishlist = (item) => {
+    const userName = user?.userName || user?.fullname?.split(' ')[0] || "User"
     const isInWishlist = wishlistItems.some((w) => w.id === item.id)
     if (isInWishlist) {
       dispatch(removeFromWishlist(item.id))
-      toast.error('Removed from wishlist')
+      toast.success('Removed from wishlist')
+          dispatch(addNotification({ message: `Hello ${userName}, You added ${item.name} to cart `, status: true, type: 'success' }))
     } else {
       dispatch(addToWishlist(item))
       toast.success('Added to wishlist')

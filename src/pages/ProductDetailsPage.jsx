@@ -7,9 +7,11 @@ import { addToCart, decreaseQuantity } from "../redux/cartSlice";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import { addNotification } from "../redux/notificationSlice";
+// import axios from 'axios'
 
 function ProductDetailsPage() {
   const { id } = useParams();
+  // const [product, setProduct] = useState(null)
   const product = productsData.find((p) => p.id === parseInt(id));
   const dispatch = useDispatch()
   const [recentItem, setrecentItem] = useState(null)
@@ -18,6 +20,30 @@ function ProductDetailsPage() {
   const [selectedColor, setSelectedColor] = useState(null)
   const user = useSelector((state) => state.auth.user)
   const notifications = useSelector((state) => state.notification.notifications)
+  // const [productsData, setProductsData] = useState([])
+
+
+  // useEffect(() => {
+  //   const fetchProduct = async () => {
+  //     setLoading(true)
+  //     try {
+  //       const allProducts = await axios.get("https://urbangraphtees-be.onrender.com/products/product")
+  //       setProductsData(allProducts.data)
+
+  //       const singleProduct = await axios.get(`https://urbangraphtees-be.onrender.com/products/product${id}`)
+  //       setProduct(singleProduct.data)
+  //     }
+  //     catch (error) {
+  //       console.log('Error fetching products:', error);
+  //     }
+  //     finally {
+  //       setLoading(false)
+  //     }
+  //   }
+  //   fetchProduct()
+  // }, [id])
+
+
 
 
   const animateFlyToCart = (imageEl) => {
@@ -67,8 +93,9 @@ function ProductDetailsPage() {
       toast.warning('Please select a size and color before adding to cart')
       return;
     }
+   
     dispatch(addToCart({ ...item, size: selectedSize, color: selectedColor }))
-    dispatch(addNotification({ message: `Hello ${userName}, You added ${item.name} to cart `, status: true , type:'success' }))
+    dispatch(addNotification({ message: `Hello ${userName}, You added ${item.name} to cart `, status: true, type: 'success' }))
     setrecentItem(item)
     toast.success(<div>
       {item.name} added to cart
@@ -76,10 +103,9 @@ function ProductDetailsPage() {
         <button onClick={() => handleUndo(product)} className="border border-0 bg-transparent ms-2"><small className="text-danger">Undo</small></button>
       )}
     </div>)
-
-
-    const imageEl = document.querySelector("#productImage");
-    animateFlyToCart(imageEl);
+    
+      const imageEl = document.querySelector("#productImage");
+      animateFlyToCart(imageEl);
   }
 
   const handleUndo = (item) => {
@@ -90,7 +116,7 @@ function ProductDetailsPage() {
 
 
 
-  if (!product) return <h2>Product not found</h2>;
+  if (!product) return <h6 className="text-center mt-5">Product not found...</h6>;
 
   return (
     <div className="container my-5">

@@ -71,6 +71,7 @@ const Settings = () => {
             <div className="card mb-3">
                 <div className="card-body">
                     <h6>Profile Information</h6>
+                    <h6>Member since : {}</h6>
                     <form onSubmit={handleSubmit} className="">
                         <div className="mb-3 ">
                             <label className="form-label">Username</label>
