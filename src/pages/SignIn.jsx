@@ -30,10 +30,6 @@ const SignIn = () => {
                     email: values.email,
                     password: values.password,
                 })
-
-                console.log(response.data)
-                let omo = JSON.stringify(response.data.user)
-                localStorage.setItem('omo', omo)
                 if (values.rememberMe) {
                     localStorage.setItem('user-data', JSON.stringify(response.data))
                 } else {

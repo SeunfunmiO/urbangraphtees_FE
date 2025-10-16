@@ -14,6 +14,15 @@ const Settings = () => {
     const navigate = useNavigate()
     const [saving, setsaving] = useState(false)
     const [loading, setloading] = useState(false)
+    const user = useSelector((state) => state.auth.user)
+
+    if (!user) return null;
+    const signupDate = new Date(user.createdAt).toLocaleDateString("en-US", {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    })
+
     const handleLogout = () => {
         setloading(true)
         setTimeout(() => {
@@ -71,7 +80,7 @@ const Settings = () => {
             <div className="card mb-3">
                 <div className="card-body">
                     <h6>Profile Information</h6>
-                    <h6>Member since : {}</h6>
+                    <small className="text-muted">Member since : {signupDate}</small>
                     <form onSubmit={handleSubmit} className="">
                         <div className="mb-3 ">
                             <label className="form-label">Username</label>
