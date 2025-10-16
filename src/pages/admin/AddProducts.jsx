@@ -64,7 +64,7 @@ const AddProducts = () => {
             });
         } catch (error) {
             console.error(error);
-            toast.success('Error adding product.');
+            toast.error('Error adding product.');
         } finally {
             setLoading(false);
         }
