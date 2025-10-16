@@ -185,7 +185,7 @@ const Notification = () => {
                       flexShrink: 0
                     }}
                   >
-                    {notif.icon}
+                    {/* {notif.icon} */}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', gap: '1rem' }}>

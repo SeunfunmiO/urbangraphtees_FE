@@ -12,117 +12,122 @@ import { logout } from "../redux/authSlice";
 import { toast } from "react-toastify";
 
 const UserDashboard = () => {
-  const [activePage, setActivePage] = useState("overview");
-  const { user } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+    const [activePage, setActivePage] = useState("overview");
+    const { user } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-  const renderContent = () => {
-    switch (activePage) {
-      case "profile":
-        return <UserProfile />;
-      case "orders":
-        return <UserOrder />;
-      case "wishlist":
-        return <Wishlist />;
-      case "settings":
-        return <Settings />;
-      default:
-        return <OverView />;
-    }
-  };
+    const renderContent = () => {
+        switch (activePage) {
+            case "profile":
+                return <UserProfile />;
+            case "orders":
+                return <UserOrder />;
+            case "wishlist":
+                return <Wishlist />;
+            case "settings":
+                return <Settings />;
+            default:
+                return <OverView />;
+        }
+    };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    toast.success("You have logged out successfully");
-    navigate("/signin");
-  };
+    const handleLogout = () => {
+        dispatch(logout());
+        toast.success("You have logged out successfully");
+        navigate("/signin");
+    };
 
-  const isAdmin = user?.isAdmin;
+    const isAdmin = user?.isAdmin;
 
-  return (
-    <div className="container-fluid">
-      <div className="row">
-        {/* Sidebar */}
-        <nav className="col-md-3 col-lg-2 d-md-block bg-black text-white sidebar collapse min-vh-100">
-          <div className="position-sticky top-0 pt-3">
-            <div className="px-3 mb-3">
-              <h4>My Account</h4>
-              <div className="d-flex align-items-center gap-3">
-                <div
-                  className="rounded-circle bg-light d-flex align-items-center justify-content-center"
-                  style={{ width: 48, height: 48 }}
-                >
-                  <FaUserCheck className="text-dark" />
-                </div>
-                <div>
-                  <div className="small text-muted">Signed in as</div>
-                  <div className="fw-semibold">
-                    {user?.userName || "User"}{" "}
-                    {isAdmin && (
-                      <span className="badge bg-warning text-dark ms-1">
-                        Admin Panel
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
+    return (
+        <div className="container-fluid">
+            <div className="row">
+                {/* Sidebar */}
+                <nav className="col-md-3 col-lg-2 d-md-block bg-black text-white sidebar collapse min-vh-100">
+                    <div className="position-sticky top-0 pt-3">
+                        <div className="px-3 mb-3">
+                            <h4>My Account</h4>
+                            <div className="d-flex align-items-center gap-3">
+                                <div
+                                    className="rounded-circle bg-light d-flex align-items-center justify-content-center"
+                                    style={{ width: 48, height: 48 }}
+                                >
+                                    <FaUserCheck className="text-dark" />
+                                </div>
+                                <div>
+                                    <div className="small text-muted">Signed in as</div>
+                                    <div className="fw-semibold">
+                                        {user?.userName || "User"}{" "}
+                                        {isAdmin && (
+                                            <span className="badge bg-success text-white ms-1">
+                                                Admin
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-            {/* User Section */}
-            <ul className="list-unstyled mt-3 px-2">
-              <li className="mb-2">
-                <FaHome />
-                <button
-                  onClick={() => setActivePage("overview")}
-                  className="btn border-0 text-white"
-                >
-                  Overview
-                </button>
-              </li>
-              <li className="mb-2">
-                <FaBox />
-                <button
-                  onClick={() => setActivePage("orders")}
-                  className="btn border-0 text-white"
-                >
-                  Orders
-                </button>
-              </li>
-              <li className="mb-2">
-                <FaHeart />
-                <button
-                  onClick={() => setActivePage("wishlist")}
-                  className="btn border-0 text-white"
-                >
-                  Wishlist
-                </button>
-              </li>
-              <li className="mb-2">
-                <FaCog />
-                <button
-                  onClick={() => setActivePage("settings")}
-                  className="btn border-0 text-white"
-                >
-                  Settings
-                </button>
-              </li>
-              <li className="mb-2">
-                <BiHome />
-                <button
-                  onClick={() => navigate("/")}
-                  className="btn border-0 text-white"
-                >
-                  Go Home
-                </button>
-              </li>
+                        {/* User Section */}
+                        <ul className="list-unstyled mt-3 px-2">
+                            <li className="mb-2">
+                                <FaHome />
+                                <button
+                                    onClick={() => setActivePage("overview")}
+                                    className="btn border-0 text-white"
+                                >
+                                    Overview
+                                </button>
+                            </li>
+                            <li className="mb-2">
+                                <FaBox />
+                                <button
+                                    onClick={() => setActivePage("orders")}
+                                    className="btn border-0 text-white"
+                                >
+                                    Orders
+                                </button>
+                            </li>
+                            <li className="mb-2">
+                                <FaHeart />
+                                <button
+                                    onClick={() => setActivePage("wishlist")}
+                                    className="btn border-0 text-white"
+                                >
+                                    Wishlist
+                                </button>
+                            </li>
+                            <li className="mb-2">
+                                <FaCog />
+                                <button
+                                    onClick={() => setActivePage("settings")}
+                                    className="btn border-0 text-white"
+                                >
+                                    Settings
+                                </button>
+                            </li>
+                            <li className="mb-2">
+                                <BiHome />
+                                <button
+                                    onClick={() => navigate("/")}
+                                    className="btn border-0 text-white"
+                                >
+                                    Go Home
+                                </button>
+                            </li>
 
-              {/* 🔸 Admin-only Section */}
-              {isAdmin && (
-                <>
-                  <hr className="border-light" />
-                  <h6 className="text-warning px-2">Admin Controls</h6>
-                  <li className="mb-2">
+                            {/* 🔸 Admin-only Section */}
+                            {isAdmin && (
+                                <>
+                                    <hr className="border-light" />
+                                    <h6 className="text-success px-2">Admin Controls</h6>
+                                    <button
+                                        className="btn border-0 text-white"
+                                        onClick={() => navigate('/admin')}>
+                                        Go to Admin Panel
+                                    </button>
+                                    {/* <li className="mb-2">
                     <FaPlus />
                     <button
                       onClick={() => navigate("/admin/add-product")}
@@ -139,40 +144,40 @@ const UserDashboard = () => {
                     >
                       Manage Users
                     </button>
-                  </li>
-                </>
-              )}
+                  </li> */}
+                                </>
+                            )}
 
-              <hr />
-              <li className="mb-2 text-danger">
-                <BiLogOut />
-                <button
-                  onClick={handleLogout}
-                  className="btn border-0 text-danger"
-                >
-                  Log Out
-                </button>
-              </li>
-            </ul>
-          </div>
-        </nav>
+                            <hr />
+                            <li className="mb-2 text-danger">
+                                <BiLogOut />
+                                <button
+                                    onClick={handleLogout}
+                                    className="btn border-0 text-danger"
+                                >
+                                    Log Out
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
 
-        {/* Main Content */}
-        <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-          <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h2>
-              Welcome back, {user?.userName || "User"}
-              {isAdmin && (
-                <small className="text-warning ms-2">(Admin Mode)</small>
-              )}
-            </h2>
-          </div>
+                {/* Main Content */}
+                <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                    <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h2>
+                            Welcome back, {user?.userName || "User"}
+                            {isAdmin && (
+                                <small className="text-success ms-2">(Admin Mode)</small>
+                            )}
+                        </h2>
+                    </div>
 
-          <div className="flex-grow-1 p-4">{renderContent()}</div>
-        </main>
-      </div>
-    </div>
-  );
+                    <div className="flex-grow-1 p-4">{renderContent()}</div>
+                </main>
+            </div>
+        </div>
+    );
 };
 
 export default UserDashboard;
