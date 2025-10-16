@@ -13,12 +13,12 @@ const AdminDashboard = () => {
         className="flex-grow-1 p-4"
         style={{
           marginLeft: 240,
-          backgroundColor: "#f8f9fa",
+          backgroundColor: "white",
           minHeight: "100vh",
         }}
       >
         <header className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-          <h2 className="fw-semibold text-dark">Dashboard Overview</h2>
+          <h2 className="fw-semibold text-black">Dashboard Overview</h2>
           <div className="text-muted small">Admin / Dashboard</div>
         </header>
 

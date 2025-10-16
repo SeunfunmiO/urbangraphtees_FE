@@ -20,9 +20,9 @@ const AdminSidebar = () => {
       <nav className="flex-grow-1">
         <ul className="nav flex-column gap-2">
           <li>
-            <NavLink to="/admin" end className="nav-link text-white" activeclassname="fw-bold text-light">
+            <button onClick={()=>navigate("/admin/overview")} end className="nav-link text-white" activeclassname="fw-bold text-light">
               <FaChartPie className="me-2" /> Overview
-            </NavLink>
+            </button>
           </li>
           <li>
             <NavLink to="/admin/products" className="nav-link text-white" activeclassname="fw-bold text-light">

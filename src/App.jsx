@@ -38,10 +38,12 @@ import ResetPassword from './pages/ResetPassword'
 import NotificationDetails from './pages/NotificationDetails'
 import AdminAuthGuard from './components/AdminAuthGuard'
 import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminOverview from './pages/admin/AdminOverview'
+import ManageProducts from './pages/admin/ManageProducts'
 
 const AppContent = () => {
   const location = useLocation();
-  const hideNavbar = location.pathname === "/dashboard" && "/admin";
+  const hideNavbar = location.pathname === "/dashboard" || location.pathname === "/admin";
 
 
   return (
@@ -93,13 +95,13 @@ const AppContent = () => {
         <Route path="/reset-password/:token" element={<ResetPassword />} />
 
 
-        <Route path='/admin/*' element={
+        <Route path='/admin' element={
           <AdminAuthGuard >
             <AdminDashboard />
           </AdminAuthGuard>
         } />
-
-
+        <Route path='/admin/overview' element={<AdminOverview />} />
+        <Route path='/admin/products' element={<ManageProducts/>} />
 
 
 

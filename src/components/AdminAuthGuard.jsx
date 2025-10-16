@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 
 const AdminAuthGuard = ({ children }) => {
-    const { user } = useSelector((state) => state.auth.user);
+    const { user } = useSelector((state) => state.auth);
 
-    if (!user || user.isAdmin) {
+    if (!user?.isAdmin) {
         return <Navigate to="/dashboard" replace />;
     }
 

@@ -5,8 +5,8 @@ import UserOrder from "./UserOrder";
 import UserProfile from "./UserProfile";
 import Settings from "./Settings";
 import OverView from "./Overview";
-import { FaBox, FaCog, FaHeart, FaHome, FaUserCheck, FaPlus, FaUsers } from "react-icons/fa";
-import { BiHome, BiLogOut } from "react-icons/bi";
+import { FaBox, FaCog, FaHeart, FaHome, FaUserCheck, FaPlus, FaUsers, FaChartPie } from "react-icons/fa";
+import { BiLogOut } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/authSlice";
 import { toast } from "react-toastify";
@@ -72,7 +72,7 @@ const UserDashboard = () => {
                         {/* User Section */}
                         <ul className="list-unstyled mt-3 px-2">
                             <li className="mb-2">
-                                <FaHome />
+                                <FaChartPie/> 
                                 <button
                                     onClick={() => setActivePage("overview")}
                                     className="btn border-0 text-white"
@@ -108,7 +108,7 @@ const UserDashboard = () => {
                                 </button>
                             </li>
                             <li className="mb-2">
-                                <BiHome />
+                                <FaHome />
                                 <button
                                     onClick={() => navigate("/")}
                                     className="btn border-0 text-white"

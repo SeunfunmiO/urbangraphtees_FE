@@ -80,7 +80,7 @@ const Settings = () => {
             <div className="card mb-3">
                 <div className="card-body">
                     <h6>Profile Information</h6>
-                    <small className="text-muted">Member since : {signupDate}</small>
+                    <small className="text-muted">Member since {signupDate}</small>
                     <form onSubmit={handleSubmit} className="">
                         <div className="mb-3 ">
                             <label className="form-label">Username</label>
