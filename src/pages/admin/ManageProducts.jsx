@@ -7,7 +7,7 @@ const ManageProducts = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const BASE_URL = "https://urbangraphtees-be.onrender.com/api/products/add-product";
+    const BASE_URL = "https://urbangraphtees-be.onrender.com/api/products/product";
 
     // Fetch products
     const fetchProducts = async () => {

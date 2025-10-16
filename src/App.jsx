@@ -40,6 +40,7 @@ import AdminAuthGuard from './components/AdminAuthGuard'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminOverview from './pages/admin/AdminOverview'
 import ManageProducts from './pages/admin/ManageProducts'
+import AddProducts from './pages/admin/AddProducts'
 
 const AppContent = () => {
   const location = useLocation();
@@ -101,8 +102,8 @@ const AppContent = () => {
           </AdminAuthGuard>
         } />
         <Route path='/admin/overview' element={<AdminOverview />} />
-        <Route path='/admin/products' element={<ManageProducts/>} />
-
+        <Route path='/admin/products' element={<ManageProducts />} />
+        <Route path='/admin/add-products' element={<AddProducts />} />
 
 
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaBox, FaChartPie, FaShoppingCart, FaUsers, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { FaBox, FaChartPie, FaShoppingCart, FaUsers, FaCog, FaSignOutAlt, FaPlus } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/authSlice";
 
@@ -23,6 +23,11 @@ const AdminSidebar = () => {
             <button onClick={()=>navigate("/admin/overview")} end className="nav-link text-white" activeclassname="fw-bold text-light">
               <FaChartPie className="me-2" /> Overview
             </button>
+          </li>
+           <li>
+            <NavLink to="/admin/add-products" className="nav-link text-white" activeclassname="fw-bold text-light">
+              <FaPlus className="me-2" /> Add Products
+            </NavLink>
           </li>
           <li>
             <NavLink to="/admin/products" className="nav-link text-white" activeclassname="fw-bold text-light">
