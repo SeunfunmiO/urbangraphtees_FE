@@ -13,7 +13,7 @@ const AddProducts = () => {
         stock: '',
         discount: '',
         category: '',
-        image: '',
+        images: '',
     });
 
     const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ const AddProducts = () => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = () => {
-            setFormData((prev) => ({ ...prev, image: reader.result }));
+            setFormData((prev) => ({ ...prev, images: reader.result }));
         };
     };
 
@@ -60,10 +60,10 @@ const AddProducts = () => {
                 stock: '',
                 discount: '',
                 category: '',
-                image: '',
+                images: '',
             });
         } catch (error) {
-            console.error(error);
+            console.error(error.message);
             toast.error('Error adding product.');
         } finally {
             setLoading(false);
@@ -196,10 +196,10 @@ const AddProducts = () => {
                                 />
                             </div>
 
-                            {formData.image && (
+                            {formData.images && (
                                 <div className="col-12 text-center mt-3">
                                     <img
-                                        src={formData.image}
+                                        src={formData.images}
                                         alt="Preview"
                                         className="img-thumbnail"
                                         style={{ width: '150px', height: '150px', objectFit: 'cover' }}

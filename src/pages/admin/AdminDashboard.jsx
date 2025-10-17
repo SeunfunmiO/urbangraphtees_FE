@@ -24,6 +24,7 @@ const AdminDashboard = () => {
 
         {/* Dynamic content rendered by routes */}
         <Outlet />
+        
       </main>
     </div>
   );

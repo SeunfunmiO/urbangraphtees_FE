@@ -1,20 +1,21 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaTrash, FaEdit } from "react-icons/fa";
+import { FaTrash, FaEdit, FaShoppingBag } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const ManageProducts = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const BASE_URL = "https://urbangraphtees-be.onrender.com/api/products/product";
+    const BASE_URL = "https://urbangraphtees-be.onrender.com/products/product";
 
-    // Fetch products
     const fetchProducts = async () => {
         try {
             const res = await axios.get(BASE_URL);
             setProducts(res.data);
         } catch (error) {
+            toast.error('Error fetching products')
             console.error("Error fetching products:", error);
         } finally {
             setLoading(false);
@@ -25,14 +26,15 @@ const ManageProducts = () => {
         fetchProducts();
     }, []);
 
-    // Delete a product
+
     const handleDelete = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this product?")) return;
         try {
             await axios.delete(`${BASE_URL} / ${id}`);
             setProducts((prev) => prev.filter((p) => p._id !== id));
+            toast.success('Product deleted')
         } catch (error) {
             console.error("Error deleting product:", error);
+            toast.error("Error deleting product")
         }
     };
 
@@ -43,8 +45,10 @@ const ManageProducts = () => {
             setProducts((prev) =>
                 prev.map((p) => (p._id === id ? res.data : p))
             );
+            toast.success("Product updated Successfully")
         } catch (error) {
             console.error("Error updating stock:", error);
+            toast.error("Error updating stock")
         }
     };
 
@@ -61,26 +65,25 @@ const ManageProducts = () => {
     };
     if (loading)
         return (
-            <div className="text-center py-10 text-gray-500">
+            <div className="text-center py-5 mt-2">
                 Loading products...
             </div>
         );
 
 
     return (
-        <div className="p-6">
-            <h2 className="text-2xl font-semibold mb-6">🛍 Product Management</h2>
-
-            <div className="overflow-x-auto bg-white rounded-lg shadow">
-                <table className="min-w-full text-sm text-gray-600">
-                    <thead className="bg-gray-100 text-gray-700">
+        <div className="p-5">
+            <h2 className="mb-4"> <FaShoppingBag /> Product Management</h2>
+            <div className="overflow-x-auto bg-white rounded-2 shadow">
+                <table className=" min-vw-100">
+                    <thead className="bg-black text-white">
                         <tr>
-                            <th className="p-3 text-left">Image</th>
-                            <th className="p-3 text-left">Name</th>
-                            <th className="p-3 text-left">Price</th>
-                            <th className="p-3 text-left">Stock</th>
-                            <th className="p-3 text-left">Discount</th>
-                            <th className="p-3 text-left">Last Updated</th>
+                            <th className="p-3 text-start">Image</th>
+                            <th className="p-3 text-start">Name</th>
+                            <th className="p-3 text-start">Price</th>
+                            <th className="p-3 text-start">Stock</th>
+                            <th className="p-3 text-start">Discount</th>
+                            <th className="p-3 text-start">Last Updated</th>
                             <th className="p-3 text-center">Actions</th>
                         </tr>
                     </thead>
@@ -89,28 +92,28 @@ const ManageProducts = () => {
                         {products.map((product) => (
                             <tr
                                 key={product._id}
-                                className="border-b hover:bg-gray-50 transition"
+                                className="border-bottom border-black "
                             >
                                 <td className="p-3">
                                     <img
                                         src={product.images?.[0]?.url}
                                         alt={product.name}
-                                        className="w-12 h-12 object-cover rounded"
+                                        className=" w-25 h-25 object-fit-cover rounded"
                                     />
                                 </td>
                                 <td className="p-3">{product.name}</td>
                                 <td className="p-3">₦{product.price?.toLocaleString()}</td>
-                                <td className="p-3">
+                                <td className="p-3" style={{ fontSize: '13px' }}>
                                     <button
                                         onClick={() => toggleStock(product._id, product.inStock)}
-                                        className={`px-3 py-1 rounded text-xs ${product.inStock
-                                            ? "bg-green-100 text-green-700"
-                                            : "bg-red-100 text-red-700"
+                                        className={`px-3 py-1 rounded ${product.inStock
+                                            ? "bg-success border-0 text-white"
+                                            : "bg-danger text-white border-0"
                                             }`}
                                     >
                                         {product.inStock ? "In Stock" : "Out of Stock"}
                                     </button>
-                                    <p className="text-xs text-gray-400 mt-1">
+                                    <p className="text-muted mt-1">
                                         {product.stock} items
                                     </p>
                                 </td>
@@ -123,20 +126,20 @@ const ManageProducts = () => {
                                         onChange={(e) =>
                                             handleDiscountChange(product._id, e.target.value)
                                         }
-                                        className="border px-2 py-1 w-16 rounded"
+                                        className="border px-2 py-1  rounded"
                                     />
-                                    <span className="ml-1 text-gray-400">%</span>
+                                    <span className="ms-1 text-muted">%</span>
                                 </td>
-                                <td className="p-3 text-gray-500">
+                                <td className="p-3 text-secondary">
                                     {new Date(product.updatedAt).toLocaleString()}
                                 </td>
-                                <td className="p-3 text-center flex items-center gap-3 justify-center">
-                                    <button className="text-blue-500 hover:text-blue-700">
-                                        <FaEdit />
+                                <td className="p-3 text-center d-flex align-items-center gap-2 justify-content-center">
+                                    <button className="text-info btn-0 btn border-0">
+                                        <FaEdit size={18} />
                                     </button>
                                     <button
-                                        onClick={() => handleDelete(product._id)}
-                                        className="text-red-500 hover:text-red-700"
+                                        type='button' data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                        className="text-danger btn btn-0 border-0"
                                     >
                                         <FaTrash />
                                     </button>
@@ -146,6 +149,30 @@ const ManageProducts = () => {
                     </tbody>
                 </table>
             </div>
+
+
+            {products.map((product) => (
+
+                <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h1 className="modal-title fs-5" id="exampleModalLabel">Confirm Product Deletion</h1>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                {`  Are you sure you want to delete ${product.name}? This cannot be undone.`}
+                            </div>
+                            <div className="modal-footer border-0">
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button disabled={loading} onClick={() => handleDelete(product._id)} type="button" className="btn btn-danger">{loading ? 'Deleting' : 'Yes, Delete'}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ))}
+
+
         </div>
     );
 };

@@ -10,7 +10,7 @@ const OverView = () => {
                                 <div className="card-body">
                                     <h5 className="card-title">My Orders</h5>
                                     <p className="card-text">Track your recent orders</p>
-                                    <div onClick={() => navigate('/orders')} className="btn text-light bg-black" >
+                                    <div onClick={() => navigate('/dashboard/orders')} className="btn text-light bg-black" >
                                         View Orders
                                     </div>
                                 </div>
@@ -22,7 +22,7 @@ const OverView = () => {
                                 <div className="card-body">
                                     <h5 className="card-title">Wishlist</h5>
                                     <p className="card-text">See your saved items</p>
-                                    <div onClick={() => navigate('/wishlist')} className="btn btn-secondary text-white">
+                                    <div onClick={() => navigate('/wishlist')} className="btn bg-black text-white">
                                         View Wishlist
                                     </div>
                                 </div>
@@ -34,7 +34,7 @@ const OverView = () => {
                                 <div className="card-body">
                                     <h5 className="card-title">Profile</h5>
                                     <p className="card-text">Manage your details</p>
-                                    <div onClick={() => navigate('/settings')} className="btn btn-success">
+                                    <div onClick={() => navigate('/settings')} className="btn bg-black text-white">
                                         Edit Profile
                                     </div>
                                 </div>

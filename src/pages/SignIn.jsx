@@ -24,7 +24,6 @@ const SignIn = () => {
         },
         onSubmit: async (values) => {
             setLoading(true)
-            console.log(values);
             try {
                 let response = await axios.post("https://urbangraphtees-be.onrender.com/user/login", {
                     email: values.email,
