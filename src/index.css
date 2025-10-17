@@ -116,17 +116,6 @@ z-index: 15000000 !important;
   height: 100vh;
 }
 
-.hero-slide {
-  height: 90vh;
-}
-
-.banner-img h1 {
-  /* font-size: 4rem;
-  background: rgba(0,0,0,0.5);
-  padding: 1rem 2rem;
-  border-radius: 12px; */
-}
-
 .product-card {
   border: none;
   background: #fff;
@@ -215,7 +204,6 @@ input{
     display: flex;
     justify-content: center;
     align-items: center;
-    /* gap: 300px; */
   }
 }
 
@@ -292,12 +280,6 @@ input{
   .prodGrid {
     padding-top: 0rem !important;
   }
-}
-
-@media screen and (max-width:375px) {
-  /* .navReverse img {
-    width: 40px;
-  } */
 }
 
 @media screen and (max-width:320px) {

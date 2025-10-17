@@ -31,7 +31,7 @@ const Navbar = () => {
   });
 
   return (
-    <nav className="glass-nav navbar container navbar-expand-lg sticky-top mx-auto mt-3 px-4 py-2 rounded-pill d-flex justify-content-between align-items-center">
+    <nav className="glass-nav/ navbar bg-white containe/r navbar-expand-lg sticky-top mx-auto mt-3 px-4 py-2 rounded/-pill d-flex justify-content-between align-items-center">
       <div className="navReverse">
         <a href="/" className="fw-bold fs-6 navbar-brand  text-white/ text-uppercase">
           UrbanGraphTees

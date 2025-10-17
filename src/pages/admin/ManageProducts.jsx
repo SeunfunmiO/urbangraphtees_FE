@@ -29,7 +29,7 @@ const ManageProducts = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`${BASE_URL} / ${id}`);
+            await axios.delete(`${BASE_URL}/${id}`);
             setProducts((prev) => prev.filter((p) => p._id !== id));
             toast.success('Product deleted')
         } catch (error) {
@@ -41,7 +41,7 @@ const ManageProducts = () => {
     // Toggle in-stock status
     const toggleStock = async (id, current) => {
         try {
-            const res = await axios.put(`${BASE_URL} / ${id}`, { inStock: !current });
+            const res = await axios.put(`${BASE_URL}/${id}`, { inStock: !current });
             setProducts((prev) =>
                 prev.map((p) => (p._id === id ? res.data : p))
             );
@@ -55,7 +55,7 @@ const ManageProducts = () => {
     // Update discount (simple inline edit)
     const handleDiscountChange = async (id, value) => {
         try {
-            const res = await axios.put(`${BASE_URL} / ${id}`, { discount: Number(value) });
+            const res = await axios.put(`${BASE_URL}/${id}`, { discount: Number(value) });
             setProducts((prev) =>
                 prev.map((p) => (p._id === id ? res.data : p))
             );

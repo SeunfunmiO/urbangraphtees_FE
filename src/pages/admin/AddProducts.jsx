@@ -13,7 +13,7 @@ const AddProducts = () => {
         stock: '',
         discount: '',
         category: '',
-        images: '',
+        images: [],
     });
 
     const [loading, setLoading] = useState(false);
@@ -24,20 +24,28 @@ const AddProducts = () => {
     };
 
     const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => {
-            setFormData((prev) => ({ ...prev, images: reader.result }));
-        };
+        const files = Array.from(e.target.files);
+        const readers = files.map((file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+            });
+        });
+
+        Promise.all(readers)
+            .then((base64Images) => {
+                setFormData((prev) => ({ ...prev, images: base64Images }));
+            })
+            .catch((error) => console.error("Image conversion error:", error));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const token = localStorage.getItem('token'); 
+            const token = localStorage.getItem('token');
             const res = await axios.post(
                 'https://urbangraphtees-be.onrender.com/products/product',
                 formData,
@@ -191,19 +199,23 @@ const AddProducts = () => {
                                 <input
                                     type="file"
                                     accept="image/*"
+                                    multiple
                                     className="form-control"
                                     onChange={handleImageChange}
                                 />
                             </div>
 
-                            {formData.images && (
-                                <div className="col-12 text-center mt-3">
-                                    <img
-                                        src={formData.images}
-                                        alt="Preview"
-                                        className="img-thumbnail"
-                                        style={{ width: '150px', height: '150px', objectFit: 'cover' }}
-                                    />
+                            {formData.images.length > 0 && (
+                                <div className="col-12 text-center mt-3 d-flex flex-wrap gap-3 justify-content-center">
+                                    {formData.images.map((img, index) => (
+                                        <img
+                                            key={index}
+                                            src={img}
+                                            alt="Preview"
+                                            className="img-thumbnail"
+                                            style={{ width: "150px", height: "150px", objectFit: "cover" }}
+                                        />
+                                    ))}
                                 </div>
                             )}
 
@@ -211,7 +223,7 @@ const AddProducts = () => {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="btn btn-dark px-4"
+                                    className="btn bg-black text-white px-4"
                                 >
                                     {loading ? 'Adding...' : 'Add Product'}
                                 </button>
