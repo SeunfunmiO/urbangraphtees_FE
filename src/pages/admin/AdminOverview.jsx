@@ -21,8 +21,10 @@ const AdminOverview = () => {
                 )
 
                 setStats(response.data);
+                console.log(response.data);
+                
             } catch (error) {
-                console.error("Error fetching admin stats:", error);
+                console.log("Error fetching admin stats:", error);
                 toast.error("Failed to load admin statistics");
             } finally {
                 setLoading(false);
@@ -41,7 +43,7 @@ const AdminOverview = () => {
     }
 
     return (
-        <div className="container-fluid py-5 px-3">
+        <div className="container-fluid px-3">
             <h2 className="fw-bold mb-4 text-center text-md-start">
                 Admin Overview
             </h2>
@@ -86,8 +88,7 @@ const AdminOverview = () => {
 
             {/* Optional last update info */}
             <div className="text-muted text-center mt-4">
-                Last updated just now
-        
+                Last updated {new Date().toLocaleDateString()}
             </div>
         </div>
     );

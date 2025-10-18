@@ -282,11 +282,11 @@ input{
   }
 }
 
-@media screen and (max-width:320px) {
+@media screen and (max-width:375px) {
   .navbar-brand {
     font-size: 10px !important;
   }
-  .dropDown{
+  .mark-pd{
     min-width: 0px !important;
     font-size: 14px;
   }

@@ -45,7 +45,10 @@ import ManageOrders from './pages/admin/ManageOrders'
 
 const AppContent = () => {
   const location = useLocation();
-  const hideNavbar = location.pathname === "/dashboard" || location.pathname === "/admin";
+  const hideNavbar = location.pathname === "/dashboard" || location.pathname === "/admin"
+  || location.pathname === "/admin/overview" || location.pathname === "/admin/add-products"
+  ||location.pathname === "/admin/orders" ||location.pathname === "/admin/products"
+  ;
 
 
   return (
@@ -96,16 +99,18 @@ const AppContent = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-           
-        <Route path='/admin' element={
-          <AdminAuthGuard >
+
+        <Route path="/admin" element={
+          <AdminAuthGuard>
             <AdminDashboard />
           </AdminAuthGuard>
-        } />
-        <Route path='/admin/overview' element={<AdminOverview />} />
-        <Route path='/admin/products' element={<ManageProducts />} />
-        <Route path='/admin/add-products' element={<AddProducts />} />
-        <Route path='/admin/orders' element={<ManageOrders/>}/>
+        }>
+          <Route index element={<AdminOverview />} />
+          <Route path="overview" element={<AdminOverview />} />
+          <Route path="products" element={<ManageProducts />} />
+          <Route path="add-products" element={<AddProducts />} />
+          <Route path="orders" element={<ManageOrders />} />
+        </Route>
 
 
 

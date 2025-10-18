@@ -227,7 +227,7 @@ const ManageProducts = () => {
         try {
             setDeleting(true)
             const token = localStorage.getItem("token");
-            await axios.delete(`${BASE_URL}/delete-product/${id}`, {
+            await axios.delete(`https://urbangraphtees-be.onrender.com/products/delete-product/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setProducts((prev) => prev.filter((p) => p._id !== id));
@@ -287,7 +287,7 @@ const ManageProducts = () => {
                 prev.map((p) => (p._id === editingProduct._id ? res.data : p))
             );
             console.log(res.data);
-            
+
             toast.success("Product updated successfully");
             const modal = window.bootstrap.Modal.getInstance(document.getElementById("editModal"));
             modal.hide();
@@ -321,7 +321,7 @@ const ManageProducts = () => {
         );
 
     return (
-        <div className="p-5">
+        <div>
             <h2 className="mb-4">
                 <FaShoppingBag /> Product Management
             </h2>
@@ -381,7 +381,7 @@ const ManageProducts = () => {
                                     <button
                                         className="btn btn-sm btn-0 border-0 text-danger"
                                         type='button' data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                        onClick={()=>setDeleteProduct(product)}
+                                        onClick={() => setDeleteProduct(product)}
                                     >
                                         <FaTrash />
                                     </button>
@@ -500,28 +500,28 @@ const ManageProducts = () => {
                 </div>
             </div>
 
-                <div className="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h1 className="modal-title fs-5" id="deleteModalLabel">Confirm Product Deletion</h1>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
-                                {deleteProduct?
-                                 (<>  Are you sure you want to delete <strong>{deleteProduct.name}</strong>? This cannot be undone.</>)
-                                 :(
+            <div className="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="deleteModalLabel">Confirm Product Deletion</h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                            {deleteProduct ?
+                                (<>  Are you sure you want to delete <strong>{deleteProduct.name}</strong>? This cannot be undone.</>)
+                                : (
                                     'No product selected'
-                                 )
-                                }
-                            </div>
-                            <div className="modal-footer border-0">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button  disabled={deleting} onClick={() => handleDelete(deleteProduct._id)} type="button" className="btn btn-danger">{deleting ? 'Deleting' : 'Yes, Delete'}</button>
-                            </div>
+                                )
+                            }
+                        </div>
+                        <div className="modal-footer border-0">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button disabled={deleting} onClick={() => handleDelete(deleteProduct._id)} type="button" className="btn btn-danger">{deleting ? 'Deleting' : 'Yes, Delete'}</button>
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
     );
 };

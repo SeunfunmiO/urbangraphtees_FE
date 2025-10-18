@@ -79,7 +79,7 @@ const AddProducts = () => {
     }
 
     return (
-        <div className="container mt-5">
+        <div className="container">
             <div className="card shadow-sm border-0">
                 <div className="card-body">
                     <h4 className="card-title mb-4 fw-bold">Add New Product</h4>

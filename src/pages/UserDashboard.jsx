@@ -69,7 +69,7 @@ const UserDashboard = () => {
                         </div>
 
                         {/* User Section */}
-                        <ul className="list-unstyled mt-3 px-2">
+                        <ul className="list-unstyled mt-3 ps-2">
                             <li className="mb-2">
                                 <FaChartPie />
                                 <button

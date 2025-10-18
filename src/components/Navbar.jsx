@@ -38,7 +38,7 @@ const Navbar = () => {
           {/* <img src="./multimedia/ugtBlackBgLogo.jpg" alt=" UrbanGraphTees logo" width={"60px"} /> */}
         </a>
         <button className="navbar-toggler border border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-          <span><BiMenuAltLeft /></span>
+          <span><BiMenuAltLeft className='border-0'/></span>
         </button>
       </div>
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaBox, FaChartPie, FaShoppingCart, FaUsers, FaCog, FaSignOutAlt, FaPlus } from "react-icons/fa";
+import { FaBox, FaChartPie, FaShoppingCart, FaUsers, FaCog, FaSignOutAlt, FaPlus, FaHome } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/authSlice";
 
@@ -47,6 +47,11 @@ const AdminSidebar = () => {
           <li>
             <NavLink to="/admin/settings" className="nav-link text-white" activeclassname="fw-bold text-light">
               <FaCog className="me-2" /> Settings
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/" className="nav-link text-white" activeclassname="fw-bold text-light">
+              <FaHome className="me-2" /> Go Home
             </NavLink>
           </li>
         </ul>

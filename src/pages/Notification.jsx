@@ -58,7 +58,7 @@ const Notification = () => {
               <span>▼</span>
             </button>
             {dropdownOpen === 'main' && (
-              <div className='dropDown' style={{
+              <div className='dropDown mark-pd' style={{
                 position: 'absolute',
                 right: 0,
                 top: '100%',
@@ -73,8 +73,8 @@ const Notification = () => {
                 <button
                   onClick={() => dispatch(markAllAsRead())}
                   style={{
-                    width: '100%/',
-                    padding: '0.5rem 0.5rem',
+                    width: '100%',
+                    padding: '0.5rem 1rem',
                     border: 'none',
                     backgroundColor: 'transparent',
                     textAlign: 'left',
@@ -171,7 +171,7 @@ const Notification = () => {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'start', gap: '1rem' }}>
-                  <div
+                  {/* <div
                     style={{
                       width: '10px',
                       height: '10px',
@@ -185,8 +185,8 @@ const Notification = () => {
                       flexShrink: 0
                     }}
                   >
-                    {/* {notif.icon} */}
-                  </div>
+                    {notif.icon}
+                  </div> */}
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', gap: '1rem' }}>
                       <div
