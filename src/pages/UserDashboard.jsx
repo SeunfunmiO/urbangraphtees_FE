@@ -50,7 +50,7 @@ const UserDashboard = () => {
                             <div className="d-flex align-items-center gap-3">
                                 <div
                                     className="rounded-circle bg-light d-flex align-items-center justify-content-center"
-                                    style={{ width: 48, height: 48 , overflow:'hidden'}}
+                                    style={{ width: 48, height: 48, overflow: 'hidden' }}
                                 >
                                     <FaUserCheck className="text-dark" />
                                 </div>
@@ -71,7 +71,7 @@ const UserDashboard = () => {
                         {/* User Section */}
                         <ul className="list-unstyled mt-3 px-2">
                             <li className="mb-2">
-                                <FaChartPie/> 
+                                <FaChartPie />
                                 <button
                                     onClick={() => setActivePage("overview")}
                                     className="btn border-0 text-white"
@@ -155,7 +155,9 @@ const UserDashboard = () => {
                     </div>
                     <div className="flex-grow-1 p-4">{renderContent()}</div>
                 </main>
-                    <button onClick={()=>navigate('/admin')} className="btn btn-outline-success d-md-none">Switch to Admin</button>
+                {user.isAdmin && (
+                    <button onClick={() => navigate('/admin')} className="btn btn-outline-success d-md-none">Switch to Admin</button>
+                )}
             </div>
         </div>
     );

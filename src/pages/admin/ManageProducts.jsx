@@ -235,7 +235,6 @@ const ManageProducts = () => {
         } catch (error) {
             toast.error("Error deleting product");
             console.log("Error deleting product:", error);
-
         }
         finally {
             setDeleting(false)
@@ -285,9 +284,10 @@ const ManageProducts = () => {
 
             // Update product in the state
             setProducts((prev) =>
-                prev.map((p) => (p._id === editingProduct._id ? res.data.updatedProduct : p))
+                prev.map((p) => (p._id === editingProduct._id ? res.data : p))
             );
-
+            console.log(res.data);
+            
             toast.success("Product updated successfully");
             const modal = window.bootstrap.Modal.getInstance(document.getElementById("editModal"));
             modal.hide();
@@ -343,7 +343,7 @@ const ManageProducts = () => {
                             <tr key={product._id} className="align-middle">
                                 <td className="p-3">
                                     <img
-                                        src={product.images?.[0]?.url || product.image}
+                                        src={product.images?.[0]?.url || product.img}
                                         alt={product.name}
                                         className="rounded"
                                         width="80"
@@ -369,7 +369,7 @@ const ManageProducts = () => {
                                 </td>
                                 <td className="p-3">{product.discount || 0}%</td>
                                 <td className="p-3 text-muted">
-                                    {new Date(product.updatedAt).toLocaleDateString()}
+                                    {new Date(product.updatedAt).toLocaleString()}
                                 </td>
                                 <td className="p-3 text-center">
                                     <button
@@ -517,7 +517,7 @@ const ManageProducts = () => {
                             </div>
                             <div className="modal-footer border-0">
                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button data-bs-toggle="modal" disabled={deleting} onClick={() => handleDelete(deleteProduct._id)} type="button" className="btn btn-danger">{deleting ? 'Deleting' : 'Yes, Delete'}</button>
+                                <button  disabled={deleting} onClick={() => handleDelete(deleteProduct._id)} type="button" className="btn btn-danger">{deleting ? 'Deleting' : 'Yes, Delete'}</button>
                             </div>
                         </div>
                     </div>
