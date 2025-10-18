@@ -227,7 +227,7 @@ const ManageProducts = () => {
         try {
             setDeleting(true)
             const token = localStorage.getItem("token");
-            await axios.delete(`${BASE_URL}/${id}`, {
+            await axios.delete(`${BASE_URL}/delete-product/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setProducts((prev) => prev.filter((p) => p._id !== id));
@@ -364,7 +364,7 @@ const ManageProducts = () => {
                                         {product.inStock ? "In Stock" : "Out of Stock"}
                                     </button>
                                     <p className="text-muted mt-1">
-                                        {product.stock} item{product.stock.length === 0 ? '' : 's'}
+                                        {product.stock} items
                                     </p>
                                 </td>
                                 <td className="p-3">{product.discount || 0}%</td>

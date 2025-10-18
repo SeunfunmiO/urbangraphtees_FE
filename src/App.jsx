@@ -41,6 +41,7 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminOverview from './pages/admin/AdminOverview'
 import ManageProducts from './pages/admin/ManageProducts'
 import AddProducts from './pages/admin/AddProducts'
+import ManageOrders from './pages/admin/ManageOrders'
 
 const AppContent = () => {
   const location = useLocation();
@@ -95,7 +96,7 @@ const AppContent = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-
+           
         <Route path='/admin' element={
           <AdminAuthGuard >
             <AdminDashboard />
@@ -104,7 +105,7 @@ const AppContent = () => {
         <Route path='/admin/overview' element={<AdminOverview />} />
         <Route path='/admin/products' element={<ManageProducts />} />
         <Route path='/admin/add-products' element={<AddProducts />} />
-
+        <Route path='/admin/orders' element={<ManageOrders/>}/>
 
 
 

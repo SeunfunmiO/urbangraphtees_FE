@@ -10,7 +10,7 @@ const ManageOrders = () => {
       try {
         const token = localStorage.getItem("token"); // assuming you store it there
         const res = await axios.get("/api/orders", {
-          headers: { Authorization:` Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}` },
         });
         setOrders(res.data);
       } catch (error) {
@@ -63,13 +63,12 @@ const ManageOrders = () => {
                   <td>₦{order.totalAmount.toLocaleString()}</td>
                   <td>
                     <span
-                      className={`badge ${
-                        order.status === "Delivered"
+                      className={`badge ${order.status === "Delivered"
                           ? "bg-success"
                           : order.status === "Pending"
-                          ? "bg-warning text-dark"
-                          : "bg-secondary"
-                      }`}
+                            ? "bg-warning text-dark"
+                            : "bg-secondary"
+                        }`}
                     >
                       {order.status}
                     </span>
