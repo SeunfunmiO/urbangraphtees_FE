@@ -9,7 +9,7 @@ const ManageOrders = () => {
     const fetchOrders = async () => {
       try {
         const token = localStorage.getItem("token"); // assuming you store it there
-        const res = await axios.get("/api/orders", {
+        const res = await axios.get("https://urbangraphtees-be.onrender.com/orders/admin", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setOrders(res.data);

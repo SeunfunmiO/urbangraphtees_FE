@@ -19,10 +19,7 @@ const AdminOverview = () => {
                         headers: { Authorization: `Bearer ${token}` },
                     }
                 )
-
                 setStats(response.data);
-                console.log(response.data);
-                
             } catch (error) {
                 console.log("Error fetching admin stats:", error);
                 toast.error("Failed to load admin statistics");
@@ -33,6 +30,7 @@ const AdminOverview = () => {
 
         fetchStats();
     }, []);
+
 
     if (loading) {
         return (
