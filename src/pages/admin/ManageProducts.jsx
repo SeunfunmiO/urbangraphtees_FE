@@ -329,6 +329,7 @@ const ManageProducts = () => {
                 <table className="table table-hover">
                     <thead className="bg-black text-white">
                         <tr>
+                            <th>#</th>
                             <th className="p-3 text-start">Image</th>
                             <th className="p-3 text-start">Name</th>
                             <th className="p-3 text-start">Price</th>
@@ -339,8 +340,9 @@ const ManageProducts = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((product) => (
+                        {products.map((product, index) => (
                             <tr key={product._id} className="align-middle">
+                                <td>{index + 1}.</td>
                                 <td className="p-3">
                                     <img
                                         src={product.images?.[0]?.url || product.img}

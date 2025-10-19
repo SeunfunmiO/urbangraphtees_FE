@@ -35,7 +35,7 @@ const AdminSidebar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/admin/orders" className="nav-link text-white" activeclassname="fw-bold text-light">
+            <NavLink to="/admin/orders/:id" className="nav-link text-white" activeclassname="fw-bold text-light">
               <FaShoppingCart className="me-2" /> Orders
             </NavLink>
           </li>
