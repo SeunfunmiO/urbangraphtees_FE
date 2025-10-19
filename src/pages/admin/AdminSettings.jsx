@@ -87,7 +87,7 @@ const AdminSettings = () => {
                                 />
                             </div>
 
-                            <button className="btn btn-dark w-100">Update Profile</button>
+                            <button className="btn bg-black text-white w-100">Update Profile</button>
                         </form>
                     </div>
                 </div>

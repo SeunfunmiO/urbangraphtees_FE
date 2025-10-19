@@ -69,6 +69,7 @@ const AddProducts = () => {
                 discount: '',
                 category: '',
                 images: '',
+                tag: '',
             });
         } catch (error) {
             console.error(error.message);
@@ -180,6 +181,20 @@ const AddProducts = () => {
                                     value={formData.discount}
                                     onChange={handleChange}
                                 />
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label">Product Tag</label>
+                                <select
+                                    className="form-select"
+                                    value={formData.tag}
+                                    onChange={handleChange}
+                                >
+                                    <option value="none">None</option>
+                                    <option value="new">NEW</option>
+                                    <option value="trending">TRENDING</option>
+                                    <option value="best-seller">BEST SELLER</option>
+                                </select>
                             </div>
 
                             <div className="col-md-6">

@@ -43,13 +43,14 @@ import ManageProducts from './pages/admin/ManageProducts'
 import AddProducts from './pages/admin/AddProducts'
 import ManageOrders from './pages/admin/ManageOrders'
 import ManageUsers from './pages/admin/ManageUsers'
+import AdminSettings from './pages/admin/AdminSettings'
 
 const AppContent = () => {
   const location = useLocation();
   const hideNavbar = location.pathname === "/dashboard" || location.pathname === "/admin"
     || location.pathname === "/admin/overview" || location.pathname === "/admin/add-products"
     || location.pathname === "/admin/orders/:id" || location.pathname === "/admin/products"
-    || location.pathname === "/admin/users"
+    || location.pathname === "/admin/users" || location.pathname === "/admin/settings"
     ;
 
 
@@ -112,7 +113,8 @@ const AppContent = () => {
           <Route path="products" element={<ManageProducts />} />
           <Route path="add-products" element={<AddProducts />} />
           <Route path="orders/:id" element={<ManageOrders />} />
-          <Route path='/admin/users' element={<ManageUsers />} />
+          <Route path='users' element={<ManageUsers />} />
+          <Route path='settings' element={<AdminSettings/>} />
         </Route>
 
 
