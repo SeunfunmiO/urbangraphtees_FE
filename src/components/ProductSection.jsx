@@ -77,11 +77,17 @@ const ProductSection = ({ tag, products }) => {
                                     className={`btn btn-0 border-0 wishlist-btn border-secondary position-absolute top-0 end-0`}
                                     onClick={() => handleWishlist(item)}
                                 >
-                                    {isInWishlist ? <FaHeart fill="crimson" /> : <BiHeart fill="black" />}
+                                    {isInWishlist ? <FaHeart fill="crimson" /> : <BiHeart fill="gray" />}
                                 </button>
                                 <Link className="text-decoration-none" to={`/products/${item.id}`}>
                                     <img
-                                        src={item.image}
+                                        src={
+                                            item.images?.[0]?.url?.startsWith("http")
+                                                ? item.images[0].url
+                                                : item.images?.[0]?.startsWith("http")
+                                                    ? item.images[0]
+                                                    : `https://urbangraphtees-be.onrender.com/${item.images?.[0]?.url || item.images?.[0] || ""}`
+                                        }
                                         alt={item.name}
                                         className="card-img-top"
                                         style={{ height: "180px", objectFit: "cover" }}

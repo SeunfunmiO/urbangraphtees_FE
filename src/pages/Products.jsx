@@ -127,7 +127,7 @@ function Products() {
   const initialCategory = queryParams.get("category") || "All";
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -137,8 +137,6 @@ function Products() {
       } catch (error) {
         console.error("Error fetching products:", error);
         toast.error("Unable to load products");
-      } finally {
-        setLoading(false);
       }
     };
     fetchProducts();
@@ -165,7 +163,7 @@ function Products() {
       toast.success("Removed from wishlist");
       dispatch(
         addNotification({
-          message:` Hello ${userName}, you removed ${item.name} from wishlist.`,
+          message: ` Hello ${userName}, you removed ${item.name} from wishlist.`,
           status: true,
           type: "success",
         })
@@ -176,8 +174,6 @@ function Products() {
     }
   };
 
-  if (loading) return <div className="text-center py-5">Loading products...</div>;
-
   return (
     <div className="container py-4">
       <h4 className="mb-4 fw-bold">Shop All Products</h4>
@@ -186,11 +182,10 @@ function Products() {
         {categories.map((cat) => (
           <button
             key={cat}
-            className={`btn btn-sm me-auto border-0 ${
-              selectedCategory === cat
+            className={`btn btn-sm me-auto border-0 ${selectedCategory === cat
                 ? "text-decoration-underline"
                 : "text-decoration-none"
-            }`}
+              }`}
             onClick={() => setSelectedCategory(cat)}
           >
             {cat}
@@ -198,7 +193,7 @@ function Products() {
         ))}
       </div>
 
-     
+
       <div className="row">
         {filteredProducts.map((product) => {
           const isInWishlist = wishlistItems.some((w) => w._id === product._id);
@@ -206,7 +201,13 @@ function Products() {
             <div className="col-md-4 mb-4" key={product._id}>
               <div className="card h-100 shadow-sm position-relative">
                 <img
-                  src={product.image}
+                  src={
+                    product.images?.[0]?.url?.startsWith("http")
+                      ? product.images[0].url
+                      : product.images?.[0]?.startsWith("http")
+                        ? product.images[0]
+                        : `https://urbangraphtees-be.onrender.com/${product.images?.[0]?.url || product.images?.[0] || ""}`
+                  }
                   className="card-img-top"
                   alt={product.name}
                   style={{

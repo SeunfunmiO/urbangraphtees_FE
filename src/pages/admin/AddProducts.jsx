@@ -14,6 +14,7 @@ const AddProducts = () => {
         discount: '',
         category: '',
         images: [],
+        tag:''
     });
 
     const [loading, setLoading] = useState(false);
@@ -187,13 +188,14 @@ const AddProducts = () => {
                                 <label className="form-label">Product Tag</label>
                                 <select
                                     className="form-select"
+                                    name="tag"
                                     value={formData.tag}
                                     onChange={handleChange}
                                 >
                                     <option value="none">None</option>
-                                    <option value="new">NEW</option>
-                                    <option value="trending">TRENDING</option>
-                                    <option value="best-seller">BEST SELLER</option>
+                                    <option value="new">New</option>
+                                    <option value="trending">Trending</option>
+                                    <option value="best-seller">Best Seller</option>
                                 </select>
                             </div>
 

@@ -2,14 +2,26 @@ import { BiBell, BiMenuAltLeft, BiShoppingBag, BiUser } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from '../redux/authSlice';
-// import SearchBar from './SearchBar';
+import { FaSearch } from 'react-icons/fa';
+import { useState } from 'react';
 
 const Navbar = () => {
   const navigate = useNavigate()
+  const [query, setQuery] = useState("");
   const cartCount = useSelector((state) => state.cart.items)
   const wishlistCount = useSelector((state) => state.wishlist.items)
   const notificationsCount = useSelector((state) => state.notification.unreadCount)
   const { token } = useSelector((state) => state.auth)
+
+  const handleSearch = () => {
+    if (query.trim() !== "") {
+      navigate(`/search?query=${encodeURIComponent(query.trim())}`);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") handleSearch();
+  }
 
 
 
@@ -38,7 +50,7 @@ const Navbar = () => {
           {/* <img src="./multimedia/ugtBlackBgLogo.jpg" alt=" UrbanGraphTees logo" width={"60px"} /> */}
         </a>
         <button className="navbar-toggler border border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-          <span><BiMenuAltLeft className='border-0'/></span>
+          <span><BiMenuAltLeft className='border-0' /></span>
         </button>
       </div>
 
@@ -114,7 +126,7 @@ const Navbar = () => {
               isActive ? "navRoute text-decoration-none  active-link text-black" : "navRoute text-decoration-none text-black"
             } to="/Privacy">Privacy Policy</NavLink></li>
             <hr className="divider" />
-            <li className="nav-item  appear" data-bs-dismiss="offcanvas" style={{ display: "none" }}> <NavLink onClick={()=> logout()} className={({ isActive }) =>
+            <li className="nav-item  appear" data-bs-dismiss="offcanvas" style={{ display: "none" }}> <NavLink onClick={() => logout()} className={({ isActive }) =>
               isActive ? "navRoute text-decoration-none  text-danger" : "navRoute text-decoration-none text-danger"
             } >Log Out</NavLink></li>
             {/* <li className="nav-item dropdown appear" style={{ display: "none" }}>
@@ -150,8 +162,19 @@ const Navbar = () => {
         </div>
       </div>
       <div className="d-flex navIcon gap-4 justify-content-center align-items-center">
-        <NavLink className='text-decoration-none text-black' title='Search' to="/Search"><i className="fa-solid fa-magnifying-glass"></i></NavLink>
-        {/* <SearchBar/> */}
+        <input
+          type="text"
+          placeholder="Search for products..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className="form-control"
+        />
+        <FaSearch
+          style={{ cursor: "pointer" }}
+          onClick={handleSearch}
+        />
+        {/* <NavLink className='text-decoration-none text-black' title='Search' to="/Search"><i className="fa-solid fa-magnifying-glass"></i></NavLink> */}
         <button type="button" className="btn badgeBtn  position-relative">
           <NavLink className='text-decoration-none text-black' title='Wishlist' to="/Wishlist"><i className="fa-regular fa-heart"></i></NavLink>
           <span className="position-absolute text-center top-0 start-100 translate-middle badge rounded-pill bg-light text-black">

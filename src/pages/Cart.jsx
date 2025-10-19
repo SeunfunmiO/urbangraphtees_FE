@@ -46,7 +46,6 @@ const Cart = () => {
                     Clear Cart
                 </button></div>
 
-
             <div className='pb-3' style={{ backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 0.125rem 0.25rem rgba(0,0,0,0.075)' }}>
                 {cartItems.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>

@@ -136,7 +136,7 @@ function ProductDetailsPage() {
 
           <div className="mb-3">
             <strong>Size: </strong>
-            {product.sizes.map((size) => (
+            {product.map((size) => (
               <button
                 key={size}
                 onClick={() => setselectedSize(size)}

@@ -16,7 +16,6 @@ import BlogPost from './components/BlogPost';
 import NotFound from './pages/NotFound';
 import ContactPage from './pages/ContactPage';
 import Search from './pages/Search';
-// import Dashboard from './pages/Dashboard';
 import ProductDetailsPage from './pages/ProductDetailsPage';
 import Checkout from './pages/Checkout';
 import Products from './pages/Products';
@@ -34,7 +33,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { ToastContainer } from 'react-toastify'
 import ForgetPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
-// import OverView from './pages/Overview'
 import NotificationDetails from './pages/NotificationDetails'
 import AdminAuthGuard from './components/AdminAuthGuard'
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -44,6 +42,7 @@ import AddProducts from './pages/admin/AddProducts'
 import ManageOrders from './pages/admin/ManageOrders'
 import ManageUsers from './pages/admin/ManageUsers'
 import AdminSettings from './pages/admin/AdminSettings'
+import SearchResults from './pages/Search'
 
 const AppContent = () => {
   const location = useLocation();
@@ -102,7 +101,6 @@ const AppContent = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-
         <Route path="/admin" element={
           <AdminAuthGuard>
             <AdminDashboard />
@@ -117,7 +115,7 @@ const AppContent = () => {
           <Route path='settings' element={<AdminSettings/>} />
         </Route>
 
-
+        <Route path='/search' element={<SearchResults/>} />
 
 
 

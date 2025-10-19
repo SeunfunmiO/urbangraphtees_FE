@@ -1,34 +1,57 @@
-import React, { useState } from 'react'
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
 
+const SearchResults = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const location = useLocation();
 
-const Search = () => {
-    const [query, setQuery] = useState("");
+  const query = new URLSearchParams(location.search).get("query");
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        if (query.trim() === "") return;
-        console.log("Searching for:", query);
-
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(
+         `https://urbangraphtees-be.onrender.com/products?search=${encodeURIComponent(query)}`
+        );
+        setProducts(res.data.products || []);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    return (
-        <div className="d-flex align-items-center justify-content-center my-5 pt-5">
-            <form onSubmit={handleSearch}>
-                <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Search items..."
-                    autoFocus
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    style={{
-                        width: "200px",
-                        transition: "all 0.3s ease-in-out",
-                    }}
-                />
-            </form>
-        </div>
-    )
-}
+    if (query) fetchProducts();
+  }, [query]);
 
-export default Search
+  if (loading) return <p>Loading...</p>;
+  if (!products.length) return <p>No products found for "{query}"</p>;
+
+  return (
+    <div className="container mt-4">
+      <h4>Search results for "{query}"</h4>
+      <div className="row">
+        {products.map((product) => (
+          <div className="col-md-3 mb-3" key={product._id}>
+            <div className="card">
+              <img
+                src={product.image}
+                alt={product.name}
+                className="card-img-top"
+              />
+              <div className="card-body">
+                <h6>{product.name}</h6>
+                <p>${product.price}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default SearchResults;

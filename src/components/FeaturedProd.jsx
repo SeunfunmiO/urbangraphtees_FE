@@ -17,6 +17,9 @@ const FeaturedProd = () => {
     fetchProducts();
   }, []);
 
+  const featuredProduct = products.map(p=>({
+    ...p , tag: p.tag?.toUpperCase() || ''
+  }));
 
   return (
     <section className="pt-5 container">
@@ -26,9 +29,9 @@ const FeaturedProd = () => {
       </div>
 
       <div className="d-flex justify-content-center gap-4 flex-wrap featuredSec">
-        <ProductSection tag="NEW" products={products} />
-        <ProductSection tag="BEST SELLER" products={products} />
-        <ProductSection tag="TRENDING" products={products} />
+        <ProductSection tag="NEW" products={featuredProduct} />
+        <ProductSection tag="BEST SELLER" products={featuredProduct} />
+        <ProductSection tag="TRENDING" products={featuredProduct} />
       </div>
     </section>
   );
