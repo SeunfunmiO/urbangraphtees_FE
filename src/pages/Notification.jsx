@@ -1,33 +1,71 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { clearAllNotifications, markAllAsRead, markAsRead, markAsUnread, removeNotification } from '../redux/notificationSlice';
 import { useNavigate } from 'react-router-dom';
+import { clearAllNotifications, fetchNotifications, markAllAsRead, markAsRead, markAsUnread, removeNotification } from '../redux/notificationSlice';
 
 const Notification = () => {
   const dispatch = useDispatch()
   const [dropdownOpen, setDropdownOpen] = useState(null);
   const [filter, setFilter] = useState('all')
-  const notifications = useSelector((state) => state.notification.notifications) || [];
+  const notifications = useSelector((state) => state.notifications.notifications) || [];
+  //name.intialstate
   const unreadCount = Array.isArray(notifications) ? notifications.filter(n => !n.read).length : 0;
-  // const [expanded, setExpanded] = useState(null)
   const navigate = useNavigate()
+  // const { items } = useSelector(state => state.notifications);
+  // const unreadCount = useSelector((state) => state.notifications.unreadCount);
 
+
+  useEffect(() => {
+    dispatch(fetchNotifications());
+  }, [dispatch]);
+
+  const handleMarkAsRead = (notif)=>{
+    dispatch(markAsRead(notif._id))
+    setDropdownOpen(null)
+  }
+  // import React, { useEffect } from "react";
+  // import { useDispatch, useSelector } from "react-redux";
+  // import {
+  //   fetchNotifications,
+  //   markAsRead,
+  //   deleteNotification,
+  //   clearAllNotifications
+  // } from "../redux/notificationSlice";
+
+
+
+
+  //   return (
+  //     <div>
+  //       <h4>Notifications</h4>
+  //       {loading && <p>Loading...</p>}
+
+  //       {items.length === 0 && <p>No notifications yet.</p>}
+
+  //       {items.map((n) => (
+  //         <div key={n._id} style={{ borderBottom: "1px solid #eee", padding: "10px" }}>
+  //           <p style={{ fontWeight: n.isRead ? "normal" : "bold" }}>{n.message}</p>
+  //           <div>
+  //             <button onClick={() => dispatch(markAsRead(n._id))}>Mark as Read</button>
+  //             <button onClick={() => dispatch(deleteNotification(n._id))}>Delete</button>
+  //           </div>
+  //         </div>
+  //       ))}
+
+  //       {items.length > 0 && (
+  //         <button onClick={() => dispatch(clearAllNotifications())}>
+  //           Clear All
+  //         </button>
+  //       )}
+  //     </div>
+  //   );
+  // }
 
   const filteredNotifications = Array.isArray(notifications) ? notifications.filter(notif => {
     if (filter === 'unread') return !notif.read;
     if (filter === 'read') return notif.read;
     return true;
   }) : [];
-  // const toggleMsg = (notif) => {
-  //   if (expanded === notif.id) {
-  //     setExpanded(null);
-  //   } else {
-  //     setExpanded(notif.id);
-  //     dispatch(markAsRead(notif.id));
-  //   }
-  // };
-
-
 
   const typeColors = {
     success: '#198754',
@@ -163,7 +201,7 @@ const Notification = () => {
           ) : (
             filteredNotifications.map((notif, index) => (
               <div
-                key={notif.id}
+                key={notif._id}
                 style={{
                   padding: '1rem',
                   borderBottom: index < filteredNotifications.length - 1 ? '1px solid #dee2e6' : 'none',
@@ -192,8 +230,8 @@ const Notification = () => {
                       <div
                         style={{ flex: 1, cursor: 'pointer' }}
                         onClick={() => {
-                          dispatch(markAsRead(notif.id));
-                          navigate(`/notifications/${notif.id}`);
+                          dispatch(handleMarkAsRead(notif._id));
+                          navigate(`/notifications/${notif._id}`);
                         }}
                       >
                         <h6 style={{ marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
@@ -214,11 +252,11 @@ const Notification = () => {
                           marginBottom: '0.25rem', color: '#6c757d', cursor: 'pointer'
                         }}
                         >{notif.message}</p>
-                        <small style={{ color: '#6c757d' }}>{notif.timestamp}</small>
+                        <small style={{ color: '#6c757d' }}>{notif.createdAt}</small>
                       </div>
                       <div style={{ position: 'relative' }}>
                         <button
-                          onClick={() => setDropdownOpen(dropdownOpen === notif.id ? null : notif.id)}
+                          onClick={() => setDropdownOpen(dropdownOpen === notif._id ? null : notif._id)}
                           style={{
                             border: 'none',
                             backgroundColor: 'transparent',
@@ -231,7 +269,7 @@ const Notification = () => {
                         >
                           ⋮
                         </button>
-                        {dropdownOpen === notif.id && (
+                        {dropdownOpen === notif._id && (
                           <div style={{
                             position: 'absolute',
                             right: 0,
@@ -246,7 +284,7 @@ const Notification = () => {
                           }}>
                             {!notif.read && (
                               <button
-                                onClick={() => dispatch(markAsRead(notif.id))}
+                                onClick={() => dispatch(markAsRead(notif._id))}
                                 style={{
                                   width: '100%',
                                   padding: '0.5rem 1rem',
@@ -263,7 +301,7 @@ const Notification = () => {
                             )}
                             {notif.read && (
                               <button
-                                onClick={() => dispatch(markAsUnread(notif.id))}
+                                onClick={() => dispatch(markAsUnread(notif._id))}
                                 style={{
                                   width: '100%',
                                   padding: '0.5rem 1rem',
@@ -279,7 +317,7 @@ const Notification = () => {
                               </button>
                             )}
                             <button
-                              onClick={() => dispatch(removeNotification(notif.id))}
+                              onClick={() => dispatch(removeNotification(notif._id))}
                               style={{
                                 width: '100%',
                                 padding: '0.5rem 1rem',

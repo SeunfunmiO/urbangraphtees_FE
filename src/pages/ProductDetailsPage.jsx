@@ -2,25 +2,23 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaCartArrowDown, FaHeart, FaShoppingBag } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, decreaseQuantity } from "../redux/cartSlice";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
-import { addNotification } from "../redux/notificationSlice";
 import axios from "axios";
+import { addNotification } from "../redux/notificationSlice";
+import { addToCart } from "../redux/cartSlice";
 
 
 function ProductDetailsPage() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const dispatch = useDispatch()
-  const [recentItem, setrecentItem] = useState(null)
   const [loading, setLoading] = useState(false)
   const [selectedSize, setselectedSize] = useState(null)
   const [selectedColor, setSelectedColor] = useState(null)
   const user = useSelector((state) => state.auth.user)
-  // const notifications = useSelector((state) => state.notification.notifications)
+  // const notifications = useSelector((state) => state.notifications.notifications) || [];
   const [productsData, setProductsData] = useState([])
-
 
 
   useEffect(() => {
@@ -35,6 +33,7 @@ function ProductDetailsPage() {
       }
       catch (error) {
         console.log('Error fetching products:', error);
+        toast.error('Error fetching product')
       }
       finally {
         setLoading(false)
@@ -55,10 +54,10 @@ function ProductDetailsPage() {
     const cartRect = cartIcon.getBoundingClientRect();
 
     imgClone.style.position = "fixed";
-    imgClone.style.left = `${ imgRect.left } px`;
-    imgClone.style.top = `${ imgRect.top } px`;
-    imgClone.style.width = `${ imgRect.width } px`;
-    imgClone.style.height = `${ imgRect.height } px`;
+    imgClone.style.left = `${imgRect.left} px`;
+    imgClone.style.top = `${imgRect.top} px`;
+    imgClone.style.width = `${imgRect.width} px`;
+    imgClone.style.height = `${imgRect.height} px`;
     imgClone.style.borderRadius = "8px";
     imgClone.style.transition = "transform 0.8s ease-in-out, opacity 0.8s ease-in-out";
     imgClone.style.zIndex = 2000;
@@ -70,7 +69,7 @@ function ProductDetailsPage() {
       const translateX = cartRect.left - imgRect.left;
       const translateY = cartRect.top - imgRect.top;
 
-      imgClone.style.transform = `translate(${ translateX }px, ${ translateY }px) scale(0.1)`;
+      imgClone.style.transform = `translate(${translateX}px, ${translateY}px) scale(0.1)`;
       imgClone.style.opacity = "0.2";
     });
 
@@ -91,25 +90,20 @@ function ProductDetailsPage() {
       toast.warning('Please select a size and color before adding to cart')
       return;
     }
-
-    dispatch(addToCart({ ...item, size: selectedSize, color: selectedColor }))
+    dispatch(addToCart({
+      productId: product._id,
+      name: product.name,
+      price: product.price,
+      images: [{ url: product.image }],
+      sizes: selectedSize,
+      colors: selectedColor,
+      quantity: 1
+    }))
     dispatch(addNotification({ message: `Hello ${userName}, You added ${item.name} to cart `, status: true, type: 'success' }))
-    setrecentItem(item)
-    toast.success(<div>
-      {item.name} added to cart
-      {recentItem && (
-        <button onClick={() => handleUndo(product)} className="border border-0 bg-transparent ms-2"><small className="text-danger">Undo</small></button>
-      )}
-    </div>);
+    toast.success(`${item.name} added to cart`);
 
     const imageEl = document.querySelector("#productImage");
     animateFlyToCart(imageEl);
-  }
-
-  const handleUndo = (item) => {
-    dispatch(decreaseQuantity(item.id))
-    setrecentItem(null)
-    toast.success('Undone')
   }
 
 
@@ -122,7 +116,13 @@ function ProductDetailsPage() {
         <div className="col-md-6">
           <img
             id="productImage"
-            src={product.image}
+            src={
+              product.images?.[0]?.url?.startsWith("http")
+                ? product.images[0].url
+                : product.images?.[0]?.startsWith("http")
+                  ? product.images[0]
+                  : `https://urbangraphtees-be.onrender.com/${product.images?.[0]?.url || product.images?.[0] || ""}`
+            }
             alt={product.name}
             className="img-fluid w-50 rounded shadow-sm position-relative"
           />
@@ -136,7 +136,7 @@ function ProductDetailsPage() {
 
           <div className="mb-3">
             <strong>Size: </strong>
-            {product.map((size) => (
+            {product.sizes.map((size) => (
               <button
                 key={size}
                 onClick={() => setselectedSize(size)}
@@ -177,16 +177,22 @@ function ProductDetailsPage() {
         <h4>Related Products</h4>
         <div className="row">
           {productsData
-            .filter((p) => p.category === product.category && p.id !== product.id)
+            .filter((p) => p.category === product.category && p._id !== product._id)
             .map((related) => (
-              <div className="col-md-3 mb-3" key={related.id}>
+              <div className="col-md-3 mb-3" key={related._id}>
                 <Link
-                  to={`/products/${related.id}`}
+                  to={`/products/${related._id}`}
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
                   <div className="card h-100 shadow-sm related-card">
                     <img
-                      src={related.image}
+                      src={
+                        related.images?.[0]?.url?.startsWith("http")
+                          ? related.images[0].url
+                          : related.images?.[0]?.startsWith("http")
+                            ? related.images[0]
+                            : `https://urbangraphtees-be.onrender.com/${product.images?.[0]?.url || product.images?.[0] || ""}`
+                      }
                       className="card-img-top"
                       alt={related.name}
                       style={{ height: "180px", objectFit: "cover" }}

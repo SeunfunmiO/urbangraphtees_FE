@@ -3,25 +3,25 @@ import { useSelector } from 'react-redux';
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from '../redux/authSlice';
 import { FaSearch } from 'react-icons/fa';
-import { useState } from 'react';
+// import { useState } from 'react';
 
 const Navbar = () => {
   const navigate = useNavigate()
-  const [query, setQuery] = useState("");
+  // const [query, setQuery] = useState("");
   const cartCount = useSelector((state) => state.cart.items)
   const wishlistCount = useSelector((state) => state.wishlist.items)
   const notificationsCount = useSelector((state) => state.notification.unreadCount)
   const { token } = useSelector((state) => state.auth)
 
-  const handleSearch = () => {
-    if (query.trim() !== "") {
-      navigate(`/search?query=${encodeURIComponent(query.trim())}`);
-    }
-  };
+  // const handleSearch = () => {
+  //   if (query.trim() !== "") {
+  //     navigate(`/search?query=${encodeURIComponent(query.trim())}`);
+  //   }
+  // };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") handleSearch();
-  }
+  // const handleKeyDown = (e) => {
+  //   if (e.key === "Enter") handleSearch();
+  // }
 
 
 
@@ -49,8 +49,8 @@ const Navbar = () => {
           UrbanGraphTees
           {/* <img src="./multimedia/ugtBlackBgLogo.jpg" alt=" UrbanGraphTees logo" width={"60px"} /> */}
         </a>
-        <button className="navbar-toggler border border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-          <span><BiMenuAltLeft className='border-0' /></span>
+        <button className="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+          <span className='border-0'><BiMenuAltLeft className='border-0' /></span>
         </button>
       </div>
 
@@ -162,7 +162,7 @@ const Navbar = () => {
         </div>
       </div>
       <div className="d-flex navIcon gap-4 justify-content-center align-items-center">
-        <input
+        {/* <input
           type="text"
           placeholder="Search for products..."
           value={query}
@@ -173,8 +173,8 @@ const Navbar = () => {
         <FaSearch
           style={{ cursor: "pointer" }}
           onClick={handleSearch}
-        />
-        {/* <NavLink className='text-decoration-none text-black' title='Search' to="/Search"><i className="fa-solid fa-magnifying-glass"></i></NavLink> */}
+        /> */}
+        <NavLink className='text-decoration-none text-black' title='Search' to="/Search"><i className="fa-solid fa-magnifying-glass"></i></NavLink>
         <button type="button" className="btn badgeBtn  position-relative">
           <NavLink className='text-decoration-none text-black' title='Wishlist' to="/Wishlist"><i className="fa-regular fa-heart"></i></NavLink>
           <span className="position-absolute text-center top-0 start-100 translate-middle badge rounded-pill bg-light text-black">

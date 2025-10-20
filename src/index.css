@@ -87,7 +87,9 @@ z-index: 15000000 !important;
   background-color: #000000 !important;
 }
 
-
+.navbar-toggler:focus{
+  box-shadow: none !important;
+}
 
 .btn {
   font-family: 'Poppins', sans-serif;

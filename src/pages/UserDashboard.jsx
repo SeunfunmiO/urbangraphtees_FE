@@ -155,8 +155,10 @@ const UserDashboard = () => {
                     </div>
                     <div className="flex-grow-1 p-4">{renderContent()}</div>
                 </main>
+            </div>
+            <div className="d-flex align-items-center justify-content-center">
                 {user.isAdmin && (
-                    <button onClick={() => navigate('/admin')} className="btn btn-outline-success d-md-none">Switch to Admin</button>
+                    <button onClick={() => navigate('/admin')} className="btn btn-outline-success d-md-none mb-4">Switch to Admin</button>
                 )}
             </div>
         </div>

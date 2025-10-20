@@ -154,12 +154,13 @@ function Products() {
       ? products
       : products.filter((p) => p.category === selectedCategory);
 
+      
   const handleWishlist = (item) => {
     const userName = user?.userName || user?.fullname?.split(" ")[0] || "User";
-    const isInWishlist = wishlistItems.some((w) => w._id === item._id);
+    const isInWishlist = wishlistItems.some((w) => w._id === item._id) || wishlistItems.some((w) => w.id === item.id);
 
     if (isInWishlist) {
-      dispatch(removeFromWishlist(item._id));
+      dispatch(removeFromWishlist(item._id || item.id));
       toast.success("Removed from wishlist");
       dispatch(
         addNotification({
@@ -183,8 +184,8 @@ function Products() {
           <button
             key={cat}
             className={`btn btn-sm me-auto border-0 ${selectedCategory === cat
-                ? "text-decoration-underline"
-                : "text-decoration-none"
+              ? "text-decoration-underline"
+              : "text-decoration-none"
               }`}
             onClick={() => setSelectedCategory(cat)}
           >

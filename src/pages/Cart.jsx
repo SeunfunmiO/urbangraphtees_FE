@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from "react-redux";
-import { removeFromCart, decreaseQuantity, addToCart, clearCart } from "../redux/cartSlice";
+import { clearCart, fetchCart, updateCartItem, removeCartItem } from "../redux/cartSlice";
 import { Link, useNavigate } from 'react-router-dom';
 import { DotLoader } from 'react-spinners'
 import { toast } from 'react-toastify';
@@ -12,20 +12,23 @@ const Cart = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate()
 
+    useEffect(() => {
+        dispatch(fetchCart())
+    }, [dispatch])
 
     const total = cartItems.reduce(
-        (sum, item) => sum + item.price * item.quantity,
+        (sum, item) => sum + item.productId.price * item.quantity,
         0
     );
 
-    const handleAddToCart = (item) => {
-        dispatch(addToCart(item))
-        toast.success(`${item.name} added to cart`)
-    }
+    // const handleAddToCart = (item) => {
+    //     dispatch(addToCart(item))
+    //     toast.success(`${item.name} added to cart`)
+    // }
 
-    const handleRemoveFromCart = (item) => {
-        dispatch(removeFromCart(item.id))
-        toast.success(`${item.name} removed from cart`)
+    const handleRemoveFromCart = (productId) => {
+        dispatch(removeCartItem(productId))
+        toast.success(`${productId.name} removed from cart`)
 
     }
 
@@ -57,18 +60,18 @@ const Cart = () => {
                         <ul className="list-group mb-4">
                             {cartItems.map((item) => (
                                 <li
-                                    key={item.id}
+                                    key={item._id}
                                     className="list-group-item flex-wrap gap-2 d-flex justify-content-between align-items-center"
                                 >
                                     <div className='d-flex'>
                                         <img
-                                            src={item.image}
-                                            alt={item.name}
-                                            onClick={() => navigate(`/products/${item.id}`)} style={{ width: "60px", marginRight: "10px" }}
+                                            src={item.productId?.image}
+                                            alt={item.productId?.name}
+                                            onClick={() => navigate(`/products/${item._id}`)} style={{ width: "60px", marginRight: "10px" }}
                                         />
                                         <div className='d-flex flex-column' >
                                             <div className="d-flex flex-column">
-                                                <div>{item.name} </div>
+                                                <div>{item.productId?.name} </div>
                                                 <div className='text-muted'>{item.size} {' '} <span
                                                     style={{
                                                         display: 'inline-block',
@@ -88,21 +91,27 @@ const Cart = () => {
                                         <div className='border border-secondary rounded-2'>
                                             <button
                                                 className="btn btn-sm btn-0"
-                                                onClick={() => dispatch(decreaseQuantity(item.id))}
+                                                onClick={() => {
+                                                    if (item.quantity > 1) {
+                                                        dispatch(updateCartItem({ productId: item.productId._id, quantity: item.quantity - 1 }))
+                                                    } else {
+                                                        dispatch(removeCartItem(item.productId._id))
+                                                    }
+                                                }}
                                             >
                                                 -
                                             </button>
                                             {item.quantity}
                                             <button
                                                 className="btn btn-sm btn-0"
-                                                onClick={() => handleAddToCart(item)}
+                                                onClick={() => dispatch(updateCartItem({ productId: item.productId._id, quantity: item.quantity + 1 }))}
                                             >
                                                 +
                                             </button>
                                         </div>
                                         <button
                                             className="btn btn-sm btn-0 text-danger"
-                                            onClick={() => handleRemoveFromCart(item.id)}
+                                            onClick={() => handleRemoveFromCart(item.productId?._id || item._id)}
                                         >
                                             Remove
                                         </button>

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { addToCart, decreaseQuantity, removeFromCart } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify"
 import { addNotification } from "../redux/notificationSlice";
+import { removeCartItem, updateCartItem } from "../redux/cartSlice";
 
 const OrderSummary = ({ showCheckoutButton = false, onCheckout }) => {
     const { items = [] } = useSelector((state) => state.cart || {});
@@ -24,12 +24,13 @@ const OrderSummary = ({ showCheckoutButton = false, onCheckout }) => {
 
 
     const applyPromo = (e) => {
-        if (promoCode.toLowerCase() === 'WELCOME10'.toLowerCase()) {
+        e.preventDefault();
+        if (promoCode.trim().toLowerCase() === 'WELCOME10') {
             toast.success('Congratulations , 10% OFF 🎉!')
             setDiscount(subtotal * 0.1);
-            dispatch(addNotification('Congratulations , You got 10% OFF your order. Thank you for shopping with Urbangraphtees'))
+            dispatch(addNotification({ title: 'Promo Applied', message: ' You got 10% OFF your order. Thank you for shopping with Urbangraphtees!', type: "success" }))
+            setPromoCode('')
         } else {
-            e.preventDefault();
             setDiscount(0)
             toast.error('Invalid promo code!')
         }
@@ -43,14 +44,14 @@ const OrderSummary = ({ showCheckoutButton = false, onCheckout }) => {
                 <ul className="list-group mb-4">
                     {items.map((item) => (
                         <li
-                            key={item.id}
+                            key={item._id}
                             className="flex-wrap gap-2 d-flex justify-content-between align-items-center"
                         >
                             <div className='d-flex'>
                                 <img
                                     src={item.image}
                                     alt={item.name}
-                                    onClick={() => navigate(`/products/${item.id}`)} style={{ width: "60px", marginRight: "10px" }}
+                                    onClick={() => navigate(`/products/${item._id}`)} style={{ width: "60px", marginRight: "10px" }}
                                 />
                                 <div className='d-flex flex-column' >
                                     <div className="d-flex flex-column">
@@ -65,21 +66,27 @@ const OrderSummary = ({ showCheckoutButton = false, onCheckout }) => {
                                 <div className='border border-secondary rounded-2'>
                                     <button
                                         className="btn btn-sm btn-0"
-                                        onClick={() => dispatch(decreaseQuantity(item.id))}
+                                        onClick={() => {
+                                            if (item.quantity > 1) {
+                                                dispatch(updateCartItem({ productId: item.productId._id, quantity: item.quantity - 1 }))
+                                            } else {
+                                                dispatch(removeCartItem(item.productId._id))
+                                            }
+                                        }}
                                     >
                                         -
                                     </button>
                                     {item.quantity}
                                     <button
                                         className="btn btn-sm btn-0"
-                                        onClick={() => dispatch(addToCart(item))}
+                                        onClick={() => dispatch(updateCartItem({ productId: item.productId._id, quantity: item.quantity + 1 }))}
                                     >
                                         +
                                     </button>
                                 </div>
                                 <button
                                     className="btn btn-sm btn-0 text-danger"
-                                    onClick={() => dispatch(removeFromCart(item.id))}
+                                    onClick={() => dispatch(removeCartItem(item._id))}
                                 >
                                     Remove
                                 </button>
@@ -106,10 +113,12 @@ const OrderSummary = ({ showCheckoutButton = false, onCheckout }) => {
                 <input type="text"
                     placeholder='Enter promo code'
                     value={promoCode}
-                    className="form-control mb-3"
+                    className="form-control mb-3 text-uppercase"
                     onChange={(e) => setPromoCode(e.target.value)}
                 />
-                <button className="btn btn-sm btn-outline-dark w-100" onClick={applyPromo}>Apply Promo</button>
+                <button className="btn btn-sm btn-outline-dark w-100"
+                    disabled={!promoCode}
+                    onClick={applyPromo}>Apply Promo</button>
             </div>
 
             {showCheckoutButton && (
