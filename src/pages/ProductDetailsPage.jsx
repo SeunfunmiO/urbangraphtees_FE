@@ -106,10 +106,6 @@ function ProductDetailsPage() {
     animateFlyToCart(imageEl);
   }
 
-
-
-  if (!product) return <h6 className="text-center mt-5">Product not found...</h6>;
-
   return (
     <div className="container my-5">
       <div className="row">
