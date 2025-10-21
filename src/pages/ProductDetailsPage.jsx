@@ -112,13 +112,7 @@ function ProductDetailsPage() {
         <div className="col-md-6">
           <img
             id="productImage"
-            src={
-              product.images?.[0]?.url?.startsWith("http")
-                ? product.images[0].url
-                : product.images?.[0]?.startsWith("http")
-                  ? product.images[0]
-                  : `https://urbangraphtees-be.onrender.com/${product.images?.[0]?.url || product.images?.[0] || ""}`
-            }
+            src={product.image}
             alt={product.name}
             className="img-fluid w-50 rounded shadow-sm position-relative"
           />
