@@ -94,7 +94,7 @@ function ProductDetailsPage() {
       productId: product._id,
       name: product.name,
       price: product.price,
-      images: [{ url: product.image }],
+      images: [{ url: product.images }],
       sizes: selectedSize,
       colors: selectedColor,
       quantity: 1
@@ -106,13 +106,28 @@ function ProductDetailsPage() {
     animateFlyToCart(imageEl);
   }
 
+
+  if (!product) {
+    return (
+      <div className="d-flex justify-content-center align-items-center my-5">
+        <ClipLoader size={30} color="#000" />
+      </div>
+    );
+  }
+
   return (
     <div className="container my-5">
       <div className="row">
         <div className="col-md-6">
           <img
             id="productImage"
-            src={product.image}
+            src={
+              product.images?.[0]?.url?.startsWith("http")
+                ? product.images[0].url
+                : product.images?.[0]?.startsWith("http")
+                  ? product.images[0]
+                  : `https://urbangraphtees-be.onrender.com/${product.images?.[0]?.url || product.images?.[0] || ""}`
+            }
             alt={product.name}
             className="img-fluid w-50 rounded shadow-sm position-relative"
           />
@@ -126,7 +141,7 @@ function ProductDetailsPage() {
 
           <div className="mb-3">
             <strong>Size: </strong>
-            {product.sizes.map((size) => (
+            {product.sizes?.map((size) => (
               <button
                 key={size}
                 onClick={() => setselectedSize(size)}
@@ -138,7 +153,7 @@ function ProductDetailsPage() {
 
           <div className="mb-3">
             <strong>Color: </strong>
-            {product.colors.map((color) => (
+            {product.colors?.map((color) => (
               <button key={color}
                 onClick={() => setSelectedColor(color)}
                 className={`btn btn-none btn-sm border-0 ${selectedColor === color ? 'text-success fw-bold' : 'text-dark'} `}>
@@ -150,11 +165,13 @@ function ProductDetailsPage() {
           <button
             id="liveToastBtn"
             type="button"
-            disabled={loading}
+            disabled={loading || !selectedSize || !selectedColor}
             className="btn border btn-md border-0 text-light d-flex justify-content-center align-items-center gap-2"
             onClick={() => handleLoader(product)}
             style={{
-              backgroundColor: 'black', minWidth: '120px', display: 'flex', justifyContent: "center", alignItems: "center", gap: '8px'
+              backgroundColor: 'black', minWidth: '120px', display: 'flex',
+              justifyContent: "center", alignItems: "center", gap: '8px', opacity: !selectedColor || !selectedSize ? 0.7 : 1,
+              cursor: !selectedColor || !selectedSize ? 'not-allowed' : "pointer"
             }}
           >
             {loading ? <ClipLoader size={18} color="#fff" /> : "Add to Cart"}

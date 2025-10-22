@@ -79,7 +79,7 @@ const ManageUsers = () => {
             setUsers((prevUsers) =>
                 prevUsers.map((user) =>
                     user._id === id
-                        ? { ...user, role: res.data.role || (user.role === "admin" ? "user" : "admin") }
+                        ? { ...user, role: res.data.user.role || (user.role === "admin" ? "user" : "admin") }
                         : user
                 )
             );

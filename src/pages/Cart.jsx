@@ -38,6 +38,7 @@ const Cart = () => {
 
     }
 
+
     return (
         <div className="container my-5">
             <div className="d-flex justify-content-between align-items-center">
@@ -65,7 +66,13 @@ const Cart = () => {
                                 >
                                     <div className='d-flex'>
                                         <img
-                                            src={item.productId?.image}
+                                            src={
+                                                item.images?.[0]?.url?.startsWith("http")
+                                                    ? item.images[0].url
+                                                    : item.images?.[0]?.startsWith("http")
+                                                        ? item.images[0]
+                                                        : `https://urbangraphtees-be.onrender.com/${item.images?.[0]?.url || item.images?.[0] || ""}`
+                                            }
                                             alt={item.productId?.name}
                                             onClick={() => navigate(`/products/${item._id}`)} style={{ width: "60px", marginRight: "10px" }}
                                         />
