@@ -196,7 +196,7 @@ import { useNavigate } from "react-router-dom";
 const ManageProducts = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [editingProduct, setEditingProduct] = useState(null); // store the product to edit
+    const [editingProduct, setEditingProduct] = useState(null); 
     const [editForm, setEditForm] = useState({});
     const [editImage, setEditImage] = useState("");
     const [deleting, setDeleting] = useState(false)
@@ -273,7 +273,7 @@ const ManageProducts = () => {
         try {
             setEditing(true)
             const payload = { ...editForm };
-            if (editImage) payload.image = editImage; // attach new image if changed
+            if (editImage) payload.image = editImage; 
 
             const res = await axios.put(`${BASE_URL}/${editingProduct._id}`, payload, {
                 headers: {
@@ -477,11 +477,10 @@ const ManageProducts = () => {
                                         <option value="none">None</option>
                                         <option value="new">New</option>
                                         <option value="trending">Trending</option>
-                                        <option value="best-seller">Best Seller</option>
+                                        <option value="best seller">Best Seller</option>
                                     </select>
                                 </div>
 
-                                {/* Image */}
                                 <div className="col-md-6">
                                     <label className="form-label">Change Image</label>
                                     <input

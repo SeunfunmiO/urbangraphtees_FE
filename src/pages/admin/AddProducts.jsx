@@ -195,7 +195,7 @@ const AddProducts = () => {
                                     <option value="none">None</option>
                                     <option value="new">New</option>
                                     <option value="trending">Trending</option>
-                                    <option value="best-seller">Best Seller</option>
+                                    <option value="best seller">Best Seller</option>
                                 </select>
                             </div>
 

@@ -178,14 +178,14 @@ const ManageUsers = () => {
 
             <div className="d-flex justify-content-center mt-4">
                 <nav>
-                    <ul className="pagination">
+                    <ul className="pagination border-0">
                         {[...Array(totalPages)].map((_, i) => (
                             <li
                                 key={i}
                                 className={`page-item ${page === i + 1 ? "active" : ""}`}
                             >
                                 <button
-                                    className="page-link border-0"
+                                    className="page-link border-0 bg-black"
                                     onClick={() => setPage(i + 1)}
                                     style={{ cursor: "pointer" }}
                                 >

@@ -7,7 +7,7 @@ const Notification = () => {
   const dispatch = useDispatch()
   const [dropdownOpen, setDropdownOpen] = useState(null);
   const [filter, setFilter] = useState('all')
-  const notifications = useSelector((state) => state.notifications.notifications) || [];
+  const notifications = useSelector((state) => state.notification.notifications) || [];
   //name.intialstate
   const unreadCount = Array.isArray(notifications) ? notifications.filter(n => !n.read).length : 0;
   const navigate = useNavigate()

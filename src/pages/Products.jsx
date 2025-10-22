@@ -133,7 +133,7 @@ function Products() {
     const fetchProducts = async () => {
       try {
         const res = await axios.get("https://urbangraphtees-be.onrender.com/products/product");
-        setProducts(res.data);
+        setProducts(res.data);        
       } catch (error) {
         console.error("Error fetching products:", error);
         toast.error("Unable to load products");

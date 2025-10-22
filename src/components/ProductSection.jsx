@@ -59,7 +59,7 @@ const ProductSection = ({ tag, products }) => {
                     const isInWishlist = wishlistItems.some((w) => w && w.id === item.id)
 
                     return (
-                        < div key={item.id} >
+                        < div key={item._id} >
                             <div className="card h-100 shadow-sm position-relative" style={{ width: '18rem' }}>
                                 <span
                                     className={`badge bg-black/ text-white position-absolute top-0 start-0 m-0 fs-6 d-flex gap-2 align-items-center
