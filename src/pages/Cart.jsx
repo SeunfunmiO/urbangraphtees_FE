@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from "react-redux";
-import { clearCart, fetchCart, updateCartItem, removeCartItem } from "../redux/cartSlice";
 import { Link, useNavigate } from 'react-router-dom';
 import { DotLoader } from 'react-spinners'
 import { toast } from 'react-toastify';
+import { clearCartLocal, clearCartServer, fetchCart, removeCartItem, removeItemLocal, updateCartItem } from '../redux/cartSlice';
 
 
 const Cart = () => {
@@ -21,20 +21,27 @@ const Cart = () => {
         0
     );
 
-    // const handleAddToCart = (item) => {
-    //     dispatch(addToCart(item))
-    //     toast.success(`${item.name} added to cart`)
-    // }
-
     const handleRemoveFromCart = (productId) => {
-        dispatch(removeCartItem(productId))
-        toast.success(`${productId.name} removed from cart`)
+        const token = localStorage.getItem("token")
+        if (token) {
+            dispatch(removeCartItem(productId))
+            toast.success(`${productId.name} removed from cart`)
+        } else {
+            dispatch(removeItemLocal(productId))
+            toast.success(`${productId.name} removed from cart`)
+        }
 
     }
 
     const handleClearCart = () => {
-        dispatch(clearCart())
-        toast.success(`Cart cleared!`)
+        const token = localStorage.getItem("token")
+        if (token) {
+            dispatch(clearCartServer())
+            toast.success(`Cart cleared!`)
+        } else {
+            dispatch(clearCartLocal())
+            toast.success(`Cart cleared!`)
+        }
 
     }
 

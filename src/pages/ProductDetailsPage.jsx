@@ -6,7 +6,7 @@ import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { addNotification } from "../redux/notificationSlice";
-import { addToCart } from "../redux/cartSlice";
+import { addItemLocal, addToCart } from "../redux/cartSlice";
 
 
 function ProductDetailsPage() {
@@ -85,12 +85,26 @@ function ProductDetailsPage() {
   }
   const handleAddToCart = (item) => {
     const userName = user?.userName || user?.fullname?.split(' ')[0] || "User"
+        const token = localStorage.getItem("token")
 
     if (!selectedSize || !selectedColor) {
       toast.warning('Please select a size and color before adding to cart')
       return;
     }
-    dispatch(addToCart({
+    if(token){
+      dispatch(addToCart({
+        productId: product._id,
+        name: product.name,
+        price: product.price,
+        images: [{ url: product.images }],
+        sizes: selectedSize,
+        colors: selectedColor,
+        quantity: 1
+      }))
+      dispatch(addNotification({ message: `Hello ${userName}, You added ${item.name} to cart `, status: true, type: 'success' }))
+      toast.success(`${item.name} added to cart`);
+    }else{
+      dispatch(addItemLocal({
       productId: product._id,
       name: product.name,
       price: product.price,
@@ -101,6 +115,8 @@ function ProductDetailsPage() {
     }))
     dispatch(addNotification({ message: `Hello ${userName}, You added ${item.name} to cart `, status: true, type: 'success' }))
     toast.success(`${item.name} added to cart`);
+
+    }
 
     const imageEl = document.querySelector("#productImage");
     animateFlyToCart(imageEl);
