@@ -108,20 +108,20 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { useDispatch, useSelector } from "react-redux";
-import { addToWishlist, removeFromWishlist } from "../redux/wishlistSlice";
-import { BiHeart } from "react-icons/bi";
-import { FaHeart } from "react-icons/fa";
+// import { useDispatch, useSelector } from "react-redux";
+// import { addToWishlist, removeFromWishlist } from "../redux/wishlistSlice";
+// import { BiHeart } from "react-icons/bi";
+// import { FaHeart } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { addNotification } from "../redux/notificationSlice";
+// import { addNotification } from "../redux/notificationSlice";
 import axios from "axios";
 
 function Products() {
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useDispatch();
-  const wishlistItems = useSelector((state) => state.wishlist.items);
-  const user = useSelector((state) => state.auth.user);
+  // const dispatch = useDispatch();
+  // const wishlistItems = useSelector((state) => state.wishlist.items);
+  // const user = useSelector((state) => state.auth.user);
 
   const queryParams = new URLSearchParams(location.search);
   const initialCategory = queryParams.get("category") || "All";
@@ -155,25 +155,25 @@ function Products() {
       : products.filter((p) => p.category === selectedCategory);
 
       
-  const handleWishlist = (item) => {
-    const userName = user?.userName || user?.fullname?.split(" ")[0] || "User";
-    const isInWishlist = wishlistItems.some((w) => w._id === item._id) || wishlistItems.some((w) => w.id === item.id);
+  // const handleWishlist = (item) => {
+  //   const userName = user?.userName || user?.fullname?.split(" ")[0] || "User";
+  //   const isInWishlist = wishlistItems.some((w) => w._id === item._id) || wishlistItems.some((w) => w.id === item.id);
 
-    if (isInWishlist) {
-      dispatch(removeFromWishlist(item._id || item.id));
-      toast.success("Removed from wishlist");
-      dispatch(
-        addNotification({
-          message: ` Hello ${userName}, you removed ${item.name} from wishlist.`,
-          status: true,
-          type: "success",
-        })
-      );
-    } else {
-      dispatch(addToWishlist(item));
-      toast.success("Added to wishlist");
-    }
-  };
+  //   if (isInWishlist) {
+  //     dispatch(removeFromWishlist(item._id || item.id));
+  //     toast.success("Removed from wishlist");
+  //     dispatch(
+  //       addNotification({
+  //         message: ` Hello ${userName}, you removed ${item.name} from wishlist.`,
+  //         status: true,
+  //         type: "success",
+  //       })
+  //     );
+  //   } else {
+  //     dispatch(addToWishlist(item));
+  //     toast.success("Added to wishlist");
+  //   }
+  // };
 
   return (
     <div className="container py-4">
@@ -197,7 +197,7 @@ function Products() {
 
       <div className="row">
         {filteredProducts.map((product) => {
-          const isInWishlist = wishlistItems.some((w) => w._id === product._id);
+          // const isInWishlist = wishlistItems.some((w) => w._id === product._id);
           return (
             <div className="col-md-4 mb-4" key={product._id}>
               <div className="card h-100 shadow-sm position-relative">
@@ -218,7 +218,7 @@ function Products() {
                   }}
                   onClick={() => navigate(`/products/${product._id}`)}
                 />
-                <button
+                {/* <button
                   className="btn btn-0 border-0 position-absolute top-0 end-0"
                   onClick={() => handleWishlist(product)}
                 >
@@ -227,7 +227,7 @@ function Products() {
                   ) : (
                     <BiHeart fill="black" />
                   )}
-                </button>
+                </button> */}
                 <div className="card-body">
                   <h5 className="card-title">{product.name}</h5>
                   <p className="card-text">

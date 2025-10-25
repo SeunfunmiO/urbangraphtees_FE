@@ -5,8 +5,8 @@ import OrderSummary from "../components/OrderSummary";
 import { DotLoader } from "react-spinners";
 import { useSelector, useDispatch } from "react-redux";
 import { placeOrder, updateOrderStatus } from "../redux/orderSlice";
-import { clearCart } from "../redux/cartSlice";
 import { toast } from "react-toastify";
+import { clearCartServer } from "../redux/cartSlice";
 
 
 const Checkout = () => {
@@ -62,7 +62,7 @@ const Checkout = () => {
 
       dispatch(updateOrderStatus({ id: lastOrderId, status: "Paid" }));
 
-      dispatch(clearCart());
+      dispatch(clearCartServer());
 
       toast.success(" Payment successful! Check your Dashboard → Orders")
       setloading(false);

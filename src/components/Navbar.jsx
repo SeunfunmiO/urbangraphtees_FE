@@ -8,7 +8,7 @@ import { FaSearch } from 'react-icons/fa';
 const Navbar = () => {
   const navigate = useNavigate()
   // const [query, setQuery] = useState("");
-  const cartCount = useSelector((state) => state.cart.items)
+  const cartCount = useSelector((state) => state.cart.cartItems)
   const wishlistCount = useSelector((state) => state.wishlist.items)
   const notificationsCount = useSelector((state) => state.notification.unreadCount)
   const { token } = useSelector((state) => state.auth)

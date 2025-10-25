@@ -30,6 +30,8 @@ function ProductDetailsPage() {
 
         const singleProduct = await axios.get(`https://urbangraphtees-be.onrender.com/products/product/${id}`)
         setProduct(singleProduct.data)
+        console.log(singleProduct.data);
+
       }
       catch (error) {
         console.log('Error fetching products:', error);
@@ -85,36 +87,36 @@ function ProductDetailsPage() {
   }
   const handleAddToCart = (item) => {
     const userName = user?.userName || user?.fullname?.split(' ')[0] || "User"
-        const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token")
 
     if (!selectedSize || !selectedColor) {
       toast.warning('Please select a size and color before adding to cart')
       return;
     }
-    if(token){
+    if (token) {
       dispatch(addToCart({
         productId: product._id,
         name: product.name,
         price: product.price,
         images: [{ url: product.images }],
-        sizes: selectedSize,
-        colors: selectedColor,
+        selectedSize,
+        selectedColor,
         quantity: 1
       }))
       dispatch(addNotification({ message: `Hello ${userName}, You added ${item.name} to cart `, status: true, type: 'success' }))
       toast.success(`${item.name} added to cart`);
-    }else{
+    } else {
       dispatch(addItemLocal({
-      productId: product._id,
-      name: product.name,
-      price: product.price,
-      images: [{ url: product.images }],
-      sizes: selectedSize,
-      colors: selectedColor,
-      quantity: 1
-    }))
-    dispatch(addNotification({ message: `Hello ${userName}, You added ${item.name} to cart `, status: true, type: 'success' }))
-    toast.success(`${item.name} added to cart`);
+        productId: product._id,
+        name: product.name,
+        price: product.price,
+        images: [{ url: product.images }],
+        selectedSize,
+        selectedColor,
+        quantity: 1
+      }))
+      dispatch(addNotification({ message: `Hello ${userName}, You added ${item.name} to cart `, status: true, type: 'success' }))
+      toast.success(`${item.name} added to cart`);
 
     }
 

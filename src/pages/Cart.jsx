@@ -8,14 +8,16 @@ import { clearCartLocal, clearCartServer, fetchCart, removeCartItem, removeItemL
 
 const Cart = () => {
     const [loading, setLoading] = useState(false)
-    const cartItems = useSelector((state) => state.cart.items);
+    const cartItems = useSelector((state) => state.cart.cartItems);
+    console.log(cartItems);
+    
     const dispatch = useDispatch();
     const navigate = useNavigate()
-
+    
     useEffect(() => {
         dispatch(fetchCart())
     }, [dispatch])
-
+    
     const total = cartItems.reduce(
         (sum, item) => sum + item.productId.price * item.quantity,
         0
@@ -75,10 +77,10 @@ const Cart = () => {
                                         <img
                                             src={
                                                 item.images?.[0]?.url?.startsWith("http")
-                                                    ? item.images[0].url
+                                                    ? item.productId.images[0].url
                                                     : item.images?.[0]?.startsWith("http")
-                                                        ? item.images[0]
-                                                        : `https://urbangraphtees-be.onrender.com/${item.images?.[0]?.url || item.images?.[0] || ""}`
+                                                        ? item.productId.images[0]
+                                                        : `https://urbangraphtees-be.onrender.com/${item.productId.images?.[0]?.url || item.images?.[0] || ""}`
                                             }
                                             alt={item.productId?.name}
                                             onClick={() => navigate(`/products/${item._id}`)} style={{ width: "60px", marginRight: "10px" }}
@@ -86,18 +88,18 @@ const Cart = () => {
                                         <div className='d-flex flex-column' >
                                             <div className="d-flex flex-column">
                                                 <div>{item.productId?.name} </div>
-                                                <div className='text-muted'>{item.size} {' '} <span
+                                                <div className='text-muted'>{item.selectedSize} {' '} <span
                                                     style={{
                                                         display: 'inline-block',
                                                         width: '16px',
                                                         height: '16px',
                                                         borderRadius: '50%',
-                                                        backgroundColor: item.color,
+                                                        backgroundColor: item.selectedColor,
                                                         border: '1px solid #ccc'
                                                     }}
                                                 ></span></div>
                                             </div>
-                                            <small className='text-muted'>₦{item.price.toLocaleString()}</small>
+                                            <small className='text-muted'>₦{item.productId.price.toLocaleString()}</small>
                                         </div>
                                     </div>
 
