@@ -22,6 +22,7 @@ const Wishlist = () => {
       dispatch(fetchWishlist(user._id))
     }
   }, [dispatch, user])
+
   const handleRemove = (id) => {
     if (token) {
       dispatch(removeFromWishlistServer(id))
