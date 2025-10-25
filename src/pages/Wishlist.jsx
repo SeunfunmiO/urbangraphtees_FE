@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   removeWishlistLocal,
   clearWishlistLocal,
   removeFromWishlistServer,
   clearWishlistServer,
+  fetchWishlist,
 } from "../redux/wishlistSlice";
 import { FaCartArrowDown, FaHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -14,8 +15,13 @@ const Wishlist = () => {
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const dispatch = useDispatch();
   const token = localStorage.getItem("token")
+  const user = localStorage.getItem("user")
 
-
+  useEffect(() => {
+    if (user._id) {
+      dispatch(fetchWishlist(user._id))
+    }
+  }, [dispatch, user])
   const handleRemove = (id) => {
     if (token) {
       dispatch(removeFromWishlistServer(id))
@@ -66,12 +72,12 @@ const Wishlist = () => {
               <div className="wishlist-image-container">
                 <img
                   src={
-              item.images?.[0]?.url?.startsWith("http")
-                ? item.images[0].url
-                : item.images?.[0]?.startsWith("http")
-                  ? item.images[0]
-                  : `https://urbangraphtees-be.onrender.com/${item.images?.[0]?.url || item.images?.[0] || ""}`
-            }
+                    item.images?.[0]?.url?.startsWith("http")
+                      ? item.images[0].url
+                      : item.images?.[0]?.startsWith("http")
+                        ? item.images[0]
+                        : `https://urbangraphtees-be.onrender.com/${item.images?.[0]?.url || item.images?.[0] || ""}`
+                  }
                   alt={item.name}
                   className="card-img-top rounded wishlist-img"
                 />

@@ -18,7 +18,7 @@ export const fetchWishlist = createAsyncThunk(
   async (userId, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(`${API_URL}/${userId}`, getAuthConfig());
-      return data?.products || data.wishlist.products || [];
+      return data?.productId || data?.products || data?.wishlist?.products || [];
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch wishlist"
@@ -36,7 +36,7 @@ export const addToWishlist = createAsyncThunk(
         { userId, productId },
         getAuthConfig()
       );
-      return data?.products || data.wishlist.products || [];
+      return data?.productId || data?.products || data?.wishlist?.products || [];
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to add to wishlist"
@@ -55,7 +55,7 @@ export const removeFromWishlistServer = createAsyncThunk(
         { userId, productId },
         getAuthConfig()
       );
-      return data?.products || data.wishlist.products || [];
+      return data?.productId || data?.products || data?.wishlist?.products || [];
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to remove from wishlist"
@@ -72,7 +72,7 @@ export const clearWishlistServer = createAsyncThunk(
         `${API_URL}/clear`,
         { data: { userId }, ...getAuthConfig() }
       );
-      return data?.products || data.wishlist.products || [];
+      return data?.productId || data?.products || data?.wishlist?.products || [];
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to clear wishlist"
