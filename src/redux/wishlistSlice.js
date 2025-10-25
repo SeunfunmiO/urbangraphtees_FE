@@ -18,7 +18,7 @@ export const fetchWishlist = createAsyncThunk(
   async (userId, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(`${API_URL}/${userId}`, getAuthConfig());
-      return data?.products || [];
+      return data?.products || data.wishlist.products || [];
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch wishlist"
@@ -29,14 +29,14 @@ export const fetchWishlist = createAsyncThunk(
 
 export const addToWishlist = createAsyncThunk(
   "wishlist/addToWishlist",
-  async ({ userId,  products }, { rejectWithValue }) => {
+  async ({ userId, productId }, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
         `${API_URL}/add`,
-        { userId,  products },
+        { userId, productId },
         getAuthConfig()
       );
-      return data?.products || [];
+      return data?.products || data.wishlist.products || [];
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to add to wishlist"
@@ -48,14 +48,14 @@ export const addToWishlist = createAsyncThunk(
 
 export const removeFromWishlistServer = createAsyncThunk(
   "wishlist/removeFromWishlistServer",
-  async ({ userId, products }, { rejectWithValue }) => {
+  async ({ userId, productId }, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
         `${API_URL}/remove`,
-        { userId, products },
+        { userId, productId },
         getAuthConfig()
       );
-      return data?.products || [];
+      return data?.products || data.wishlist.products || [];
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to remove from wishlist"
@@ -72,7 +72,7 @@ export const clearWishlistServer = createAsyncThunk(
         `${API_URL}/clear`,
         { data: { userId }, ...getAuthConfig() }
       );
-      return data?.products || [];
+      return data?.products || data.wishlist.products || [];
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to clear wishlist"

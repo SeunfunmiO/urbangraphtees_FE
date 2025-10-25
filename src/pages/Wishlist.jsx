@@ -66,10 +66,12 @@ const Wishlist = () => {
               <div className="wishlist-image-container">
                 <img
                   src={
-                    item.image?.startsWith("http")
-                      ? item.image
-                      : `https://urbangraphtees-be.onrender.com/${item.image}`
-                  }
+              item.images?.[0]?.url?.startsWith("http")
+                ? item.images[0].url
+                : item.images?.[0]?.startsWith("http")
+                  ? item.images[0]
+                  : `https://urbangraphtees-be.onrender.com/${item.images?.[0]?.url || item.images?.[0] || ""}`
+            }
                   alt={item.name}
                   className="card-img-top rounded wishlist-img"
                 />
