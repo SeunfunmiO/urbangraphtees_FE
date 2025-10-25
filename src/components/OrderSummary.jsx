@@ -3,14 +3,14 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify"
-import { addNotification } from "../redux/notificationSlice";
 import { removeCartItem, updateCartItem } from "../redux/cartSlice";
+import { addNotificationLocal, createNotification } from "../redux/notificationSlice";
 
 const OrderSummary = ({ showCheckoutButton = false, onCheckout }) => {
     const cartItems = useSelector((state) => state.cart.cartItems);
     const [promoCode, setPromoCode] = useState('')
     const [discount, setDiscount] = useState(0)
-
+    const token = localStorage.getItem("token")
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -28,8 +28,25 @@ const OrderSummary = ({ showCheckoutButton = false, onCheckout }) => {
         if (promoCode.trim().toLowerCase() === 'WELCOME10') {
             toast.success('Congratulations , 10% OFF 🎉!')
             setDiscount(subtotal * 0.1);
-            dispatch(addNotification({ title: 'Promo Applied', message: ' You got 10% OFF your order. Thank you for shopping with Urbangraphtees!', type: "success" }))
-            setPromoCode('')
+            if (token) {
+                dispatch(createNotification({
+                    title: 'Promo Applied',
+                    message: ' You got 10% OFF your order. Thank you for shopping with Urbangraphtees!',
+                    status: true,
+                    type: "success"
+                }))
+                setPromoCode('')
+            }
+            else {
+                dispatch(addNotificationLocal({
+                    title: 'Promo Applied',
+                    message: ' You got 10% OFF your order. Thank you for shopping with Urbangraphtees!',
+                    status: true,
+                    type: "success"
+                }))
+                setPromoCode('')
+            }
+
         } else {
             setDiscount(0)
             toast.error('Invalid promo code!')

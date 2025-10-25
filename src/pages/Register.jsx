@@ -7,7 +7,7 @@ import { FaAsterisk } from "react-icons/fa";;
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../redux/authSlice";
 import { toast } from "react-toastify";
-import { addNotification } from "../redux/notificationSlice";
+import { createNotification } from "../redux/notificationSlice";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -40,7 +40,11 @@ const Register = () => {
         dispatch(loginSuccess)
         toast.success(' Account created successfully')
         const userName = user?.userName || user?.fullname?.split(' ')[0] || "User"
-        dispatch(addNotification({ message: `Hello ${userName}, You have successfully created an account`, type: 'success' }))
+        dispatch(createNotification({
+          message: `Hello ${userName}, You have successfully created an account`,
+          type: 'success',
+          status: true
+        }))
 
         setTimeout(() => {
           navigate("/signin");

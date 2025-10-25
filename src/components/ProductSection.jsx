@@ -6,31 +6,33 @@ import { HiSparkles } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { addNotification } from "../redux/notificationSlice";
 import { addToWishlist, addWishlistLocal, removeFromWishlistServer, removeWishlistLocal } from "../redux/wishlistSlice";
+import { addNotificationLocal, createNotification } from "../redux/notificationSlice";
 
 
 const ProductSection = ({ tag, products }) => {
     const dispatch = useDispatch()
     const wishlistItems = useSelector((state) => state.wishlist.items);
     const token = localStorage.getItem("token")
+    const user = JSON.parse(localStorage.getItem("user") || {})
 
 
     const filteredProducts = products.filter((p) => p.tag === tag);
     if (filteredProducts.length === 0) return null;
 
     const handleWishlist = (item) => {
-        const isInWishlist = wishlistItems.some((w) => w._id === item._id);
-
+        const isInWishlist = wishlistItems.some(
+            (w) => w?._id?.toString() === item?._id?.toString()
+        );
         if (token) {
             if (isInWishlist) {
-                dispatch(removeFromWishlistServer(item._id));
-                toast.warning("Removed from wishlist");
+                dispatch(removeFromWishlistServer({ userId: user?._id, productId: item?._id }));
+                toast.warning(`${item.name} removed from wishlist`);
             } else {
-                dispatch(addToWishlist(item));
-                toast.success("Added to wishlist");
+                dispatch(addToWishlist({ userId: user?._id, productId: item?._id }));
+                toast.success(`${item.name} added to wishlist`);
                 dispatch(
-                    addNotification({
+                    createNotification({
                         message: `You added ${item.name} - ₦${item.price.toLocaleString()} to your wishlist`,
                         status: true,
                         type: "info",
@@ -39,11 +41,18 @@ const ProductSection = ({ tag, products }) => {
             }
         } else {
             if (isInWishlist) {
-                dispatch(removeWishlistLocal(item._id));
+                dispatch(removeWishlistLocal(item.id));
                 toast.warning("Removed from wishlist");
             } else {
                 dispatch(addWishlistLocal(item));
                 toast.success("Added to wishlist");
+                dispatch(
+                    addNotificationLocal({
+                        message: `You added ${item.name} - ₦${item.price.toLocaleString()} to your wishlist`,
+                        status: true,
+                        type: "info",
+                    })
+                );
             }
         }
     };
@@ -69,10 +78,10 @@ const ProductSection = ({ tag, products }) => {
             </svg>
             <div>
                 {filteredProducts.map((item) => {
-                    const isInWishlist = wishlistItems.some((w) => w && w.id === item.id)
+                    const isInWishlist = wishlistItems.some((w) => w && w?._id === item?._id)
 
                     return (
-                        < div key={item._id} >
+                        < div key={item?._id} >
                             <div className="card h-100 shadow-sm position-relative" style={{ width: '18rem' }}>
                                 <span
                                     className={`badge bg-black/ text-white position-absolute top-0 start-0 m-0 fs-6 d-flex gap-2 align-items-center
@@ -88,12 +97,14 @@ const ProductSection = ({ tag, products }) => {
                                 </span>
                                 <button
                                     className="btn btn-sm btn-light rounded-circle position-absolute top-0 end-0 m-2"
-                                    // className={`btn btn-0 border-0 wishlist-btn border-secondary position-absolute top-0 end-0`}
-                                    onClick={() => handleWishlist(item)}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        handleWishlist(item)
+                                    }}
                                 >
                                     {isInWishlist ? <FaHeart fill="crimson" /> : <BiHeart fill="black" />}
                                 </button>
-                                <Link className="text-decoration-none" to={`/products/${item.id}`}>
+                                <Link className="text-decoration-none" to={`/products/${item._id}`}>
                                     <img
                                         src={
                                             item.images?.[0]?.url?.startsWith("http")

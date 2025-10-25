@@ -15,10 +15,10 @@ export const store = configureStore({
   reducer: {
     cart: cartReducer,
     wishlist: wishlistReducer,
-    orders:orderReducer,
-    settings:settingsReducer,
-    auth:authReducer,
-    notification:notificationReducer
+    orders: orderReducer,
+    settings: settingsReducer,
+    auth: authReducer,
+    notification: notificationReducer
   }
 })
 

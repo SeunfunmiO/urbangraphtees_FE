@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { addNotification } from "../redux/notificationSlice";
 import { addItemLocal, addToCart } from "../redux/cartSlice";
+import { addNotificationLocal, createNotification } from "../redux/notificationSlice";
 
 
 function ProductDetailsPage() {
@@ -101,7 +101,7 @@ function ProductDetailsPage() {
         selectedColor,
         quantity: 1
       }))
-      dispatch(addNotification({ message: `Hello ${userName}, You added ${item.name} to cart `, status: true, type: 'success' }))
+      dispatch(createNotification({ message: `Hello ${userName}, You added ${item.name} to cart `, status: true, type: 'success' }))
       toast.success(`${item.name} added to cart`);
     } else {
       dispatch(addItemLocal({
@@ -113,7 +113,7 @@ function ProductDetailsPage() {
         selectedColor,
         quantity: 1
       }))
-      dispatch(addNotification({ message: `Hello ${userName}, You added ${item.name} to cart `, status: true, type: 'success' }))
+      dispatch(addNotificationLocal({ message: `Hello ${userName}, You added ${item.name} to cart `, status: true, type: 'success' }))
       toast.success(`${item.name} added to cart`);
 
     }
@@ -125,7 +125,7 @@ function ProductDetailsPage() {
 
   if (!product) {
     return (
-      <div className="d-flex justify-content-center align-items-center my-5">
+      <div className="d-flex h-100 justify-content-center align-items-center my-5">
         <ClipLoader size={30} color="#000" />
       </div>
     );

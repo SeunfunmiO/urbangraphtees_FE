@@ -123,12 +123,13 @@ import { toast } from 'react-toastify';
 import Axios from 'axios';
 import { FaEnvelope } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { addNotification } from '../redux/notificationSlice';
+import { addNotificationLocal, createNotification } from '../redux/notificationSlice';
 
 const Footer = () => {
     const [email, setEmail] = useState('')
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
+    const token = localStorage.getItem("token")
 
     const handleSubcribe = async (e) => {
         e.preventDefault()
@@ -137,8 +138,21 @@ const Footer = () => {
             setLoading(true)
             const response = await Axios.post("https://urbangraphtees-be.onrender.com/newsletter/subscribe", { email });
             toast.success(response.data.message || "Subscription successful!")
-            dispatch(addNotification('Thank you for subscribing to our newsletter!'))
-            setEmail('')
+            if (token) {
+                dispatch(createNotification({
+                    message: 'Thank you for subscribing to our newsletter!',
+                    status: true,
+                    type: "success"
+                }))
+                setEmail('')
+            } else {
+                dispatch(addNotificationLocal({
+                    message: 'Thank you for subscribing to our newsletter!',
+                    status: true,
+                    type: "success"
+                }))
+                setEmail('')
+            }
         } catch (error) {
             toast.error(error.response?.data?.message || "Something went wrong");
         } finally {
@@ -150,13 +164,12 @@ const Footer = () => {
         <footer style={{ backgroundColor: "#000000" }} className="text-light">
             <div className="footer px-5 mb-0 pt-4 d-lg-flex">
 
-                {/* Logo & About */}
-                <div className="mb-3" style={{flexBasis:'30%'}}>
+                <div className="mb-3" style={{ flexBasis: '30%' }}>
                     <img src="./multimedia/ugtBlackBgLogo.jpg" className='mb-3' alt=" UrbanGraphTees logo" width={"100px"} />
                     <AboutUs />
                 </div>
 
-                {/* Desktop layout */}
+
                 <div className="col d-none d-lg-flex gap-4">
                     <div className="col">
                         <h5>Quick Actions</h5>
@@ -202,8 +215,8 @@ const Footer = () => {
                                         <span className="input-group-text">
                                             <FaEnvelope />
                                         </span>
-                                        <input className='form-control' type="email" value={email} 
-                                            onChange={(e)=>setEmail(e.target.value)}
+                                        <input className='form-control' type="email" value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
                                             placeholder='hi@gmail.com' required />
                                     </div>
                                     <button className='btn btn-light' disabled={loading} type="submit">
@@ -287,8 +300,8 @@ const Footer = () => {
                                         <span className="input-group-text">
                                             <FaEnvelope />
                                         </span>
-                                        <input className='form-control' type="email" value={email} 
-                                            onChange={(e)=>setEmail(e.target.value)}
+                                        <input className='form-control' type="email" value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
                                             placeholder='hi@gmail.com' required />
                                     </div>
                                     <button className='btn btn-light' disabled={loading} type="submit">

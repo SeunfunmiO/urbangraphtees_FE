@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { DotLoader } from 'react-spinners'
 import { toast } from 'react-toastify';
 import { clearCartLocal, clearCartServer, fetchCart, removeCartItem, removeItemLocal, updateCartItem } from '../redux/cartSlice';
+import { BsCart2 } from 'react-icons/bs';
 
 
 const Cart = () => {
@@ -11,11 +12,11 @@ const Cart = () => {
     const cartItems = useSelector((state) => state.cart.cartItems);
     const dispatch = useDispatch();
     const navigate = useNavigate()
-    
+
     useEffect(() => {
         dispatch(fetchCart())
     }, [dispatch])
-    
+
     const total = cartItems.reduce(
         (sum, item) => sum + item.productId.price * item.quantity,
         0
@@ -55,12 +56,17 @@ const Cart = () => {
                     onClick={() => handleClearCart()}
                 >
                     Clear Cart
-                </button></div>
+                </button>
+                </div>
 
             <div className='pb-3' style={{ backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 0.125rem 0.25rem rgba(0,0,0,0.075)' }}>
                 {cartItems.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-                        <p style={{ color: '#6c757d', marginBottom: 0 }}>No items in cart yet...</p>
+                    <div className="text-center my-5 py-5">
+                        <BsCart2 size={40} color="lightgray" />
+                        <p className="text-muted mt-3">Your cart is currently empty</p>
+                        <Link to="/shop" className="btn btn-dark mt-3">
+                            Start Shopping
+                        </Link>
                     </div>
 
                 ) : (

@@ -1,268 +1,236 @@
-// import { createSlice } from "@reduxjs/toolkit";
-
-// const loadNotificationsFromStorage = () => {
-//     try {
-//         const savedNotification = localStorage.getItem('notifications')
-//         return savedNotification ? JSON.parse(savedNotification) : [];
-//     } catch (error) {
-//         console.log(' Error loading notifications from localstorage', error);
-//         return []
-//     }
-// };
-
-// export const notificationSlice = createSlice({
-//     name: 'notification',
-//     initialState: {
-//         notifications: loadNotificationsFromStorage(),
-//         unreadCount: loadNotificationsFromStorage().filter(n => !n.read).length,
-//     },
-//     reducers: {
-//         addNotification: (state, action) => {
-//             const newNotification = {
-//                 id: Date.now(),
-//                 message: action.payload.message,
-//                 type: action.payload.type || "info",
-//                 read: false,
-//                 timestamp: new Date().toLocaleString(),
-//             };
-//             state.notifications.unshift(newNotification);
-//             state.unreadCount += 1;
-//             localStorage.setItem('notifications', JSON.stringify(state.notifications))
-//         },
-
-//         markAsRead: (state, action) => {
-//             const notif = state.notifications.find(
-//                 (n) => n.id === action.payload
-//             );
-//             if (notif && !notif.read) {
-//                 notif.read = true;
-//                 state.unreadCount -= 1;
-//             }
-//             localStorage.setItem('notifications', JSON.stringify(state.notifications))
-//         },
-//         markAsUnread: (state, action) => {
-//             const notif = state.notifications.find(
-//                 (n) => n.id === action.payload
-//             );
-//             if (notif && notif.read) {
-//                 notif.read = false
-//                 state.unreadCount += 1;
-//             }
-//             localStorage.setItem('notifications', JSON.stringify(state.notifications))
-//         },
-//         markAllAsRead: (state) => {
-//             state.notifications.forEach((n) => (n.read = true));
-//             state.unreadCount = 0;
-//             localStorage.setItem('notifications', JSON.stringify(state.notifications))
-//         },
-//         removeNotification: (state, action) => {
-//             state.notifications = state.notifications.filter(
-//                 (n) => n.id !== action.payload
-//             );
-//             localStorage.setItem('notifications', JSON.stringify(state.notifications))
-//         },
-//         clearAllNotifications: (state) => {
-//             state.notifications = [];
-//             state.unreadCount = 0;
-//             localStorage.setItem('notifications', JSON.stringify([]))
-//         },
-//     }
-// })
-
-// export const {
-//     addNotification,
-//     markAsRead,
-//     markAsUnread,
-//     markAllAsRead,
-//     removeNotification,
-//     clearAllNotifications,
-// } = notificationSlice.actions;
-
-// export default notificationSlice.reducer;
-
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const API_URL = "https://urbangraphtees-be.onrender.com/notification";
 
-const saveToLocal = (notifications) => {
-    localStorage.setItem("notifications", JSON.stringify(notifications));
-    const unreadCount = notifications.filter((n) => !n.read).length;
-    localStorage.setItem("unreadCount", unreadCount);
-};
-
-const loadFromLocal = () => {
-    const notifications = JSON.parse(localStorage.getItem("notifications")) || [];
-    const unreadCount = Number(localStorage.getItem("unreadCount")) || 0;
-    return { notifications, unreadCount };
-};
-
-const { notifications: cachedNotifications, unreadCount: cachedUnread } = loadFromLocal();
-
-
 export const fetchNotifications = createAsyncThunk(
-    "notifications/fetchAll",
-    async (_, { rejectWithValue }) => {
-        try {
-            const res = await axios.get(`${API_URL}`, { withCredentials: true });
-            return res.data;
-        } catch (err) {
-            return rejectWithValue(err.response?.data?.message || err.message);
-        }
+  "notifications/fetchNotifications",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(API_URL, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to fetch notifications");
     }
+  }
 );
 
 
-export const addNotification = createAsyncThunk(
-    "notifications/add",
-    async (notificationData, { rejectWithValue }) => {
-        try {
-            const res = await axios.post(`${API_URL}`, notificationData, { withCredentials: true });
-            return res.data;
-        } catch (err) {
-            return rejectWithValue(err.response?.data?.message || err.message);
-        }
+export const createNotification = createAsyncThunk(
+  "notifications/createNotification",
+  async (notificationData, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.post(API_URL, notificationData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to create notification");
     }
+  }
 );
-
 
 export const markAsRead = createAsyncThunk(
-    "notifications/markAsRead",
-    async (id, { rejectWithValue }) => {
-        try {
-            const res = await axios.patch(`${API_URL}/${id}/read`, {}, { withCredentials: true });
-            return res.data;
-        } catch (err) {
-            return rejectWithValue(err.response?.data?.message || err.message);
-        }
+  "notifications/markAsRead",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.put(`${API_URL}/${id}/read`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to mark as read");
     }
+  }
 );
 
 export const markAsUnread = createAsyncThunk(
-    "notifications/markAsUnread",
-    async (id, { rejectWithValue }) => {
-        try {
-            const res = await axios.patch(`${API_URL}/${id}/unread`, {}, { withCredentials: true });
-            return res.data;
-        } catch (err) {
-            return rejectWithValue(err.response?.data?.message || err.message);
-        }
+  "notifications/markAsUnread",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.put(`${API_URL}/${id}/unread`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to mark as unread");
     }
+  }
 );
 
 export const markAllAsRead = createAsyncThunk(
-    "notifications/markAllAsRead",
-    async (_, { rejectWithValue }) => {
-        try {
-            const res = await axios.patch(`${API_URL}/read-all`, {}, { withCredentials: true });
-            return res.data;
-        } catch (err) {
-            return rejectWithValue(err.response?.data?.message || err.message);
-        }
+  "notifications/markAllAsRead",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(`${API_URL}/read-all`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return true;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to mark all as read");
     }
+  }
 );
 
-
-export const removeNotification = createAsyncThunk(
-    "notifications/remove",
-    async (id, { rejectWithValue }) => {
-        try {
-            const res = await axios.delete(`${API_URL}/${id}`, { withCredentials: true });
-            return res
-            //   return { id };
-        } catch (err) {
-            return rejectWithValue(err.response?.data?.message || err.message);
-        }
+export const deleteNotification = createAsyncThunk(
+  "notifications/deleteNotification",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${API_URL}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return id;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to delete notification");
     }
+  }
 );
-
 
 export const clearAllNotifications = createAsyncThunk(
-    "notifications/clearAll",
-    async (_, { rejectWithValue }) => {
-        try {
-            await axios.delete(`${API_URL}/clear`, { withCredentials: true });
-            return [];
-        } catch (err) {
-            return rejectWithValue(err.response?.data?.message || err.message);
-        }
+  "notifications/clearAllNotifications",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${API_URL}/clear-all`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return [];
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to clear notifications");
     }
+  }
 );
 
+const loadLocalNotifications = () => {
+  try {
+    const saved = localStorage.getItem("notifications");
+    return saved ? JSON.parse(saved) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveLocalNotifications = (notifications) => {
+  localStorage.setItem("notifications", JSON.stringify(notifications));
+};
+
+const computedUnreadCount = (items = []) => items.reduce((acc, n) => acc + (n.isRead ? 0 : 1), 0);
+
 const notificationSlice = createSlice({
-    name: "notifications",
-    initialState: {
-        notifications: cachedNotifications,
-        unreadCount: cachedUnread,
-        loading: false,
-        error: null,
+  name: "notifications",
+  initialState: {
+    items: loadLocalNotifications(),
+    unreadCount: computedUnreadCount(loadLocalNotifications()),
+    loading: false,
+    error: null,
+  },
+  reducers: {
+    addNotificationLocal: (state, action) => {
+      state.items.unshift({
+        ...action.payload,
+        _id: Date.now().toString(),
+        isRead: false,
+        createdAt: new Date().toLocaleString(),
+      });
+      state.unreadCount = computedUnreadCount(state.items)
+      saveLocalNotifications(state.items);
     },
-    reducers: {},
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchNotifications.pending, (state) => {
-                state.loading = true;
-            })
-            .addCase(fetchNotifications.fulfilled, (state, action) => {
-                state.loading = false;
-                state.notifications = action.payload;
-                state.unreadCount = action.payload.filter((n) => !n.read).length;
-                saveToLocal(state.notifications);
-            })
-            .addCase(fetchNotifications.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
-
-
-            .addCase(addNotification.fulfilled, (state, action) => {
-                state.notifications.unshift(action.payload);
-                state.unreadCount++;
-                saveToLocal(state.notifications);
-            })
-
-
-            .addCase(markAsRead.fulfilled, (state, action) => {
-                const index = state.notifications.findIndex((n) => n._id === action.payload._id);
-                if (index !== -1) {
-                    state.notifications[index].read = true;
-                    state.unreadCount = state.notifications.filter((n) => !n.read).length;
-                }
-                saveToLocal(state.notifications);
-            })
-
-            .addCase(markAsUnread.fulfilled, (state, action) => {
-                const updated = action.payload.notification || action.payload
-                const index = state.notifications.findIndex((n) => n._id === updated._id);
-                if (index !== -1) {
-                    state.notifications[index].read = false;
-                    state.unreadCount = state.notifications.filter((n) => !n.read).length;
-                }
-                saveToLocal(state.notifications);
-            })
-
-            .addCase(markAllAsRead.fulfilled, (state) => {
-                state.notifications.forEach((n) => (n.read = true));
-                state.unreadCount = 0;
-                saveToLocal(state.notifications);
-            })
-
-            .addCase(removeNotification.fulfilled, (state, action) => {
-                state.notifications = state.notifications.filter((n) => n._id !== action.payload.id);
-                state.unreadCount = state.notifications.filter((n) => !n.read).length;
-                saveToLocal(state.notifications);
-            })
-
-            .addCase(clearAllNotifications.fulfilled, (state) => {
-                state.notifications = [];
-                state.unreadCount = 0;
-                saveToLocal([]);
-            });
+    markAsReadLocal: (state, action) => {
+      const item = state.items.find((n) => n._id === action.payload);
+      if (item) item.isRead = true;
+      state.unreadCount = computedUnreadCount(state.items)
+      saveLocalNotifications(state.items);
     },
+    markAsUnreadLocal: (state, action) => {
+      const item = state.items.find((n) => n._id === action.payload);
+      if (item) item.isRead = false;
+      state.unreadCount = computedUnreadCount(state.items)
+      saveLocalNotifications(state.items);
+    },
+    deleteNotificationLocal: (state, action) => {
+      state.items = state.items.filter((n) => n._id !== action.payload);
+      state.unreadCount = computedUnreadCount(state.items)
+      saveLocalNotifications(state.items);
+    },
+    markAllAsReadLocal: (state) => {
+      state.items = state.items.map((n) => ({ ...n, isRead: true }));
+      state.unreadCount = 0
+      saveLocalNotifications(state.items);
+    },
+    clearNotificationsLocal: (state) => {
+      state.items = [];
+      state.unreadCount = 0
+      saveLocalNotifications([]);
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchNotifications.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchNotifications.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+        state.unreadCount = computedUnreadCount(state.items)
+        saveLocalNotifications(state.items);
+      })
+      .addCase(fetchNotifications.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(createNotification.fulfilled, (state, action) => {
+        state.items.unshift(action.payload);
+        saveLocalNotifications(state.items);
+      })
+
+      .addCase(markAsRead.fulfilled, (state, action) => {
+        const item = state.items.find((n) => n._id === action.payload._id);
+        if (item) item.isRead = true;
+        saveLocalNotifications(state.items);
+      })
+
+      .addCase(markAsUnread.fulfilled, (state, action) => {
+        const item = state.items.find((n) => n._id === action.payload._id);
+        if (item) item.isRead = false;
+        saveLocalNotifications(state.items);
+      })
+
+      .addCase(markAllAsRead.fulfilled, (state) => {
+        state.items = state.items.map((n) => ({ ...n, isRead: true }));
+        saveLocalNotifications(state.items);
+      })
+
+      .addCase(deleteNotification.fulfilled, (state, action) => {
+        state.items = state.items.filter((n) => n._id !== action.payload);
+        saveLocalNotifications(state.items);
+      })
+
+      .addCase(clearAllNotifications.fulfilled, (state) => {
+        state.items = [];
+        saveLocalNotifications([]);
+      });
+  },
 });
 
+export const {
+  addNotificationLocal,
+  markAsReadLocal,
+  markAsUnreadLocal,
+  deleteNotificationLocal,
+  markAllAsReadLocal,
+  clearNotificationsLocal,
+} = notificationSlice.actions;
+
+export const selectUnreadCount = (state) => state.notification.unreadCount;
+
 export default notificationSlice.reducer;
-
-
-

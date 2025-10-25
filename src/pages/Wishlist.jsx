@@ -15,27 +15,28 @@ const Wishlist = () => {
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const dispatch = useDispatch();
   const token = localStorage.getItem("token")
-  const user = localStorage.getItem("user")
+  const user = JSON.parse(localStorage.getItem("user"))
 
   useEffect(() => {
     if (user._id) {
       dispatch(fetchWishlist(user._id))
     }
-  }, [dispatch, user])
+  }, [dispatch, user?._id])
 
-  const handleRemove = (id) => {
+  const handleRemove = (productId) => {
+    const wishlistItems = localStorage.getItem('wishlist');
     if (token) {
-      dispatch(removeFromWishlistServer(id))
-      toast.info("Removed from wishlist");
+      dispatch(removeFromWishlistServer({ userId: user?._id, productId }))
+      toast.info(`${wishlistItems.name} removed from wishlist`);
     } else {
-      dispatch(removeWishlistLocal(id));
-      toast.info("Removed from wishlist");
+      dispatch(removeWishlistLocal(productId));
+      toast.info(`${wishlistItems.name} removed from wishlist`);
     }
   };
 
   const handleClear = () => {
     if (token) {
-      dispatch(clearWishlistServer())
+      dispatch(clearWishlistServer(user?._id))
       toast.info("Wishlist cleared");
     } else {
       dispatch(clearWishlistLocal());
@@ -43,14 +44,19 @@ const Wishlist = () => {
     }
   };
 
+  
   if (!wishlistItems || wishlistItems.length === 0) {
     return (
       <div className="text-center my-5 py-5">
-        <p className="text-muted">Your wishlist is empty...</p>
+        <FaHeart size={40} color="lightgray" />
+        <p className="text-muted mt-3">Your wishlist is currently empty</p>
+        <Link to="/shop" className="btn btn-dark mt-3">
+          Start Shopping
+        </Link>
       </div>
     );
   }
-
+  
   return (
     <div className="container my-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -66,7 +72,7 @@ const Wishlist = () => {
       <div className="row g-4">
         {wishlistItems.map((item) => (
           <div
-            key={item._id}
+            key={item?._id}
             className="col-12 col-sm-6 col-md-4 col-lg-3"
           >
             <div className="card border-0 shadow-sm wishlist-card position-relative">
@@ -87,7 +93,7 @@ const Wishlist = () => {
                   onClick={() => handleRemove(item._id)}
                   title="Remove"
                 >
-                  <FaHeart size={15} color="red" />
+                  <FaHeart size={15} color="crimson" />
                 </button>
               </div>
 

@@ -1,19 +1,22 @@
 import React from "react";
+import { FaBoxOpen } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const UserOrder = () => {
     const orders = useSelector((state) => state.orders.items);
-    const navigate = useNavigate()
 
     return (
         <div className="container my-5">
             <h2>My Orders</h2>
 
             {orders.length === 0 ? (
-                <div>
-                    <p>No orders yet.</p>
-                    <button onClick={()=>navigate('/shop')} className="btn btn-outline-dark">Shop Now</button>
+                <div className="text-center my-5 py-5">
+                    <FaBoxOpen size={40} color="lightgray" />
+                    <p className="text-muted mt-3">No orders yet</p>
+                    <Link to="/shop" className="btn btn-dark mt-3">
+                        Start Shopping
+                    </Link>
                 </div>
             ) : (
                 <div className="list-group">
