@@ -35,11 +35,7 @@ const Checkout = () => {
         .oneOf([true], "You must select your country"),
     })
   })
-  console.log(formik.values);
-  console.log(formik.errors);
-  console.log(formik.touched);
-
-
+ 
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [loading, setloading] = useState(false)
 

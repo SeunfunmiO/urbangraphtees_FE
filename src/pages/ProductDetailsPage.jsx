@@ -30,8 +30,6 @@ function ProductDetailsPage() {
 
         const singleProduct = await axios.get(`https://urbangraphtees-be.onrender.com/products/product/${id}`)
         setProduct(singleProduct.data)
-        console.log(singleProduct.data);
-
       }
       catch (error) {
         console.log('Error fetching products:', error);

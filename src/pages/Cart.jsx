@@ -9,8 +9,6 @@ import { clearCartLocal, clearCartServer, fetchCart, removeCartItem, removeItemL
 const Cart = () => {
     const [loading, setLoading] = useState(false)
     const cartItems = useSelector((state) => state.cart.cartItems);
-    console.log(cartItems);
-    
     const dispatch = useDispatch();
     const navigate = useNavigate()
     

@@ -7,15 +7,15 @@ import { addNotification } from "../redux/notificationSlice";
 import { removeCartItem, updateCartItem } from "../redux/cartSlice";
 
 const OrderSummary = ({ showCheckoutButton = false, onCheckout }) => {
-    const { items = [] } = useSelector((state) => state.cart || {});
+    const cartItems = useSelector((state) => state.cart.cartItems);
     const [promoCode, setPromoCode] = useState('')
     const [discount, setDiscount] = useState(0)
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    // calculate totals
-    const subtotal = items.reduce(
+
+    const subtotal = cartItems.reduce(
         (acc, item) => acc + item.price * item.quantity,
         0
     );
@@ -42,21 +42,28 @@ const OrderSummary = ({ showCheckoutButton = false, onCheckout }) => {
             <h5 className="mb-3">Order Summary</h5>
             <div className="list-group-item">
                 <ul className="list-group mb-4">
-                    {items.map((item) => (
+                    {cartItems.map((item) => (
                         <li
                             key={item._id}
                             className="flex-wrap gap-2 d-flex justify-content-between align-items-center"
                         >
                             <div className='d-flex'>
                                 <img
-                                    src={item.image}
+                                    src={
+                                        item.images?.[0]?.url?.startsWith("http")
+                                            ? item.productId.images[0].url
+                                            : item.images?.[0]?.startsWith("http")
+                                                ? item.productId.images[0]
+                                                : `https://urbangraphtees-be.onrender.com/${item.productId.images?.[0]?.url || item.images?.[0] || ""}`
+                                    }
+
                                     alt={item.name}
                                     onClick={() => navigate(`/products/${item._id}`)} style={{ width: "60px", marginRight: "10px" }}
                                 />
                                 <div className='d-flex flex-column' >
                                     <div className="d-flex flex-column">
                                         <div>{item.name} </div>
-                                        <div className='text-muted'>{item.size} - {item.color}</div>
+                                        <div className='text-muted'>{item.selectedSize} - {item.selectedColor}</div>
                                     </div>
                                     <small className='text-muted'>₦{item.price.toLocaleString()}</small>
                                 </div>
@@ -125,7 +132,7 @@ const OrderSummary = ({ showCheckoutButton = false, onCheckout }) => {
                 <button
                     className="btn btn-dark w-100 mt-3"
                     onClick={onCheckout}
-                    disabled={items.length === 0}
+                    disabled={cartItems.length === 0}
                 >
                     Proceed to Checkout
                 </button>

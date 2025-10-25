@@ -5,34 +5,38 @@ import { FaFireFlameCurved } from "react-icons/fa6";
 import { HiSparkles } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { addToWishlist, removeFromWishlist } from "../redux/wishlistSlice";
 import { toast } from "react-toastify";
 import { addNotification } from "../redux/notificationSlice";
+import { addToWishlist, addWishlistLocal, removeFromWishlistServer, removeWishlistLocal } from "../redux/wishlistSlice";
 
 
 const ProductSection = ({ tag, products }) => {
     const dispatch = useDispatch()
-    const wishlistItems = useSelector((state) => state.wishlist.items)
+    const wishlistItems = useSelector((state) => state.wishlist.items);
+    const token = localStorage.getItem("token")
+
 
     const filteredProducts = products.filter((p) => p.tag === tag);
     if (filteredProducts.length === 0) return null;
 
     const handleWishlist = (item) => {
-        const isInWishlist = wishlistItems.some((w) => w.id === item.id)
-        if (isInWishlist) {
-            dispatch(removeFromWishlist(item.id))
-            toast.success(<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                Removed from wishlist
-            </div>)
+        // const isInWishlist = wishlistItems.some((w) => w._id === item._id)
+        if (token) {
+            dispatch(removeFromWishlistServer(item._id))
+            toast.warning("Removed from wishlist")
         } else {
             dispatch(addToWishlist(item))
-            toast.success(
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    Added to wishlist
-                </div>
-            )
+            toast.success('Added to wishlist')
             dispatch(addNotification({ message: `You added ${item.name} - ${item.price} to your wishlist`, status: true, type: 'info' }))
         }
+
+        // if (!token && isInWishlist) {
+        //     dispatch(removeWishlistLocal(item._id))
+        //     toast.warning("Removed from wishlist")
+        // } else {
+        //     dispatch(addWishlistLocal(item))
+        //     toast.success("Added to wishlist")
+        // }
     }
 
 
@@ -96,7 +100,8 @@ const ProductSection = ({ tag, products }) => {
                                         <h6 className="card-title text-black">{item.name}</h6>
                                         <div className="d-flex align-items-center mb-2">
                                             <FaStar size={16} fill="gold" className="text-warning" />
-                                            <span className="ms-1 small text-muted">{item.rating} ({item.reviews})</span>
+                                            <span className="ms-1 small text-muted">4</span>
+                                            {/* <span className="ms-1 small text-muted">{item.rating} ({item.reviews})</span> */}
                                         </div>
                                         <div className="d-flex justify-content-between align-items-center">
                                             <p className="text-muted mb-0">₦{item.price.toLocaleString()}</p>
