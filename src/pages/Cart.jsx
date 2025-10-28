@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 import { DotLoader } from 'react-spinners'
 import { toast } from 'react-toastify';
-import { clearCartLocal, clearCartServer, fetchCart, removeCartItem, removeItemLocal, updateCartItem } from '../redux/cartSlice';
+import { clearCartLocal, clearCartServer, decreaseQuantity, decreaseQuantityLocal, fetchCart, increaseQuantity, increaseQuantityLocal, removeCartItem, removeItemLocal } from '../redux/cartSlice';
 import { BsCart2 } from 'react-icons/bs';
 
 
@@ -12,26 +12,25 @@ const Cart = () => {
     const cartItems = useSelector((state) => state.cart.cartItems);
     const dispatch = useDispatch();
     const navigate = useNavigate()
+    const token = localStorage.getItem("token")
+
 
     useEffect(() => {
         dispatch(fetchCart())
     }, [dispatch])
 
     const total = cartItems.reduce(
-        (sum, item) => sum + item.productId.price * item.quantity,
+        (sum, item) => sum + item.price * item.quantity,
         0
     );
 
     const handleRemoveFromCart = (productId) => {
-        const token = localStorage.getItem("token")
         if (token) {
             dispatch(removeCartItem(productId))
-            toast.success(`${productId.name} removed from cart`)
         } else {
             dispatch(removeItemLocal(productId))
-            toast.success(`${productId.name} removed from cart`)
         }
-
+        toast.success(`Removed from cart`)
     }
 
     const handleClearCart = () => {
@@ -57,14 +56,14 @@ const Cart = () => {
                 >
                     Clear Cart
                 </button>
-                </div>
+            </div>
 
             <div className='pb-3' style={{ backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 0.125rem 0.25rem rgba(0,0,0,0.075)' }}>
                 {cartItems.length === 0 ? (
                     <div className="text-center my-5 py-5">
                         <BsCart2 size={40} color="lightgray" />
                         <p className="text-muted mt-3">Your cart is currently empty</p>
-                        <Link to="/shop" className="btn btn-dark mt-3">
+                        <Link to="/shop" className="btn bg-black text-white mt-3">
                             Start Shopping
                         </Link>
                     </div>
@@ -81,41 +80,42 @@ const Cart = () => {
                                         <img
                                             src={
                                                 item.images?.[0]?.url?.startsWith("http")
-                                                    ? item.productId.images[0].url
+                                                    ? item.images[0].url
                                                     : item.images?.[0]?.startsWith("http")
-                                                        ? item.productId.images[0]
-                                                        : `https://urbangraphtees-be.onrender.com/${item.productId.images?.[0]?.url || item.images?.[0] || ""}`
+                                                        ? item.images[0]
+                                                        : `https://urbangraphtees-be.onrender.com/${item.images?.[0]?.url || item.images?.[0] || ""}`
                                             }
-                                            alt={item.productId?.name}
+                                            alt={item?.name}
                                             onClick={() => navigate(`/products/${item._id}`)} style={{ width: "60px", marginRight: "10px" }}
                                         />
                                         <div className='d-flex flex-column' >
                                             <div className="d-flex flex-column">
-                                                <div>{item.productId?.name} </div>
-                                                <div className='text-muted'>{item.selectedSize} {' '} <span
-                                                    style={{
-                                                        display: 'inline-block',
-                                                        width: '16px',
-                                                        height: '16px',
-                                                        borderRadius: '50%',
-                                                        backgroundColor: item.selectedColor,
-                                                        border: '1px solid #ccc'
-                                                    }}
-                                                ></span></div>
+                                                <div>{item?.name} </div>
+                                                <div className='text-muted'>{item.selectedSize} {' '} {" - "}<span
+                                                // style={{
+                                                //     display: 'inline-block',
+                                                //     width: '16px',
+                                                //     height: '16px',
+                                                //     borderRadius: '50%',
+                                                //     backgroundColor: item.selectedColor,
+                                                //     border: '1px solid #ccc'
+                                                // }}
+                                                >{item.selectedColor}</span></div>
                                             </div>
-                                            <small className='text-muted'>₦{item.productId.price.toLocaleString()}</small>
+                                            <small className='text-muted'>₦{item.price.toLocaleString()}</small>
                                         </div>
                                     </div>
 
                                     <div className='d-flex gap-2 '>
                                         <div className='border border-secondary rounded-2'>
                                             <button
-                                                className="btn btn-sm btn-0"
+                                                className="btn btn-sm btn-0 border-0"
                                                 onClick={() => {
                                                     if (item.quantity > 1) {
-                                                        dispatch(updateCartItem({ productId: item.productId._id, quantity: item.quantity - 1 }))
+                                                        token ?
+                                                            dispatch(decreaseQuantity({ productId: item.productId._id, quantity: item.productId.quantity - 1 })) : dispatch(decreaseQuantityLocal({ productId: item.productId._id, quantity: item.productId.quantity - 1 }))
                                                     } else {
-                                                        dispatch(removeCartItem(item.productId._id))
+                                                        dispatch(removeCartItem(item._id))
                                                     }
                                                 }}
                                             >
@@ -123,15 +123,15 @@ const Cart = () => {
                                             </button>
                                             {item.quantity}
                                             <button
-                                                className="btn btn-sm btn-0"
-                                                onClick={() => dispatch(updateCartItem({ productId: item.productId._id, quantity: item.quantity + 1 }))}
+                                                className="btn btn-sm btn-0 border-0"
+                                                onClick={() => token ? dispatch(increaseQuantity({ productId: item.productId._id, quantity: item.productId.quantity + 1 })) : dispatch(increaseQuantityLocal({ productId: item.productId._id, quantity: item.productId.quantity + 1 }))}
                                             >
                                                 +
                                             </button>
                                         </div>
                                         <button
-                                            className="btn btn-sm btn-0 text-danger"
-                                            onClick={() => handleRemoveFromCart(item.productId?._id || item._id)}
+                                            className="btn btn-sm btn-0 text-danger border-0"
+                                            onClick={() => handleRemoveFromCart(item.productId || item._id)}
                                         >
                                             Remove
                                         </button>

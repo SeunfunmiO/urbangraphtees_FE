@@ -89,6 +89,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
+import { formatDistanceToNow } from "date-fns";
 
 const ManageOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -204,7 +205,7 @@ const ManageOrders = () => {
                     <option value="cancelled">Cancelled</option>
                   </select>
                 </td>
-                <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                <td>{formatDistanceToNow(new Date(order.createdAt), { addSuffix: true })}</td>
               </tr>
             ))}
           </tbody>

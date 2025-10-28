@@ -17,7 +17,6 @@ function ProductDetailsPage() {
   const [selectedSize, setselectedSize] = useState(null)
   const [selectedColor, setSelectedColor] = useState(null)
   const user = useSelector((state) => state.auth.user)
-  // const notifications = useSelector((state) => state.notifications.notifications) || [];
   const [productsData, setProductsData] = useState([])
 
 

@@ -43,15 +43,17 @@ h5 {
 .glass-nav:hover {
   /* transform: translateY(-3px); */
 }
-.offcanvas-backdrop.fade.show{
+
+.offcanvas-backdrop.fade.show {
   background-color: white !important;
 }
-.offcanvas-body{
+
+.offcanvas-body {
   backdrop-filter: blur(0px) !important;
   /* background: white;
   -webkit-backdrop-filter: blur(10px) !important;
 color: white !important; */
-z-index: 15000000 !important;
+  z-index: 15000000 !important;
 
 }
 
@@ -87,7 +89,7 @@ z-index: 15000000 !important;
   background-color: #000000 !important;
 }
 
-.navbar-toggler:focus{
+.navbar-toggler:focus {
   box-shadow: none !important;
 }
 
@@ -105,6 +107,7 @@ z-index: 15000000 !important;
 .wishlist-btn:hover {
   transform: none !important;
 }
+
 .wishlist-card {
   transition: all 0.3s ease;
   cursor: pointer;
@@ -194,7 +197,8 @@ z-index: 15000000 !important;
 .text-gray:hover {
   color: gray !important;
 }
-input{
+
+input {
   font-size: 13px !important;
 }
 
@@ -232,22 +236,19 @@ input{
   .appear {
     display: block !important;
   }
-  .navbar-nav{
+
+  .navbar-nav {
     gap: 0px !important;
   }
+
   .footer {
     grid-template-columns: 1fr 1fr;
   }
-  .foot-link{
+
+  .foot-link {
     font-size: 14px;
   }
 
-}
-
-@media screen and (max-width:540px) {
-  /* .navReverse {
-    gap: 150px;
-  } */
 }
 
 @media screen and (max-width:430px) {
@@ -307,8 +308,9 @@ input{
   .navbar-brand {
     font-size: 10px !important;
   }
-  .mark-pd{
-    min-width: 0px !important;
+
+  .mark-pd {
+    left: 3px;
     font-size: 14px;
   }
 }

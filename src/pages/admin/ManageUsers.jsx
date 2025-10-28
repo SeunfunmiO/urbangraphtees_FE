@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 import { FaSearch } from "react-icons/fa";
+import { formatDistanceToNow } from "date-fns";
 
 const ManageUsers = () => {
     const [users, setUsers] = useState([]);
@@ -143,7 +144,7 @@ const ManageUsers = () => {
                                             {user.role || "User"}
                                         </span>
                                     </td>
-                                    <td>{new Date(user.createdAt).toLocaleDateString()}</td>
+                                    <td>{formatDistanceToNow(new Date(user.createdAt), { addSuffix: true })}</td>
                                     <td>
                                         <div className="d-flex gap-3">
                                             <button

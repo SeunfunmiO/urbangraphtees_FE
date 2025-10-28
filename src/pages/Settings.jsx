@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../redux/authSlice";
 import { toast } from "react-toastify";
 import axios from "axios"
+import { formatDistanceToNow } from "date-fns";
 
 const Settings = () => {
     const { name, email } = useSelector((state) => state.settings);
@@ -17,11 +18,6 @@ const Settings = () => {
     const user = useSelector((state) => state.auth.user)
 
     if (!user) return null;
-    const signupDate = new Date(user.createdAt).toLocaleDateString("en-US", {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    })
 
     const handleLogout = () => {
         setloading(true)
@@ -80,7 +76,7 @@ const Settings = () => {
             <div className="card mb-3">
                 <div className="card-body">
                     <h6>Profile Information</h6>
-                    <small className="text-muted">Member since {signupDate}</small>
+                    <small className="text-muted">Member since {formatDistanceToNow(new Date(user.createdAt), { addSuffix: true })}</small>
                     <form onSubmit={handleSubmit} className="">
                         <div className="mb-3 ">
                             <label className="form-label">Username</label>

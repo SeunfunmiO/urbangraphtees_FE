@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { addToWishlist, addWishlistLocal, removeFromWishlistServer, removeWishlistLocal } from "../redux/wishlistSlice";
 import { addNotificationLocal, createNotification } from "../redux/notificationSlice";
+import { ClipLoader } from "react-spinners";
 
 
 function Products() {
@@ -18,7 +19,7 @@ function Products() {
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const user = useSelector((state) => state.auth.user);
   const token = localStorage.getItem("token")
-
+  const [loading, setLoading] = useState(false)
   const queryParams = new URLSearchParams(location.search);
   const initialCategory = queryParams.get("category") || "All";
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
@@ -32,6 +33,7 @@ function Products() {
   }, [products]);
 
   useEffect(() => {
+    setLoading(true)
     const fetchProducts = async () => {
       try {
         const res = await axios.get("https://urbangraphtees-be.onrender.com/products/product");
@@ -39,6 +41,8 @@ function Products() {
       } catch (error) {
         console.error("Error fetching products:", error);
         toast.error("Unable to load products");
+      }finally{
+        setLoading(false)
       }
     };
     fetchProducts();
@@ -102,18 +106,21 @@ function Products() {
       <h4 className="mb-4 fw-bold">Shop All Products</h4>
 
       <div className="mb-4">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            className={`btn btn-sm me-auto border-0 ${selectedCategory === cat
-              ? "text-decoration-underline"
-              : "text-decoration-none"
-              }`}
-            onClick={() => setSelectedCategory(cat)}
-          >
-            {cat}
-          </button>
-        ))}
+        {loading ? (<div className="d-flex h-100 justify-content-center align-items-center my-5">
+          <ClipLoader size={30} color="#000" />
+        </div>) :
+          categories.map((cat) => (
+            <button
+              key={cat}
+              className={`btn btn-sm me-auto border-0 ${selectedCategory === cat
+                ? "text-decoration-underline"
+                : "text-decoration-none"
+                }`}
+              onClick={() => setSelectedCategory(cat)}
+            >
+              {cat}
+            </button>
+          ))}
       </div>
 
 
