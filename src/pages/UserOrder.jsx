@@ -1,7 +1,7 @@
 import React from "react";
 import { FaBoxOpen } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+
 
 const UserOrder = () => {
     const orders = useSelector((state) => state.orders.items);
@@ -14,9 +14,6 @@ const UserOrder = () => {
                 <div className="text-center my-5 py-5">
                     <FaBoxOpen size={40} color="lightgray" />
                     <p className="text-muted mt-3">No orders yet</p>
-                    <Link to="/shop" className="btn btn-dark mt-3">
-                        Start Shopping
-                    </Link>
                 </div>
             ) : (
                 <div className="list-group">
@@ -29,8 +26,8 @@ const UserOrder = () => {
 
                         return (
                             <div key={order.id} className="list-group-item mb-3">
-                                <h5>Order ID: {order.id}</h5>
-                                <p>Date: {order.date}</p>
+                                <h5>Order ID: {order._id}</h5>
+                                <p>Date: {order.createdAt}</p>
                                 <p>Total: ₦{order.total}</p>
                                 <p className={textColor}>Status: {order.status}</p>
 

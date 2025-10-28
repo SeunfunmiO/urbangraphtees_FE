@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaCartArrowDown, FaHeart, FaShoppingBag } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { ClipLoader } from "react-spinners";
+import { BarLoader, MoonLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { addItemLocal, addToCart } from "../redux/cartSlice";
@@ -52,11 +52,15 @@ function ProductDetailsPage() {
     const imgRect = imageEl.getBoundingClientRect();
     const cartRect = cartIcon.getBoundingClientRect();
 
-    imgClone.style.position = "fixed";
-    imgClone.style.left = `${imgRect.left} px`;
-    imgClone.style.top = `${imgRect.top} px`;
-    imgClone.style.width = `${imgRect.width} px`;
-    imgClone.style.height = `${imgRect.height} px`;
+
+    const scrollX = window.scrollX || window.pageXOffset;
+    // const scrollY = window.scrollY || window.pageYOffset;
+
+    imgClone.style.position = "absolute";
+    imgClone.style.right = `${imgRect.right + scrollX}px`;
+    // imgClone.style.bottom = `${imgRect.bottom + scrollY}px`;
+    imgClone.style.width = `${imgRect.width}px`;
+    imgClone.style.height = `${imgRect.height}px`;
     imgClone.style.borderRadius = "8px";
     imgClone.style.transition = "transform 0.8s ease-in-out, opacity 0.8s ease-in-out";
     imgClone.style.zIndex = 2000;
@@ -65,10 +69,11 @@ function ProductDetailsPage() {
     document.body.appendChild(imgClone);
 
     requestAnimationFrame(() => {
-      const translateX = cartRect.left - imgRect.left;
-      const translateY = cartRect.top - imgRect.top;
+      const translateX = cartRect.right + scrollX - (imgRect.right + scrollX);
+      // const translateY = cartRect.bottom + scrollY - (imgRect.bottom + scrollY);
 
-      imgClone.style.transform = `translate(${translateX}px, ${translateY}px) scale(0.1)`;
+
+      imgClone.style.transform = `translate(${translateX}px scale(0.1)`;
       imgClone.style.opacity = "0.2";
     });
 
@@ -101,7 +106,6 @@ function ProductDetailsPage() {
         quantity: 1
       }))
       dispatch(createNotification({ message: `Hello ${userName}, You added ${item.name} to cart `, status: true, type: 'success' }))
-      toast.success(`${item.name} added to cart`);
     } else {
       dispatch(addItemLocal({
         productId: product._id,
@@ -113,9 +117,8 @@ function ProductDetailsPage() {
         quantity: 1
       }))
       dispatch(addNotificationLocal({ message: `Hello ${userName}, You added ${item.name} to cart `, status: true, type: 'success' }))
-      toast.success(`${item.name} added to cart`);
-
     }
+    toast.success(`${item.name} added to cart`);
 
     const imageEl = document.querySelector("#productImage");
     animateFlyToCart(imageEl);
@@ -125,7 +128,7 @@ function ProductDetailsPage() {
   if (!product) {
     return (
       <div className="d-flex h-100 justify-content-center align-items-center my-5">
-        <ClipLoader size={30} color="#000" />
+        <BarLoader size={30} color="#000" />
       </div>
     );
   }
@@ -189,7 +192,7 @@ function ProductDetailsPage() {
               cursor: !selectedColor || !selectedSize ? 'not-allowed' : "pointer"
             }}
           >
-            {loading ? <ClipLoader size={18} color="#fff" /> : "Add to Cart"}
+            {loading ? <MoonLoader size={18} color="#fff" /> : "Add to Cart"}
             <FaCartArrowDown />
           </button>
         </div>

@@ -47,7 +47,7 @@ const Navbar = () => {
       <div className="navReverse">
         <a href="/" className="fw-bold fs-6 navbar-brand  text-white/ text-uppercase">
           UrbanGraphTees
-          {/* <img src="./multimedia/ugtBlackBgLogo.jpg" alt=" UrbanGraphTees logo" width={"60px"} /> */}
+          {/* <img src="./multimedia/ugtWhiteBgLogo.jpg" alt=" UrbanGraphTees logo" width={"60px"} /> */}
         </a>
         <button className="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
           <span className='border-0'><BiMenuAltLeft className='border-0' /></span>
@@ -57,9 +57,9 @@ const Navbar = () => {
       <div className="offcanvas offcanvas-start " tabIndex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
         <div className="offcanvas-header">
           <h5 className="offcanvas-title" id="offcanvasNavbarLabel">MENU</h5>
-          <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          <button type="button" className="btn-close border-0" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <div className="offcanvas-body ">
+        <div className="offcanvas-body">
           <ul className="navbar-nav d-flex gap-3 justify-content-center flex-grow-1 pe-3">
             <li className="nav-item" data-bs-dismiss="offcanvas"> <NavLink className={({ isActive }) =>
               isActive ? "navRoute text-black text-decoration-none active-link" : "navRoute text-decoration-none text-black"

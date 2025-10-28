@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 import { DotLoader } from 'react-spinners'
 import { toast } from 'react-toastify';
-import { clearCartLocal, clearCartServer, decreaseQuantity, decreaseQuantityLocal, fetchCart, increaseQuantity, increaseQuantityLocal, removeCartItem, removeItemLocal } from '../redux/cartSlice';
+import { clearCartLocal, clearCartServer, fetchCart, removeCartItem, removeItemLocal, updateCartItem } from '../redux/cartSlice';
 import { BsCart2 } from 'react-icons/bs';
 
 
@@ -34,16 +34,40 @@ const Cart = () => {
     }
 
     const handleClearCart = () => {
-        const token = localStorage.getItem("token")
         if (token) {
             dispatch(clearCartServer())
-            toast.success(`Cart cleared!`)
         } else {
             dispatch(clearCartLocal())
-            toast.success(`Cart cleared!`)
         }
+        toast.success(`Cart cleared!`)
 
     }
+
+    const handleDecreaseItem = (item) => {
+        if (item.quantity > 1) {
+            dispatch(
+                updateCartItem({
+                    productId: item.productId?._id || item.productId,
+                    quantity: item.quantity - 1,
+                })
+            );
+        } else {
+            if (token) {
+                dispatch(removeCartItem(item.productId?._id || item.productId));
+            } else {
+                dispatch(removeItemLocal(item._id));
+            }
+        }
+    };
+
+    const handleIncreaseItem = (item) => {
+        dispatch(
+            updateCartItem({
+                productId: item.productId?._id || item.productId,
+                quantity: item.quantity + 1,
+            })
+        );
+    };
 
 
     return (
@@ -110,21 +134,14 @@ const Cart = () => {
                                         <div className='border border-secondary rounded-2'>
                                             <button
                                                 className="btn btn-sm btn-0 border-0"
-                                                onClick={() => {
-                                                    if (item.quantity > 1) {
-                                                        token ?
-                                                            dispatch(decreaseQuantity({ productId: item.productId._id, quantity: item.productId.quantity - 1 })) : dispatch(decreaseQuantityLocal({ productId: item.productId._id, quantity: item.productId.quantity - 1 }))
-                                                    } else {
-                                                        dispatch(removeCartItem(item._id))
-                                                    }
-                                                }}
+                                                onClick={() => handleDecreaseItem(item)}
                                             >
                                                 -
                                             </button>
                                             {item.quantity}
                                             <button
                                                 className="btn btn-sm btn-0 border-0"
-                                                onClick={() => token ? dispatch(increaseQuantity({ productId: item.productId._id, quantity: item.productId.quantity + 1 })) : dispatch(increaseQuantityLocal({ productId: item.productId._id, quantity: item.productId.quantity + 1 }))}
+                                                onClick={() => handleIncreaseItem(item)}
                                             >
                                                 +
                                             </button>

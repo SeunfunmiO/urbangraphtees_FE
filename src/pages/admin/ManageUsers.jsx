@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { ClipLoader } from "react-spinners";
+import { BarLoader } from "react-spinners";
 import { FaSearch } from "react-icons/fa";
 import { formatDistanceToNow } from "date-fns";
 
@@ -95,7 +95,7 @@ const ManageUsers = () => {
     if (loading)
         return (
             <div className="d-flex justify-content-center align-items-center vh-100">
-                <ClipLoader color="#000" size={35} />
+                <BarLoader color="#000" size={40} />
             </div>
         );
 

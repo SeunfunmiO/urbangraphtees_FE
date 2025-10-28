@@ -7,10 +7,10 @@ import { formatDistanceToNow } from 'date-fns';
 
 
 const NotificationDetails = () => {
-    const { id } = useParams();
+    // const { id } = useParams();
     const navigate = useNavigate();
     const notifications = useSelector((state) => state.notification.items || [])
-    const notification = notifications.find((n) => n._id == id)
+    // const notification = notifications.find((n) => n._id === id)
     const dispatch = useDispatch()
     const token = localStorage.getItem('token')
 
@@ -20,18 +20,18 @@ const NotificationDetails = () => {
 
     useEffect(() => {
 
-        if (notification && !notification.isRead) {
+        if (notifications && !notifications.isRead) {
             if (token) {
-                dispatch(markAsRead(notification._id))
+                dispatch(markAsRead(notifications._id))
 
             }
             else {
-                dispatch(markAsReadLocal(notification._id))
+                dispatch(markAsReadLocal(notifications._id))
             }
         }
-    }, [token, notification, dispatch]);
+    }, [token, notifications, dispatch]);
 
-    if (!notification) {
+    if (!notifications) {
         return (
             <div className="text-center my-5 py-5">
                 <ImNotification size={40} color="lightgray" />
@@ -44,11 +44,11 @@ const NotificationDetails = () => {
     return (
         <div style={{ maxWidth: '800px', margin: '2rem auto', padding: '1rem' }}>
             <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '0.5rem' }}>
-                <h4 style={{ marginBottom: '0.5rem', textTransform: 'capitalize' }}>{notification.type}</h4>
-                <small style={{ color: '#6c757d' }}>{formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}</small>
+                <h4 style={{ marginBottom: '0.5rem', textTransform: 'capitalize' }}>{notifications.type}</h4>
+                {/* <small style={{ color: '#6c757d' }}>{formatDistanceToNow(new Date(notifications.createdAt), { addSuffix: true })}</small> */}
                 <hr />
                 <p style={{ marginTop: '1rem', lineHeight: '1.6', color: '#333' }}>
-                    {notification.message}
+                    {notifications.message}
                 </p>
             </div>
             <button className="btn btn-outline-dark mb-3" onClick={() => navigate(-1)}>

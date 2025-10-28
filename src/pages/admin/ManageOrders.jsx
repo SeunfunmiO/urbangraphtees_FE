@@ -87,9 +87,10 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { ClipLoader } from "react-spinners";
+import { BarLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import { formatDistanceToNow } from "date-fns";
+import { FaBoxOpen } from "react-icons/fa6";
 
 const ManageOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -140,78 +141,84 @@ const ManageOrders = () => {
 
   if (loading)
     return (
-      <div className="text-center py-5">
-        <ClipLoader color="#000" size={35} />
+      <div className="vh-100 d-flex justify-content-center align-items-center">
+        <BarLoader color="#000" size={35} />
       </div>
     );
-  // if(orders.length === 0)
-  //   return <div className="alert alert-light text-center">No orders yet</div>
+
 
 
   return (
     <div>
       <h3 className="fw-bold mb-4">Manage Orders</h3>
-      <div className="table-responsive">
-        <table className="table table-hover">
-          <thead className="table-dark/">
-            <tr>
-              <th>#</th>
-              <th>Customer</th>
-              <th>Email</th>
-              <th>Items</th>
-              <th>Total</th>
-              <th>Action</th>
-              <th>Status</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order, index) => (
-              <tr key={order._id}>
-                <td>{index + 1}.</td>
-                <td>{order.user?.name || "N/A"}</td>
-                <td>{order.user?.email || "N/A"}</td>
-                <td>
-                  {order.orderItems.map((item, i) => (
-                    <div key={i}>
-                      {item.name} × {item.quantity}
-                    </div>
-                  ))}
-                </td>
-                <td>₦{order.totalAmount.toLocaleString()}</td>
-                <td>
-                  <span className={`badge bg-${order.orderStatus === "delivered"
-                    ? "success"
-                    : order.orderStatus === "processing"
-                      ? "warning"
-                      : "secondary"
-                    }`}>
-                    {order.orderStatus}
-                  </span>
-                </td>
-                <td>
-                  <select
-                    className="form-select form-select-sm"
-                    disabled={updating}
-                    value={order.orderStatus}
-                    onChange={(e) =>
-                      handleStatusChange(order._id, e.target.value)
-                    }
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="processing">Processing</option>
-                    <option value="shipped">Shipped</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="cancelled">Cancelled</option>
-                  </select>
-                </td>
-                <td>{formatDistanceToNow(new Date(order.createdAt), { addSuffix: true })}</td>
+      {orders.length === 0 ? (
+        <div className="text-center my-5 py-5">
+          <FaBoxOpen size={40} color="lightgray" />
+          <p className="text-muted mt-3">No orders yet</p>
+        </div>
+      ) : (
+        <div className="table-responsive">
+          <table className="table table-hover">
+            <thead className="table-dark/">
+              <tr>
+                <th>#</th>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Action</th>
+                <th>Status</th>
+                <th>Date</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {orders.map((order, index) => (
+                <tr key={order._id}>
+                  <td>{index + 1}.</td>
+                  <td>{order.user?.name || "N/A"}</td>
+                  <td>{order.user?.email || "N/A"}</td>
+                  <td>
+                    {order.orderItems.map((item, i) => (
+                      <div key={i}>
+                        {item.name} × {item.quantity}
+                      </div>
+                    ))}
+                  </td>
+                  <td>₦{order.totalAmount.toLocaleString()}</td>
+                  <td>
+                    <span className={`badge bg-${order.orderStatus === "delivered"
+                      ? "success"
+                      : order.orderStatus === "processing"
+                        ? "warning"
+                        : "secondary"
+                      }`}>
+                      {order.orderStatus}
+                    </span>
+                  </td>
+                  <td>
+                    <select
+                      className="form-select form-select-sm"
+                      disabled={updating}
+                      value={order.orderStatus}
+                      onChange={(e) =>
+                        handleStatusChange(order._id, e.target.value)
+                      }
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="processing">Processing</option>
+                      <option value="shipped">Shipped</option>
+                      <option value="delivered">Delivered</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  </td>
+                  <td>{formatDistanceToNow(new Date(order.createdAt), { addSuffix: true })}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>)}
     </div>
+
   );
 };
 

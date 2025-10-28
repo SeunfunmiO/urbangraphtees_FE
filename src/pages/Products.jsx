@@ -7,9 +7,10 @@ import { BiHeart } from "react-icons/bi";
 import { FaHeart } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { addToWishlist, addWishlistLocal, removeFromWishlistServer, removeWishlistLocal } from "../redux/wishlistSlice";
+import { addToWishlist, addWishlistLocal, fetchWishlist, removeFromWishlistServer, removeWishlistLocal } from "../redux/wishlistSlice";
 import { addNotificationLocal, createNotification } from "../redux/notificationSlice";
-import { ClipLoader } from "react-spinners";
+import { BarLoader } from "react-spinners";
+
 
 
 function Products() {
@@ -25,6 +26,11 @@ function Products() {
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [products, setProducts] = useState([]);
 
+  useEffect(() => {
+    if (user._id) {
+      dispatch(fetchWishlist(user._id))
+    }
+  }, [dispatch, user?._id])
 
   useEffect(() => {
     if (products.length > 0 && !queryParams.get("category")) {
@@ -41,7 +47,7 @@ function Products() {
       } catch (error) {
         console.error("Error fetching products:", error);
         toast.error("Unable to load products");
-      }finally{
+      } finally {
         setLoading(false)
       }
     };
@@ -107,7 +113,7 @@ function Products() {
 
       <div className="mb-4">
         {loading ? (<div className="d-flex h-100 justify-content-center align-items-center my-5">
-          <ClipLoader size={30} color="#000" />
+          <BarLoader size={30} color="#000" />
         </div>) :
           categories.map((cat) => (
             <button

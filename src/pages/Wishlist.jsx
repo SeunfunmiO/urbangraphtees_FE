@@ -8,7 +8,7 @@ import {
   fetchWishlist,
 } from "../redux/wishlistSlice";
 import { FaCartArrowDown, FaHeart } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Wishlist = () => {
@@ -16,6 +16,7 @@ const Wishlist = () => {
   const dispatch = useDispatch();
   const token = localStorage.getItem("token")
   const user = JSON.parse(localStorage.getItem("user"))
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (user._id) {
@@ -108,7 +109,7 @@ const Wishlist = () => {
                   </Link>
                   <button
                     className="btn btn-outline-dark btn-sm px-3"
-                    onClick={() => toast.success(`${item.name} added to cart`)}
+                    onClick={() => navigate(`/products/${item._id}`)}
                   >
                     <FaCartArrowDown size={13} />
                   </button>

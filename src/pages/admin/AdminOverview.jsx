@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaUsers, FaBoxOpen, FaShoppingBag } from "react-icons/fa";
-import { ClipLoader } from "react-spinners";
+import { BarLoader } from "react-spinners";
 import { toast } from "react-toastify";
 
 const AdminOverview = () => {
@@ -35,7 +35,7 @@ const AdminOverview = () => {
     if (loading) {
         return (
             <div className="d-flex justify-content-center align-items-center vh-100">
-                <ClipLoader size={40} color="#000" />
+                <BarLoader size={40} color="#000" />
             </div>
         );
     }

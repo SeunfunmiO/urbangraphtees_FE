@@ -192,11 +192,13 @@ import axios from "axios";
 import { FaTrash, FaEdit, FaShoppingBag } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { FaBoxOpen } from "react-icons/fa6";
+import { BarLoader } from "react-spinners";
 
 const ManageProducts = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [editingProduct, setEditingProduct] = useState(null); 
+    const [editingProduct, setEditingProduct] = useState(null);
     const [editForm, setEditForm] = useState({});
     const [editImage, setEditImage] = useState("");
     const [deleting, setDeleting] = useState(false)
@@ -273,7 +275,7 @@ const ManageProducts = () => {
         try {
             setEditing(true)
             const payload = { ...editForm };
-            if (editImage) payload.image = editImage; 
+            if (editImage) payload.image = editImage;
 
             const res = await axios.put(`${BASE_URL}/${editingProduct._id}`, payload, {
                 headers: {
@@ -317,10 +319,13 @@ const ManageProducts = () => {
 
     if (loading)
         return (
-            <div className="text-center py-5 mt-2">Loading products...</div>
+            <div className="vh-100 d-flex justify-content-center align-items-center"><BarLoader /></div>
         );
     if (products.length === 0) {
-        return <div>No product yet</div>
+        <div className="text-center my-5 py-5">
+            <FaBoxOpen size={40} color="lightgray" />
+            <p className="text-muted mt-3">No products yet</p>
+        </div>
     }
     return (
         <div>
@@ -398,7 +403,7 @@ const ManageProducts = () => {
                 </table>
             </div>
 
-            {/* ✏ Edit Product Modal */}
+
             <div
                 className="modal fade"
                 id="editModal"

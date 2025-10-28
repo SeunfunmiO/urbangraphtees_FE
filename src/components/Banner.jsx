@@ -21,7 +21,8 @@ const Banner = () => {
                             <div className="position-relative">
                                 <img
                                     src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=600&fit=crop"
-                                    alt="Hero"
+                                    // src='./multimedia/ugtTshirtCom.jpg'
+                                    alt="Hero Image"
                                     className="img-fluid rounded shadow-lg"
                                 />
                             </div>
