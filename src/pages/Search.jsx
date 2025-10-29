@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { BarLoader } from "react-spinners";
 
 const SearchResults = () => {
   const [products, setProducts] = useState([]);
@@ -14,7 +15,7 @@ const SearchResults = () => {
       try {
         setLoading(true);
         const res = await axios.get(
-         `https://urbangraphtees-be.onrender.com/products?search=${encodeURIComponent(query)}`
+          `https://urbangraphtees-be.onrender.com/products?search=${encodeURIComponent(query)}`
         );
         setProducts(res.data.products || []);
       } catch (err) {
@@ -27,8 +28,11 @@ const SearchResults = () => {
     if (query) fetchProducts();
   }, [query]);
 
-  if (loading) return <p>Loading...</p>;
-  if (!products.length) return <p>No products found for "{query}"</p>;
+  if (loading) return <p className='mt-5 text-center'><BarLoader />.</p>;
+  if (!products.length) return <div className="text-center my-5 py-5">
+    <FaBoxOpen size={40} color="lightgray" />
+    <p className="text-muted mt-3">No products for "{query}"</p>
+  </div>;
 
   return (
     <div className="container mt-4">

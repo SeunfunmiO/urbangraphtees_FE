@@ -8,7 +8,7 @@ import { FaHeart } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { addToWishlist, addWishlistLocal, fetchWishlist, removeFromWishlistServer, removeWishlistLocal } from "../redux/wishlistSlice";
-import { addNotificationLocal, createNotification } from "../redux/notificationSlice";
+import { addNotificationLocal, createNotification, fetchNotifications } from "../redux/notificationSlice";
 import { BarLoader } from "react-spinners";
 
 
@@ -25,6 +25,12 @@ function Products() {
   const initialCategory = queryParams.get("category") || "All";
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [products, setProducts] = useState([]);
+
+
+
+  useEffect(() => {
+    dispatch(fetchNotifications());
+  }, [dispatch]);
 
   useEffect(() => {
     if (user._id) {

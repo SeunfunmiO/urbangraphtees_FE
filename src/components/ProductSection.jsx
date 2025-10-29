@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { addToWishlist, addWishlistLocal, fetchWishlist, removeFromWishlistServer, removeWishlistLocal } from "../redux/wishlistSlice";
-import { addNotificationLocal, createNotification } from "../redux/notificationSlice";
+import { addNotificationLocal, createNotification, fetchNotifications } from "../redux/notificationSlice";
 
 
 const ProductSection = ({ tag, products }) => {
@@ -16,11 +16,17 @@ const ProductSection = ({ tag, products }) => {
     const token = localStorage.getItem("token")
     const user = JSON.parse(localStorage.getItem("user") || {})
 
-  useEffect(() => {
-    if (user._id) {
-      dispatch(fetchWishlist(user._id))
-    }
-  }, [dispatch, user?._id])
+
+
+    useEffect(() => {
+        dispatch(fetchNotifications());
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (user._id) {
+            dispatch(fetchWishlist(user._id))
+        }
+    }, [dispatch, user?._id])
 
     const filteredProducts = products.filter((p) => p.tag === tag);
     if (filteredProducts.length === 0) return null;

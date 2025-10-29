@@ -5,6 +5,7 @@ import { DotLoader } from 'react-spinners'
 import { toast } from 'react-toastify';
 import { clearCartLocal, clearCartServer, fetchCart, removeCartItem, removeItemLocal, updateCartItem } from '../redux/cartSlice';
 import { BsCart2 } from 'react-icons/bs';
+import { fetchNotifications } from '../redux/notificationSlice';
 
 
 const Cart = () => {
@@ -13,6 +14,12 @@ const Cart = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
+
+
+    
+      useEffect(() => {
+        dispatch(fetchNotifications());
+      }, [dispatch]);
 
 
     useEffect(() => {

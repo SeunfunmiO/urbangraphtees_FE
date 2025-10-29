@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux';
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from '../redux/authSlice';
 import { FaSearch } from 'react-icons/fa';
-// import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
 
 const Navbar = () => {
   const navigate = useNavigate()
@@ -12,6 +13,14 @@ const Navbar = () => {
   const wishlistCount = useSelector((state) => state.wishlist.items)
   const notificationsCount = useSelector((state) => state.notification.unreadCount)
   const { token } = useSelector((state) => state.auth)
+  // const queryParams = new URLSearchParams(location.search);
+  // const initialCategory = queryParams.get("category") || "All";
+  // const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+
+  const [products, setProducts] = useState([]);
+
+
+
 
   // const handleSearch = () => {
   //   if (query.trim() !== "") {
@@ -23,7 +32,27 @@ const Navbar = () => {
   //   if (e.key === "Enter") handleSearch();
   // }
 
+  // useEffect(() => {
+  //   if (products.length > 0 && !queryParams.get("category")) {
+  //     setSelectedCategory('All')
+  //   }
+  // }, [products])
 
+  // useEffect(() => {
+  //   setLoading(true)
+  //   const fetchProducts = async () => {
+  //     try {
+  //       const res = await axios.get("https://urbangraphtees-be.onrender.com/products/product");
+  //       setProducts(res.data);
+  //     } catch (error) {
+  //       console.error("Error fetching products:", error);
+  //       toast.error("Unable to load products");
+  //     } finally {
+  //       setLoading(false)
+  //     }
+  //   };
+  //   fetchProducts();
+  // }, []);
 
   const handleUser = () => {
     if (token) {
