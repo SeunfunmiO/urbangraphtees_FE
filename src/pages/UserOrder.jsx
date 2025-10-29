@@ -1,6 +1,7 @@
 import React from "react";
 import { FaBoxOpen } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom"
 
 
 const UserOrder = () => {
@@ -14,6 +15,9 @@ const UserOrder = () => {
                 <div className="text-center my-5 py-5">
                     <FaBoxOpen size={40} color="lightgray" />
                     <p className="text-muted mt-3">No orders yet</p>
+                    <Link to="/shop" className="btn bg-black text-white mt-3">
+                        Start Shopping
+                    </Link>
                 </div>
             ) : (
                 <div className="list-group">
