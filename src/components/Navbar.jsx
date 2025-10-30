@@ -39,7 +39,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const results = products.filter((p) =>
-      p.name.toLowerCase().includes(searchQuery)
+      p.name?.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredProducts(results);
   }, [searchQuery, products]);
@@ -197,7 +197,7 @@ const Navbar = () => {
           ></button>
         </div>
 
-        <div className="offcanvas-body">
+        <div className="offcanvas-body d-lg-none">
           <input
             type="text"
             className="form-control mb-3"
