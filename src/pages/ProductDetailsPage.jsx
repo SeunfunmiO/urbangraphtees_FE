@@ -44,41 +44,41 @@ function ProductDetailsPage() {
 
 
 
-  const animateFlyToCart = (imageEl) => {
-    const cartIcon = document.querySelector("#cartIcon");
-    if (!imageEl || !cartIcon) return;
+  // const animateFlyToCart = (imageEl) => {
+  //   const cartIcon = document.querySelector("#cartIcon");
+  //   if (!imageEl || !cartIcon) return;
 
-    const imgClone = imageEl.cloneNode(true);
-    const imgRect = imageEl.getBoundingClientRect();
-    const cartRect = cartIcon.getBoundingClientRect();
-
-
-    const scrollX = window.scrollX || window.pageXOffset;
-    // const scrollY = window.scrollY || window.pageYOffset;
-
-    imgClone.style.position = "absolute";
-    imgClone.style.right = `${imgRect.right + scrollX}px`;
-    // imgClone.style.bottom = `${imgRect.bottom + scrollY}px`;
-    imgClone.style.width = `${imgRect.width}px`;
-    imgClone.style.height = `${imgRect.height}px`;
-    imgClone.style.borderRadius = "8px";
-    imgClone.style.transition = "transform 0.8s ease-in-out, opacity 0.8s ease-in-out";
-    imgClone.style.zIndex = 2000;
-    imgClone.style.pointerEvents = "none";
-
-    document.body.appendChild(imgClone);
-
-    requestAnimationFrame(() => {
-      const translateX = cartRect.right + scrollX - (imgRect.right + scrollX);
-      // const translateY = cartRect.bottom + scrollY - (imgRect.bottom + scrollY);
+  //   const imgClone = imageEl.cloneNode(true);
+  //   const imgRect = imageEl.getBoundingClientRect();
+  //   const cartRect = cartIcon.getBoundingClientRect();
 
 
-      imgClone.style.transform = `translate(${translateX}px scale(0.1)`;
-      imgClone.style.opacity = "0.2";
-    });
+  //   const scrollX = window.scrollX || window.pageXOffset;
+  //   // const scrollY = window.scrollY || window.pageYOffset;
 
-    imgClone.addEventListener("transitionend", () => imgClone.remove());
-  };
+  //   imgClone.style.position = "absolute";
+  //   imgClone.style.right = `${imgRect.right + scrollX}px`;
+  //   // imgClone.style.bottom = `${imgRect.bottom + scrollY}px`;
+  //   imgClone.style.width = `${imgRect.width}px`;
+  //   imgClone.style.height = `${imgRect.height}px`;
+  //   imgClone.style.borderRadius = "8px";
+  //   imgClone.style.transition = "transform 0.8s ease-in-out, opacity 0.8s ease-in-out";
+  //   imgClone.style.zIndex = 2000;
+  //   imgClone.style.pointerEvents = "none";
+
+  //   document.body.appendChild(imgClone);
+
+  //   requestAnimationFrame(() => {
+  //     const translateX = cartRect.right + scrollX - (imgRect.right + scrollX);
+  //     // const translateY = cartRect.bottom + scrollY - (imgRect.bottom + scrollY);
+
+
+  //     imgClone.style.transform = `translate(${translateX}px scale(0.1)`;
+  //     imgClone.style.opacity = "0.2";
+  //   });
+
+  //   imgClone.addEventListener("transitionend", () => imgClone.remove());
+  // };
 
   const handleLoader = () => {
     setLoading(true);
@@ -120,8 +120,8 @@ function ProductDetailsPage() {
     }
     toast.success(`${item.name} added to cart`);
 
-    const imageEl = document.querySelector("#productImage");
-    animateFlyToCart(imageEl);
+    // const imageEl = document.querySelector("#productImage");
+    // animateFlyToCart(imageEl);
   }
 
 

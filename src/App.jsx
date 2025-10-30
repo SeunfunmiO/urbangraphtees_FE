@@ -43,6 +43,7 @@ import ManageOrders from './pages/admin/ManageOrders'
 import ManageUsers from './pages/admin/ManageUsers'
 import AdminSettings from './pages/admin/AdminSettings'
 import SearchResults from './pages/Search'
+import SuccessPage from './pages/SuccessPage'
 
 const AppContent = () => {
   const location = useLocation();
@@ -50,6 +51,7 @@ const AppContent = () => {
     || location.pathname === "/admin/overview" || location.pathname === "/admin/add-products"
     || location.pathname === "/admin/orders/:id" || location.pathname === "/admin/products"
     || location.pathname === "/admin/users" || location.pathname === "/admin/settings"
+    || location.pathname === "/success"
     ;
 
 
@@ -116,6 +118,8 @@ const AppContent = () => {
         </Route>
 
         <Route path='/search' element={<SearchResults/>} />
+        <Route path='/success' element={<SuccessPage/>} />
+
 
 
 

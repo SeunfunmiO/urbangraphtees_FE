@@ -28,7 +28,7 @@ const SearchResults = () => {
     if (query) fetchProducts();
   }, [query]);
 
-  if (loading) return <p className='mt-5 text-center'><BarLoader />.</p>;
+  if (loading) return <p className='mt-5 d-flex justify-content-center'><BarLoader /></p>;
   if (!products.length) return <div className="text-center my-5 py-5">
     <FaBoxOpen size={40} color="lightgray" />
     <p className="text-muted mt-3">No products for "{query}"</p>

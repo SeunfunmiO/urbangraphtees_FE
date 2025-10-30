@@ -210,7 +210,9 @@ import { createOrder } from "../redux/orderSlice";
 import { clearCartServer } from "../redux/cartSlice";
 import { toast } from "react-toastify";
 import { DotLoader } from "react-spinners";
+import { PaystackButton } from "react-paystack"
 import OrderSummary from "../components/OrderSummary";
+import { formatDistanceToNow } from "date-fns";
 
 const Checkout = () => {
   const dispatch = useDispatch();
@@ -222,7 +224,7 @@ const Checkout = () => {
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
-
+  const paystackKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
 
   useEffect(() => {
     fetch("https://countriesnow.space/api/v0.1/countries/states")
@@ -255,7 +257,7 @@ const Checkout = () => {
     }
   }, [selectedCountry, selectedState]);
 
- 
+
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -278,42 +280,55 @@ const Checkout = () => {
     }),
     onSubmit: async (values, { resetForm }) => {
       if (cartItems.length === 0) return toast.error("Cart is empty");
-      setLoading(true);
-
       const totalAmount = cartItems.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0
       );
 
-      const orderData = {
-        orderItems: cartItems.map((item) => ({
-          product: item._id,
-          name: item.name,
-          quantity: item.quantity,
-          price: item.price,
-          image: item.image,
-          sizes: item.sizes || "M",
-          colors: item.colors || "Default",
-        })),
-        shippingAddress: values,
-        paymentMethod: values.paymentMethod,
-        totalAmount,
-      };
+      const handlePaystackSuccess = async (reference) => {
+        const orderData = {
+          orderItems: cartItems.map((item) => ({
+            product: item._id,
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price,
+            image: item.image,
+            sizes: item.sizes || "M",
+            colors: item.colors || "Default",
+          })),
+          shippingAddress: values,
+          paymentMethod: "Paystack",
+          totalAmount,
+          paymentReference: reference.reference,
+        };
 
-      try {
-        const result = await dispatch(createOrder(orderData));
-        if (result.meta.requestStatus === "fulfilled") {
-          dispatch(clearCartServer());
-          toast.success("✅ Payment successful! Check your Orders page");
-          resetForm();
-        } else {
-          toast.error("Failed to place order");
+        try {
+          const result = await dispatch(createOrder(orderData));
+          setLoading(true);
+          if (result.meta.requestStatus === "fulfilled") {
+            dispatch(clearCartServer());
+            toast.success("Payment successful! Check your Orders page");
+            resetForm();
+          } else {
+            toast.error("Something went wrong while saving your order.");
+          }
+        } catch (error) {
+          toast.error("Error creating order:", error);
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        toast.error("Error creating order:",error);
-      } finally {
-        setLoading(false);
       }
+
+      const paystackConfig = {
+        reference: new Date().getTime().toString(),
+        email: formik.values.email,
+        amount: totalAmount * 100,
+        publicKey: paystackKey,
+        firstName: formik.values.firstName,
+        lastName: formik.values.lastName,
+        phone: formik.values.phone
+      }
+
     },
   });
 
@@ -321,7 +336,7 @@ const Checkout = () => {
     <div className="container py-5">
       <h2 className="text-center mb-4">Checkout</h2>
       <div className="row">
-       
+
         <div className="col-md-7">
           <form onSubmit={formik.handleSubmit}>
             <h4 className="mb-3">Billing Information</h4>
@@ -336,11 +351,10 @@ const Checkout = () => {
                   <input
                     type={field === "email" ? "email" : field === "phone" ? "tel" : "text"}
                     name={field}
-                    className={`form-control ${
-                      formik.touched[field] && formik.errors[field]
-                        ? "border-danger"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched[field] && formik.errors[field]
+                      ? "border-danger"
+                      : ""
+                      }`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -350,7 +364,7 @@ const Checkout = () => {
                 </div>
               ))}
 
-          
+
               <div className="col-md-4">
                 <label>Country</label>
                 <select
@@ -373,7 +387,7 @@ const Checkout = () => {
                 </select>
               </div>
 
-             
+
               <div className="col-md-4">
                 <label>State</label>
                 <select
@@ -411,7 +425,9 @@ const Checkout = () => {
             <hr className="my-4" />
 
             <h4 className="mb-3">Payment Method</h4>
-            {["card", "bank", "ussd", "paypal"].map((method) => (
+
+
+            {/* {["card", "bank", "ussd", "paypal"].map((method) => (
               <div className="form-check" key={method}>
                 <input
                   className="form-check-input"
@@ -425,7 +441,7 @@ const Checkout = () => {
                   {method}
                 </label>
               </div>
-            ))}
+            ))} */}
 
             <button
               type="submit"
@@ -446,3 +462,265 @@ const Checkout = () => {
 };
 
 export default Checkout;
+
+// import React, { useEffect, useState } from "react";
+// import { useFormik } from "formik";
+// import * as yup from "yup";
+// import { useDispatch, useSelector } from "react-redux";
+// import { createOrder } from "../redux/orderSlice";
+// import { clearCartServer } from "../redux/cartSlice";
+// import { toast } from "react-toastify";
+// import { DotLoader } from "react-spinners";
+// import { PaystackButton } from "react-paystack";
+// import OrderSummary from "../components/OrderSummary";
+// import { Navigate, useNavigate } from "react-router-dom";
+
+// const Checkout = () => {
+//   const dispatch = useDispatch();
+//   const cartItems = useSelector((state) => state.cart.items);
+//   const [loading, setLoading] = useState(false);
+//   const navigate = useNavigate()
+//   const [countries, setCountries] = useState([]);
+//   const [states, setStates] = useState([]);
+//   const [cities, setCities] = useState([]);
+//   const [selectedCountry, setSelectedCountry] = useState("");
+//   const [selectedState, setSelectedState] = useState("");
+
+//   const paystackKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
+
+//   // ✅ Fetch countries and states
+//   useEffect(() => {
+//     fetch("https://countriesnow.space/api/v0.1/countries/states")
+//       .then((res) => res.json())
+//       .then((data) => setCountries(data.data || []))
+//       .catch(console.error);
+//   }, []);
+
+//   useEffect(() => {
+//     if (selectedCountry) {
+//       const country = countries.find((c) => c.name === selectedCountry);
+//       setStates(country?.states || []);
+//     }
+//   }, [selectedCountry, countries]);
+
+//   useEffect(() => {
+//     if (selectedCountry && selectedState) {
+//       fetch("https://countriesnow.space/api/v0.1/countries/state/cities", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({
+//           country: selectedCountry,
+//           state: selectedState,
+//         }),
+//       })
+//         .then((res) => res.json())
+//         .then((data) => setCities(data.data || []))
+//         .catch(console.error);
+//     }
+//   }, [selectedCountry, selectedState]);
+
+//   // ✅ Formik setup
+//   const formik = useFormik({
+//     initialValues: {
+//       firstName: "",
+//       lastName: "",
+//       email: "",
+//       phone: "",
+//       address: "",
+//       city: "",
+//       country: "",
+//     },
+//     validationSchema: yup.object({
+//       firstName: yup.string().required("First name is required"),
+//       lastName: yup.string().required("Last name is required"),
+//       email: yup.string().email().required("Email is required"),
+//       phone: yup.string().required("Phone number is required"),
+//       address: yup.string().required("Address is required"),
+//       city: yup.string().required("City is required"),
+//       country: yup.string().required("Country is required"),
+//     }),
+//     onSubmit: () => { },
+//   });
+
+//   // ✅ Calculate total amount
+//   const totalAmount = Array.isArray(cartItems) ? cartItems.reduce((sum, item) => sum + item.price * item.quantity,
+//     0
+//   ) : 0;
+
+
+//   // ✅ Paystack success handler
+//   const handlePaystackSuccess = async (reference) => {
+//     setLoading(true);
+//     const values = formik.values;
+
+//     const orderData = {
+//       orderItems: cartItems.map((item) => ({
+//         product: item._id,
+//         name: item.name,
+//         quantity: item.quantity,
+//         price: item.price,
+//         image: item.image,
+//         sizes: item.sizes || "M",
+//         colors: item.colors || "Default",
+//       })),
+//       shippingAddress: values,
+//       paymentMethod: "Paystack",
+//       totalAmount,
+//       paymentReference: reference.reference,
+//     };
+
+//     try {
+//       const result = await dispatch(createOrder(orderData));
+//       if (result.meta.requestStatus === "fulfilled") {
+//         dispatch(clearCartServer());
+//         navigate('/success')
+//         // toast.success("Payment successful! 🎉 Check your Orders page.");
+//         formik.resetForm();
+//       } else {
+//         toast.error("Something went wrong while saving your order.");
+//       }
+//     } catch (error) {
+//       toast.error("Error creating order.");
+//       console.log(error);
+
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   // ✅ Paystack configuration
+//   const paystackConfig = {
+//     reference: new Date().getTime().toString(),
+//     email: formik.values.email,
+//     amount: totalAmount * 100, // Paystack expects kobo
+//     publicKey: paystackKey,
+//     onSuccess: handlePaystackSuccess,
+//     onClose: () => toast.info("Payment window closed"),
+//   };
+
+//   return (
+//     <div className="container py-5">
+//       <h2 className="text-center mb-4">Checkout</h2>
+//       <div className="row">
+//         <div className="col-md-7">
+//           <form onSubmit={formik.handleSubmit}>
+//             <h4 className="mb-3">Billing Information</h4>
+//             <div className="row g-3">
+//               {["firstName", "lastName", "email", "phone", "address"].map(
+//                 (field, i) => (
+//                   <div
+//                     key={field}
+//                     className={i < 2 ? "col-md-6" : "col-12"}
+//                   >
+//                     <label className="form-label text-capitalize">{field}</label>
+//                     <input
+//                       type={
+//                         field === "email"
+//                           ? "email"
+//                           : field === "phone"
+//                             ? "tel"
+//                             : "text"
+//                       }
+//                       name={field}
+//                       className={`form-control ${formik.touched[field] && formik.errors[field]
+//                         ? "border-danger"
+//                         : ""
+//                         }`}
+//                       onChange={formik.handleChange}
+//                       onBlur={formik.handleBlur}
+//                       value={formik.values[field]}
+//                     />
+//                     {formik.touched[field] && (
+//                       <small className="text-danger">
+//                         {formik.errors[field]}
+//                       </small>
+//                     )}
+//                   </div>
+//                 )
+//               )}
+
+//               <div className="col-md-4">
+//                 <label>Country</label>
+//                 <select
+//                   name="country"
+//                   className="form-select"
+//                   onChange={(e) => {
+//                     formik.handleChange(e);
+//                     setSelectedCountry(e.target.value);
+//                     setStates([]);
+//                     setCities([]);
+//                   }}
+//                   value={formik.values.country}
+//                 >
+//                   <option value="">Select Country</option>
+//                   {countries.map((c, i) => (
+//                     <option key={i} value={c.name}>
+//                       {c.name}
+//                     </option>
+//                   ))}
+//                 </select>
+//               </div>
+
+//               <div className="col-md-4">
+//                 <label>State</label>
+//                 <select
+//                   className="form-select"
+//                   value={selectedState}
+//                   onChange={(e) => setSelectedState(e.target.value)}
+//                 >
+//                   <option value="">Select State</option>
+//                   {states.map((s, i) => (
+//                     <option key={i} value={s.name}>
+//                       {s.name}
+//                     </option>
+//                   ))}
+//                 </select>
+//               </div>
+
+//               <div className="col-md-4">
+//                 <label>City</label>
+//                 <select
+//                   name="city"
+//                   className="form-select"
+//                   onChange={formik.handleChange}
+//                   value={formik.values.city}
+//                 >
+//                   <option value="">Select City</option>
+//                   {cities.map((ct, i) => (
+//                     <option key={i} value={ct}>
+//                       {ct}
+//                     </option>
+//                   ))}
+//                 </select>
+//               </div>
+//             </div>
+
+//             <hr className="my-4" />
+//             <h4 className="mb-3">Payment Method</h4>
+
+//             <PaystackButton
+//               {...paystackConfig}
+//               text={loading ? "Processing..." : "Pay with Paystack"}
+//               className="btn bg-black text-white w-100"
+//               disabled={loading || !formik.isValid}
+//             />
+
+//             <button
+//               type="submit"
+//               disabled={loading}
+//               className="btn bg-black text-white w-100 my-4"
+//             >
+//               {loading ? <DotLoader size={20} color="#fff" /> : "Place Order"}
+//             </button>
+//           </form>
+//         </div>
+
+//         <div className="col-md-4">
+//           <OrderSummary />
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Checkout;

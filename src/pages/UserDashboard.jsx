@@ -10,6 +10,7 @@ import { BiLogOut } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/authSlice";
 import { toast } from "react-toastify";
+import { RiAdminFill } from "react-icons/ri";
 
 const UserDashboard = () => {
     const [activePage, setActivePage] = useState("overview");
@@ -149,7 +150,7 @@ const UserDashboard = () => {
                         <h2>
                             Welcome back, {user?.userName || "User"}
                             {isAdmin && (
-                                <small className="text-success ms-2">(Admin Mode)</small>
+                                <small className="text-success ms-2"><RiAdminFill /></small>
                             )}
                         </h2>
                     </div>
@@ -157,13 +158,13 @@ const UserDashboard = () => {
                 </main>
             </div>
             <div className="d-flex align-items-center justify-content-center" >
-                <button onClick={() => navigate('/')} className="btn btn-outine-dark d-md-none mb-3">
-                    Go Home
+                <button onClick={() => navigate('/')} className="btn btn-outline-dark d-md-none mb-3 d-flex align-items-center gap-1">
+                    <FaHome />Go Home
                 </button>
             </div>
             <div className="d-flex align-items-center justify-content-center">
                 {user.isAdmin && (
-                    <button onClick={() => navigate('/admin')} className="btn btn-outline-success d-md-none mb-4">Switch to Admin</button>
+                    <button onClick={() => navigate('/admin')} className="btn btn-outline-success d-md-none mb-4"><RiAdminFill /> Switch to Admin</button>
                 )}
             </div>
         </div>

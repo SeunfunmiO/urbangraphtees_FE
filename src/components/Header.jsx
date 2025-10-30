@@ -25,9 +25,6 @@ const Header = () => {
           <li className="nav-item">
             <NavLink to="/shop?category=Hats" className="nav-link" style={{ color: "black" }}>Hats</NavLink>
           </li>
-          <li className="nav-item">
-            <NavLink to="/shop?category=Footwear" className="nav-link" style={{ color: "black" }}>Footwear</NavLink>
-          </li>
         </ul>
       </div>
 

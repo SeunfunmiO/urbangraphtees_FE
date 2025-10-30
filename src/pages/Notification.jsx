@@ -39,16 +39,7 @@ const Notification = () => {
     } else {
       dispatch(markAsReadLocal(notif._id))
     }
-    navigate(`/notifications/${notif._id}`);
-  }
-
-  const clearAllNotif = () => {
-    if (token) {
-      dispatch(clearAllNotifications())
-    } else {
-      dispatch(clearNotificationsLocal())
-    }
-    setDropdownOpen(null);
+    navigate(`/notifications/${notif._id}`)
   }
 
   const filteredNotifications = Array.isArray(notifications)
@@ -111,7 +102,10 @@ const Notification = () => {
                   Mark all as read
                 </button>
                 <button
-                  onClick={clearAllNotif}
+                  onClick={() => {
+                    dispatch(token ? clearAllNotifications() : clearNotificationsLocal());
+                    setDropdownOpen(null);
+                  }}
                   className="dropdown-item w-100 text-start px-3 py-2 border-0 bg-transparent text-danger"
                 >
                   Clear all
@@ -179,9 +173,7 @@ const Notification = () => {
                 <div className="d-flex justify-content-between align-items-start">
                   <div
                     style={{ flex: 1, cursor: 'pointer' }}
-                    onClick={() => {
-                      handleMarkAsRead(notif._id)
-                    }}
+                    onClick={() => handleMarkAsRead(notif)}
                   >
                     <p style={{ margin: 0, fontWeight: notif.isRead ? 400 : 600 }}>
                       {notif.message}

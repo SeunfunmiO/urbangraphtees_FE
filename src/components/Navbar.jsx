@@ -1,58 +1,48 @@
-import { BiBell, BiMenuAltLeft, BiShoppingBag, BiUser } from 'react-icons/bi';
+import { BiBell, BiMenuAltLeft, BiSearch, BiShoppingBag, BiUser } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from '../redux/authSlice';
-import { FaSearch } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
+import axios from 'axios'
+import { toast } from 'react-toastify';
+import { BarLoader } from 'react-spinners';
+
 
 
 const Navbar = () => {
   const navigate = useNavigate()
-  // const [query, setQuery] = useState("");
   const cartCount = useSelector((state) => state.cart.cartItems)
   const wishlistCount = useSelector((state) => state.wishlist.items)
   const notificationsCount = useSelector((state) => state.notification.unreadCount)
   const { token } = useSelector((state) => state.auth)
-  // const queryParams = new URLSearchParams(location.search);
-  // const initialCategory = queryParams.get("category") || "All";
-  // const [selectedCategory, setSelectedCategory] = useState(initialCategory);
-
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false)
 
+  useEffect(() => {
+    setLoading(true)
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get("https://urbangraphtees-be.onrender.com/products/product");
+        setProducts(res.data);
 
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        toast.error("Unable to load products");
+      } finally {
+        setLoading(false)
+      }
+    };
+    fetchProducts();
+  }, []);
 
-
-  // const handleSearch = () => {
-  //   if (query.trim() !== "") {
-  //     navigate(`/search?query=${encodeURIComponent(query.trim())}`);
-  //   }
-  // };
-
-  // const handleKeyDown = (e) => {
-  //   if (e.key === "Enter") handleSearch();
-  // }
-
-  // useEffect(() => {
-  //   if (products.length > 0 && !queryParams.get("category")) {
-  //     setSelectedCategory('All')
-  //   }
-  // }, [products])
-
-  // useEffect(() => {
-  //   setLoading(true)
-  //   const fetchProducts = async () => {
-  //     try {
-  //       const res = await axios.get("https://urbangraphtees-be.onrender.com/products/product");
-  //       setProducts(res.data);
-  //     } catch (error) {
-  //       console.error("Error fetching products:", error);
-  //       toast.error("Unable to load products");
-  //     } finally {
-  //       setLoading(false)
-  //     }
-  //   };
-  //   fetchProducts();
-  // }, []);
+  useEffect(() => {
+    const results = products.filter((p) =>
+      p.name.toLowerCase().includes(searchQuery)
+    );
+    setFilteredProducts(results);
+  }, [searchQuery, products]);
 
   const handleUser = () => {
     if (token) {
@@ -76,7 +66,6 @@ const Navbar = () => {
       <div className="navReverse">
         <a href="/" className="fw-bold fs-6 navbar-brand  text-white/ text-uppercase">
           UrbanGraphTees
-          {/* <img src="./multimedia/ugtWhiteBgLogo.jpg" alt=" UrbanGraphTees logo" width={"60px"} /> */}
         </a>
         <button className="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
           <span className='border-0'><BiMenuAltLeft className='border-0' /></span>
@@ -123,11 +112,6 @@ const Navbar = () => {
                     Hats
                   </NavLink>
                 </li>
-                <li data-bs-dismiss="offcanvas">
-                  <NavLink className="dropdown-item" to="/shop?category=Footwear">
-                    Footwear
-                  </NavLink>
-                </li>
               </ul>
             </li>
             <hr className="divider" />
@@ -158,52 +142,21 @@ const Navbar = () => {
             <li className="nav-item  appear" data-bs-dismiss="offcanvas" style={{ display: "none" }}> <NavLink onClick={() => logout()} className={({ isActive }) =>
               isActive ? "navRoute text-decoration-none  text-danger" : "navRoute text-decoration-none text-danger"
             } >Log Out</NavLink></li>
-            {/* <li className="nav-item dropdown appear" style={{ display: "none" }}>
-              <NavLink className={({ isActive }) =>
-                isActive ? "navRoute text-decoration-none  active-link dropdown-toggle text-black" : "navRoute text-decoration-none dropdown-toggle text-black"
-              } role="button" data-bs-toggle="dropdown" aria-expanded="false" to="/Profile">Profile</NavLink>
-              <ul className="dropdown-menu">
-                <li data-bs-dismiss="offcanvas"><NavLink className="dropdown-item" to="/dashboard">Go to your profile</NavLink></li>
-                <li>
-                  <NavLink className="dropdown-item" to="/Changepassword">
-                    Change Password
-                  </NavLink>
-                </li>
-                <li data-bs-dismiss="offcanvas">
-                  <NavLink className="dropdown-item" to="/reset-password">
-                    Reset Password
-                  </NavLink>
-                </li>
-                <li data-bs-dismiss="offcanvas">
-                  <NavLink className="dropdown-item" to="/Logout">
-                    Log Out
-                  </NavLink>
-                </li>
-                <li data-bs-dismiss="offcanvas">
-                  <NavLink className="dropdown-item text-danger" to="/Deleteaccount">
-                    Delete Account
-                  </NavLink>
-                </li>
-              </ul>
-            </li> */}
           </ul>
 
         </div>
       </div>
       <div className="d-flex navIcon gap-4 justify-content-center align-items-center">
-        {/* <input
-          type="text"
-          placeholder="Search for products..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          className="form-control"
-        />
-        <FaSearch
-          style={{ cursor: "pointer" }}
-          onClick={handleSearch}
-        /> */}
-        <NavLink className='text-decoration-none text-black' title='Search' to="/Search"><i className="fa-solid fa-magnifying-glass"></i></NavLink>
+        <button
+          className="btn text-black border-0 p-0"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasSearch"
+          aria-controls="offcanvasSearch"
+        >
+          <BiSearch />
+        </button>
+        {/* <NavLink className='text-decoration-none text-black' title='Search' to="/Search"><BiSearch /></NavLink> */}
         <button type="button" className="btn badgeBtn  position-relative">
           <NavLink className='text-decoration-none text-black' title='Wishlist' to="/Wishlist"><i className="fa-regular fa-heart"></i></NavLink>
           <span className="position-absolute text-center top-0 start-100 translate-middle badge rounded-pill bg-light text-black">
@@ -227,6 +180,60 @@ const Navbar = () => {
           </span>
         </button>
       </div>
+
+      <div
+        className="offcanvas offcanvas-end"
+        tabIndex="-1"
+        id="offcanvasSearch"
+        aria-labelledby="offcanvasSearchLabel"
+      >
+        <div className="offcanvas-header">
+          <h5 id="offcanvasSearchLabel">Search Products</h5>
+          <button
+            type="button"
+            className="btn-close text-reset"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <div className="offcanvas-body">
+          <input
+            type="text"
+            className="form-control mb-3"
+            placeholder="Search for products..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
+          />
+
+          {loading ? <div className="d-flex justify-content-center align-items-center">
+            <BarLoader />
+          </div> : filteredProducts.length > 0 ? (
+            <div className="list-group">
+              {filteredProducts.map((product) => (
+                <div key={product._id} className="list-group-item">
+                  <div className="d-flex align-items-center">
+                    <img
+                      src={
+                        product.images?.[0]?.url || product.images
+                      }
+                      alt={product.name}
+                      className="me-3 rounded"
+                      width="60"
+                      height="60"
+                    />
+                    <div>
+                      <h6 className="mb-0">{product.name}</h6>
+                      <small className="text-muted">₦{product.price}</small>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-muted">No products found.</p>
+          )}
+        </div></div>
     </nav >
 
   )

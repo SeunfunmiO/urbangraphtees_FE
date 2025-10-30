@@ -19,7 +19,7 @@ const OrderSummary = ({ showCheckoutButton = false, onCheckout }) => {
         (acc, item) => acc + item.price * item.quantity,
         0
     );
-    const shipping = subtotal > 0 ? 2000 : 0;
+    const shipping = subtotal > 0 ? 4000 : 0;
     const total = subtotal - discount + shipping;
 
 
