@@ -427,7 +427,7 @@ const Checkout = () => {
             <h4 className="mb-3">Payment Method</h4>
 
 
-            {/* {["card", "bank", "ussd", "paypal"].map((method) => (
+            {["card", "bank transfer", "ussd", "paypal"].map((method) => (
               <div className="form-check" key={method}>
                 <input
                   className="form-check-input"
@@ -441,7 +441,7 @@ const Checkout = () => {
                   {method}
                 </label>
               </div>
-            ))} */}
+            ))}
 
             <button
               type="submit"
