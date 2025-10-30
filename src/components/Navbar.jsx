@@ -224,7 +224,7 @@ const Navbar = () => {
                     />
                     <div>
                       <h6 className="mb-0">{product.name}</h6>
-                      <small className="text-muted">₦{product.price}</small>
+                      <small className="text-muted">₦{product.price.toLocaleString()}</small>
                     </div>
                   </div>
                 </div>
